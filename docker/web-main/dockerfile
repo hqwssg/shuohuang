@@ -1,0 +1,17 @@
+FROM eclipse-temurin:17-jre
+MAINTAINER ruoyi
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nginx redis-server \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /home/ruoyi /home/ruoyi/projects/ruoyi-ui /home/ruoyi/uploadPath /data /run/nginx
+WORKDIR /home/ruoyi
+
+COPY ./jar/ruoyi-admin.jar /home/ruoyi/ruoyi-admin.jar
+COPY ./html/dist /home/ruoyi/projects/ruoyi-ui
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./start.sh /home/ruoyi/start.sh
+
+EXPOSE 80 8081
+ENTRYPOINT ["sh", "/home/ruoyi/start.sh"]

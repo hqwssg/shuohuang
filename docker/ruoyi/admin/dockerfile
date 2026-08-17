@@ -1,0 +1,8 @@
+FROM openjdk:17
+MAINTAINER ruoyi
+
+VOLUME /home/ruoyi
+RUN mkdir -p /home/ruoyi
+WORKDIR /home/ruoyi
+COPY ./jar/ruoyi-admin.jar /home/ruoyi/ruoyi-admin.jar
+ENTRYPOINT ["java","-jar","ruoyi-admin.jar"]

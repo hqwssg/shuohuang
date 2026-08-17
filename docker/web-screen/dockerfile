@@ -1,0 +1,17 @@
+FROM eclipse-temurin:8-jre
+MAINTAINER ruoyi
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends nginx \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /home/goview /home/goview/projects/goview /home/goview/upload /home/goview/sqllite /run/nginx
+WORKDIR /home/goview
+
+COPY ./jar/goview.war /home/goview/goview.war
+COPY ./html/dist /home/goview/projects/goview
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./start.sh /home/goview/start.sh
+
+EXPOSE 80 8083
+ENTRYPOINT ["sh", "/home/goview/start.sh"]

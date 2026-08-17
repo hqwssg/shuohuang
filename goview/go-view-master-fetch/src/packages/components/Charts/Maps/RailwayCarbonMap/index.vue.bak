@@ -1,0 +1,732 @@
+<template>
+  <div class="railway-carbon-map-wrap" :style="wrapStyle">
+    <!-- 地图容器 -->
+    <div ref="mapContainer" class="map-container"></div>
+
+    <!-- 工具栏 (条件渲染 showToolbar) -->
+    <div v-if="showToolbar" class="toolbar">
+      <!-- 指标切换按钮组 (碳排放/能耗) -->
+      <div class="toolbar-group metric-group">
+        <button
+          v-for="metric in metricOptions"
+          :key="metric.value"
+          class="toolbar-btn"
+          :class="{ active: activeMetric === metric.value }"
+          @click="setMetric(metric.value)"
+        >
+          {{ metric.label }}
+        </button>
+      </div>
+
+      <!-- 方向筛选按钮组 (全部/上行/下行) -->
+      <div class="toolbar-group direction-group">
+        <button
+          v-for="dir in directionOptions"
+          :key="dir.value"
+          class="toolbar-btn"
+          :class="{ active: activeDirection === dir.value }"
+          @click="setDirection(dir.value)"
+        >
+          {{ dir.label }}
+        </button>
+      </div>
+
+      <!-- 高能耗筛选复选框 -->
+      <div class="toolbar-group filter-group">
+        <label class="checkbox-label">
+          <input v-model="showHighOnly" type="checkbox" />
+          <span class="checkbox-text">高{{ getTypeLabel(activeMetric) }}区段</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 核算点Tooltip -->
+    <div
+      v-show="pointTooltipVisible && pointTooltipData"
+      class="tooltip point-tooltip"
+      :style="pointTooltipStyle"
+    >
+      <div class="tooltip-header">
+        <span class="point-name">{{ pointTooltipData?.name }}</span>
+        <span class="point-type">{{ getPointTypeLabel(pointTooltipData?.type) }}</span>
+      </div>
+      <div class="tooltip-body">
+        <div class="info-row">
+          <span class="label">碳排放强度:</span>
+          <span class="value highlight">{{ pointTooltipData?.carbonIntensity }} {{ pointTooltipData?.unit }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">碳排放量:</span>
+          <span class="value">{{ pointTooltipData?.carbonEmission }} {{ pointTooltipData?.unit }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">核算时间:</span>
+          <span class="value">{{ pointTooltipData?.latestAccountingTime }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">统计周期:</span>
+          <span class="value">{{ pointTooltipData?.statPeriod }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 线路Tooltip -->
+    <div
+      v-show="lineTooltipVisible && lineTooltipData"
+      class="tooltip line-tooltip"
+      :style="lineTooltipStyle"
+    >
+      <div class="tooltip-header">
+        <span class="section-name">{{ lineTooltipData?.sectionName }}</span>
+        <span class="direction-tag" :class="lineTooltipData?.direction">
+          {{ getDirectionLabel(lineTooltipData?.direction) }}
+        </span>
+      </div>
+      <div class="tooltip-body">
+        <div class="info-row">
+          <span class="label">长度:</span>
+          <span class="value">{{ lineTooltipData?.lengthKm }} km</span>
+        </div>
+        <div class="info-row">
+          <span class="label">能耗强度:</span>
+          <span class="value">{{ lineTooltipData?.energyIntensity }} kWh/万吨·km</span>
+        </div>
+        <div class="info-row">
+          <span class="label">碳排放强度:</span>
+          <span class="value highlight">{{ lineTooltipData?.carbonIntensity }} kgCO₂/万吨·km</span>
+        </div>
+        <div class="info-row">
+          <span class="label">统计周期:</span>
+          <span class="value">{{ lineTooltipData?.statPeriod }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 图例 (条件渲染 showLegend) -->
+    <div v-if="showLegend" class="legend">
+      <!-- 核算点图例 (五色渐变) -->
+      <div class="legend-section">
+        <div class="legend-title">核算点 - 碳排放强度</div>
+        <div class="legend-gradient point-gradient"></div>
+        <div class="legend-labels">
+          <span>低</span>
+          <span>高</span>
+        </div>
+      </div>
+
+      <!-- 线路图例 (四色渐变，跟随activeMetric) -->
+      <div class="legend-section">
+        <div class="legend-title">
+          线路区段 - {{ activeMetric === 'carbon' ? '碳排放强度' : '能耗强度' }}
+        </div>
+        <div class="legend-gradient line-gradient"></div>
+        <div class="legend-labels">
+          <span>低</span>
+          <span>高</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+// Vue核心
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  PropType,
+  ref,
+  toRefs,
+  watch
+} from 'vue'
+import type { CreateComponentType } from '@/packages/index.d'
+import { useChartDataFetch } from '@/hooks'
+import { useChartEditStore } from '@/store/modules/chartEditStore/chartEditStore'
+import cloneDeep from 'lodash/cloneDeep'
+import isEqual from 'lodash/isEqual'
+
+// 组件配置和类型
+import { option, MetricTypeEnum, DirectionEnum } from './config'
+import type {
+  RailwayCarbonMapData,
+  PointTooltipData,
+  LineTooltipData,
+  AccountingPointType
+} from './types'
+
+// 核心管理器
+import { MapManager } from './core/MapManager'
+import { LayerManager } from './core/LayerManager'
+import { TooltipManager } from './core/TooltipManager'
+import { FilterManager } from './core/FilterManager'
+
+// L7
+import { Scene } from '@antv/l7'
+import { Map } from '@antv/l7-maps'
+
+// Props定义
+const props = defineProps({
+  chartConfig: {
+    type: Object as PropType<CreateComponentType & typeof option>,
+    required: true
+  }
+})
+
+// 从props解构w, h (组件宽高)
+const { w, h } = toRefs(props.chartConfig.attr)
+
+// ref定义mapContainer (地图DOM容器)
+const mapContainer = ref<HTMLElement>()
+
+// 管理器实例变量
+let mapManager: MapManager | null = null
+let layerManager: LayerManager | null = null
+let tooltipManager: TooltipManager | null = null
+let filterManager: FilterManager | null = null
+
+// 状态变量
+let isUnmounted = false
+const activeMetric = ref(props.chartConfig.option.activeMetric ?? MetricTypeEnum.CARBON)
+const activeDirection = ref(props.chartConfig.option.activeDirection ?? DirectionEnum.ALL)
+const showHighOnly = ref(props.chartConfig.option.showHighOnly ?? false)
+
+// Tooltip状态 - 核算点
+const pointTooltipVisible = ref(false)
+const pointTooltipData = ref<PointTooltipData | null>(null)
+const pointTooltipPosition = ref({ x: 0, y: 0 })
+
+// Tooltip状态 - 线路
+const lineTooltipVisible = ref(false)
+const lineTooltipData = ref<LineTooltipData | null>(null)
+const lineTooltipPosition = ref({ x: 0, y: 0 })
+
+// 工具栏选项
+const metricOptions = [
+  { value: MetricTypeEnum.CARBON, label: '碳排放' },
+  { value: MetricTypeEnum.ENERGY, label: '能耗' }
+]
+
+const directionOptions = [
+  { value: DirectionEnum.ALL, label: '全部' },
+  { value: DirectionEnum.UP, label: '上行' },
+  { value: DirectionEnum.DOWN, label: '下行' }
+]
+
+// 计算属性
+const wrapStyle = computed(() => ({
+  width: `${w.value}px`,
+  height: `${h.value}px`
+}))
+
+const showToolbar = computed(() => props.chartConfig.option.showToolbar !== false)
+const showLegend = computed(() => props.chartConfig.option.showLegend !== false)
+
+const pointTooltipStyle = computed(() => ({
+  left: `${pointTooltipPosition.value.x + 15}px`,
+  top: `${pointTooltipPosition.value.y + 15}px`
+}))
+
+const lineTooltipStyle = computed(() => ({
+  left: `${lineTooltipPosition.value.x + 15}px`,
+  top: `${lineTooltipPosition.value.y + 15}px`
+}))
+
+// 工具方法
+function getTypeLabel(metric: string): string {
+  return metric === 'carbon' ? '碳排放' : '能耗'
+}
+
+function getDirectionLabel(direction?: string): string {
+  const labels: Record<string, string> = {
+    up: '上行',
+    down: '下行',
+    both: '双向'
+  }
+  return direction ? labels[direction] || direction : ''
+}
+
+function getPointTypeLabel(type?: AccountingPointType): string {
+  const labels: Record<AccountingPointType, string> = {
+    station: '车站',
+    marshalling: '编组站',
+    maintenance: '维修基地',
+    other: '其他'
+  }
+  return type ? labels[type] || type : ''
+}
+
+function setMetric(metric: string): void {
+  if (isUnmounted) return
+  activeMetric.value = metric as 'carbon' | 'energy'
+  updateLayers()
+}
+
+function setDirection(direction: string): void {
+  if (isUnmounted) return
+  activeDirection.value = direction as 'all' | 'up' | 'down'
+  updateLayers()
+}
+
+// 构建选项对象
+function buildOptions() {
+  return {
+    activeMetric: activeMetric.value,
+    activeDirection: activeDirection.value,
+    showHighOnly: showHighOnly.value,
+    showBaseLine: props.chartConfig.option.showBaseLine ?? true,
+    showDirectionArrows: props.chartConfig.option.showDirectionArrows ?? false,
+    showPointLabels: props.chartConfig.option.showPointLabels ?? true,
+    showHaloEffect: props.chartConfig.option.showHaloEffect ?? true,
+    pointBaseSize: props.chartConfig.option.pointBaseSize ?? 8,
+    pointSizeScale: props.chartConfig.option.pointSizeScale ?? 2,
+    haloSize: props.chartConfig.option.haloSize ?? 6,
+    haloOpacity: props.chartConfig.option.haloOpacity ?? 0.25,
+    labelFontSize: props.chartConfig.option.labelFontSize ?? 10,
+    labelColor: props.chartConfig.option.labelColor ?? '#ffffff',
+    labelYOffset: props.chartConfig.option.labelYOffset ?? -10
+  }
+}
+
+// 获取数据
+function getDataset(): RailwayCarbonMapData {
+  const dataset = props.chartConfig.option.dataset
+  if (!dataset || !dataset.points || !dataset.lines) {
+    return cloneDeep(option.dataset) as RailwayCarbonMapData
+  }
+  return dataset as RailwayCarbonMapData
+}
+
+// 初始化地图
+async function initMap(): Promise<void> {
+  if (!mapContainer.value || isUnmounted) return
+
+  try {
+    // 创建MapManager
+    mapManager = new MapManager(mapContainer.value, {
+      center: props.chartConfig.option.center ?? [115.5, 38.5],
+      zoom: props.chartConfig.option.zoom ?? 7,
+      mapStyle: props.chartConfig.option.mapStyle ?? 'https://demotiles.maplibre.org/style.json',
+      minZoom: props.chartConfig.option.minZoom ?? 5,
+      maxZoom: props.chartConfig.option.maxZoom ?? 14
+    })
+
+    // 初始化MapLibre地图
+    const map = await mapManager.initMap()
+
+    // 创建L7 Scene
+    const scene = new Scene({
+      id: mapContainer.value,
+      map: new Map({
+        mapInstance: map
+      }),
+      logoVisible: false
+    })
+
+    // 等待Scene初始化完成
+    await new Promise<void>((resolve) => {
+      scene.on('loaded', () => {
+        resolve()
+      })
+    })
+
+    // 设置Scene到MapManager
+    mapManager.setScene(scene)
+
+    // 初始化图层和Tooltip
+    await initLayers(scene)
+  } catch (error) {
+    console.error('RailwayCarbonMap init error:', error)
+  }
+}
+
+// 初始化图层
+async function initLayers(scene: Scene): Promise<void> {
+  if (!scene || isUnmounted) return
+
+  // 创建FilterManager
+  filterManager = new FilterManager()
+
+  // 创建LayerManager
+  layerManager = new LayerManager()
+  layerManager.setScene(scene)
+
+  // 创建TooltipManager
+  tooltipManager = new TooltipManager({
+    onPointHover: (data, position) => {
+      if (isUnmounted) return
+      void nextTick(() => {
+        if (isUnmounted) return
+        pointTooltipData.value = data
+        pointTooltipPosition.value = position
+        pointTooltipVisible.value = true
+        // 隐藏线路Tooltip
+        lineTooltipVisible.value = false
+      })
+    },
+    onPointClick: (data) => {
+      if (isUnmounted) return
+      void nextTick(() => {
+        if (isUnmounted) return
+        pointTooltipData.value = data
+        pointTooltipVisible.value = true
+      })
+    },
+    onLineHover: (data, position) => {
+      if (isUnmounted) return
+      void nextTick(() => {
+        if (isUnmounted) return
+        lineTooltipData.value = data
+        lineTooltipPosition.value = position
+        lineTooltipVisible.value = true
+        // 隐藏核算点Tooltip
+        pointTooltipVisible.value = false
+      })
+    },
+    onLineClick: (data) => {
+      if (isUnmounted) return
+      void nextTick(() => {
+        if (isUnmounted) return
+        lineTooltipData.value = data
+        lineTooltipVisible.value = true
+      })
+    }
+  })
+  tooltipManager.setScene(scene)
+
+  // 创建所有图层
+  updateLayers()
+}
+
+// 更新图层
+function updateLayers(): void {
+  if (!layerManager || !filterManager || isUnmounted) return
+
+  const dataset = getDataset()
+  const options = buildOptions()
+
+  // 应用筛选
+  const filterResult = filterManager.applyFilters(
+    dataset.lines.features,
+    dataset.points.points,
+    options
+  )
+
+  // 设置数据和选项
+  layerManager.setDataAndOptions(filterResult.lines, filterResult.points, options)
+
+  // 更新图层
+  layerManager.updateLayers()
+
+  // 绑定Tooltip事件（在图层创建后）
+  void nextTick(() => {
+    if (isUnmounted) return
+
+    const pointLayer = layerManager?.getLayer('points')
+    const upLineLayer = layerManager?.getLayer('upLine')
+    const downLineLayer = layerManager?.getLayer('downLine')
+
+    if (pointLayer) {
+      tooltipManager?.bindPointLayerEvents(pointLayer, filterResult.points)
+    }
+
+    if (upLineLayer) {
+      tooltipManager?.bindLineLayerEvents(upLineLayer, filterResult.lines)
+    }
+
+    if (downLineLayer) {
+      tooltipManager?.bindLineLayerEvents(downLineLayer, filterResult.lines)
+    }
+  })
+}
+
+// 更新数据
+function updateData(data: unknown): void {
+  if (isUnmounted || !layerManager) return
+
+  const newDataset = data as RailwayCarbonMapData
+  if (!newDataset || !newDataset.points || !newDataset.lines) {
+    console.warn('RailwayCarbonMap: invalid data format')
+    return
+  }
+
+  // 更新图层数据
+  updateLayers()
+}
+
+// 监听数据变化
+watch(
+  () => props.chartConfig.option.dataset,
+  (newData) => {
+    if (isUnmounted || !newData) return
+    const current = getDataset()
+    if (isEqual(newData, current)) return
+    updateData(newData)
+  },
+  { deep: false }
+)
+
+// 监听showHighOnly变化
+watch(showHighOnly, () => {
+  if (isUnmounted) return
+  updateLayers()
+})
+
+// 生命周期
+onMounted(() => {
+  isUnmounted = false
+  void initMap()
+})
+
+onBeforeUnmount(() => {
+  isUnmounted = true
+
+  // 隐藏Tooltip
+  pointTooltipVisible.value = false
+  lineTooltipVisible.value = false
+  pointTooltipData.value = null
+  lineTooltipData.value = null
+
+  // 销毁管理器
+  tooltipManager?.destroy()
+  tooltipManager = null
+
+  layerManager = null
+
+  mapManager?.destroy()
+  mapManager = null
+
+  filterManager = null
+})
+
+// 使用数据获取hook
+useChartDataFetch(props.chartConfig, useChartEditStore, updateData)
+</script>
+
+<style scoped>
+/* 容器样式 */
+.railway-carbon-map-wrap {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* 工具栏样式 */
+.toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  background: rgba(2, 12, 24, 0.75);
+  border: 1px solid rgba(46, 199, 255, 0.35);
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+
+.toolbar-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  color: rgba(230, 247, 255, 0.85);
+  background: rgba(10, 30, 50, 0.6);
+  border: 1px solid rgba(46, 199, 255, 0.25);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  background: rgba(46, 199, 255, 0.2);
+  border-color: rgba(46, 199, 255, 0.5);
+}
+
+.toolbar-btn.active {
+  color: #ffffff;
+  background: rgba(46, 199, 255, 0.35);
+  border-color: rgba(46, 199, 255, 0.8);
+  box-shadow: 0 0 8px rgba(46, 199, 255, 0.4);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(230, 247, 255, 0.85);
+  cursor: pointer;
+}
+
+.checkbox-label input[type='checkbox'] {
+  width: 14px;
+  height: 14px;
+  accent-color: rgba(46, 199, 255, 0.8);
+  cursor: pointer;
+}
+
+.checkbox-text {
+  user-select: none;
+}
+
+/* Tooltip样式 - 深色半透明卡片 */
+.tooltip {
+  position: absolute;
+  background: rgba(10, 26, 42, 0.95);
+  border: 1px solid #00ffff;
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 4px 16px rgba(0, 255, 255, 0.2);
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.point-name,
+.section-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: #4db8ff;
+}
+
+.point-type,
+.direction-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(46, 199, 255, 0.25);
+  color: rgba(230, 247, 255, 0.9);
+}
+
+.direction-tag.up {
+  background: rgba(76, 175, 80, 0.3);
+  color: #81c784;
+}
+
+.direction-tag.down {
+  background: rgba(244, 67, 54, 0.3);
+  color: #e57373;
+}
+
+.direction-tag.both {
+  background: rgba(255, 152, 0, 0.3);
+  color: #ffb74d;
+}
+
+.tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-row .label {
+  color: rgba(230, 247, 255, 0.7);
+  font-size: 11px;
+}
+
+.info-row .value {
+  color: rgba(230, 247, 255, 0.95);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.info-row .value.highlight {
+  color: #00ffff;
+  font-weight: bold;
+}
+
+/* 图例样式 - 右下角 */
+.legend {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(2, 12, 24, 0.75);
+  border: 1px solid rgba(46, 199, 255, 0.35);
+  border-radius: 6px;
+  pointer-events: none;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.legend-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legend-title {
+  font-size: 11px;
+  color: rgba(46, 199, 255, 0.9);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.legend-gradient {
+  width: 120px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(46, 199, 255, 0.3);
+}
+
+.point-gradient {
+  background: linear-gradient(to right, #0b5cff, #00d4ff, #00ffb2, #ffe600, #ff3b30);
+}
+
+.line-gradient {
+  background: linear-gradient(to right, #4caf50, #ffeb3b, #ff9800, #f44336);
+}
+
+.legend-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(230, 247, 255, 0.75);
+}
+</style>
+
+<style>
+/* 全局样式：L7 logo隐藏 */
+.l7-scene .l7-logo {
+  display: none !important;
+}
+
+/* 地图控件样式覆盖 */
+.maplibregl-ctrl-attrib {
+  font-size: 10px !important;
+  opacity: 0.7;
+}
+</style>

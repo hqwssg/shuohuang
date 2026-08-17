@@ -1,0 +1,5139 @@
+{
+  "editCanvasConfig": {
+    "projectName": "朔黄铁路碳排放全景大屏",
+    "width": 1920,
+    "height": 1080,
+    "background": "#020a14",
+    "backgroundImage": null,
+    "selectColor": true,
+    "chartThemeColor": "dark",
+    "chartThemeSetting": {},
+    "vChartThemeName": "vScreenVolcanoBlue",
+    "previewScaleType": "fit",
+    "projectId": null,
+    "remarks": "内置演示数据 · 碳排放全景视图"
+  },
+  "requestGlobalConfig": {
+    "requestInterval": 0,
+    "requestIntervalUnit": "second",
+    "requestOriginUrl": "",
+    "requestDataPond": [],
+    "requestParams": {
+      "Body": {
+        "form-data": {},
+        "x-www-form-urlencoded": {},
+        "json": "",
+        "xml": ""
+      },
+      "Header": {},
+      "Params": {
+        "dataScope": "overall",
+        "stationName": "",
+        "scopeGeneration": 0
+      }
+    }
+  },
+  "componentList": [
+    {
+      "id": "dash-map-001",
+      "isGroup": false,
+      "attr": {
+        "x": 0,
+        "y": 0,
+        "w": 1920,
+        "h": 1080,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": -1
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "RailwayCarbonMap",
+      "chartConfig": {
+        "key": "RailwayCarbonMap",
+        "chartKey": "VRailwayCarbonMap",
+        "conKey": "VCRailwayCarbonMap",
+        "title": "铁路碳排放时空分布图",
+        "category": "Maps",
+        "categoryName": "地图",
+        "package": "Charts",
+        "chartFrame": "common",
+        "image": "railway_carbon_map.png"
+      },
+      "option": {
+        "dataset": {
+          "points": {
+            "points": [
+              {
+                "lng": 111.76,
+                "lat": 39.09,
+                "name": "神池南站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8,
+                "carbonEmission": 480,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 112.3,
+                "lat": 39.03,
+                "name": "宁武西站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.5,
+                "carbonEmission": 525.2,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 112.55,
+                "lat": 38.98,
+                "name": "龙宫站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.9,
+                "carbonEmission": 553.2,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 112.72,
+                "lat": 38.92,
+                "name": "北大牛站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.9,
+                "carbonEmission": 570.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 112.72,
+                "lat": 38.75,
+                "name": "原平南站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.7,
+                "carbonEmission": 586.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 112.85,
+                "lat": 38.68,
+                "name": "回凤站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.5,
+                "carbonEmission": 610.9,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 113.05,
+                "lat": 38.62,
+                "name": "东冶站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.3,
+                "carbonEmission": 650.8,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 113.22,
+                "lat": 38.58,
+                "name": "南湾站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.3,
+                "carbonEmission": 710.1,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 113.38,
+                "lat": 38.52,
+                "name": "滴流蹬站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 8.7,
+                "carbonEmission": 787.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 113.52,
+                "lat": 38.48,
+                "name": "猴刎站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 9.2,
+                "carbonEmission": 878.1,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 113.68,
+                "lat": 38.44,
+                "name": "小觉站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 9.7,
+                "carbonEmission": 972.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 113.82,
+                "lat": 38.4,
+                "name": "古月站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 10,
+                "carbonEmission": 1061.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 113.98,
+                "lat": 38.36,
+                "name": "温塘站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 10.1,
+                "carbonEmission": 1136.8,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 114.12,
+                "lat": 38.28,
+                "name": "西柏坡站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 9.9,
+                "carbonEmission": 1193.1,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 114.28,
+                "lat": 38.26,
+                "name": "三汲站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 9.6,
+                "carbonEmission": 1230.3,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 114.42,
+                "lat": 38.3,
+                "name": "灵寿站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 9.5,
+                "carbonEmission": 1252.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 114.58,
+                "lat": 38.38,
+                "name": "行唐站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 9.5,
+                "carbonEmission": 1268.4,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 114.72,
+                "lat": 38.42,
+                "name": "新曲站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 9.9,
+                "carbonEmission": 1286.8,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 114.88,
+                "lat": 38.48,
+                "name": "定州西站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 10.4,
+                "carbonEmission": 1317.1,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 115.05,
+                "lat": 38.48,
+                "name": "定州东站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 10.9,
+                "carbonEmission": 1365.2,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 115.22,
+                "lat": 38.47,
+                "name": "安国站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 11.2,
+                "carbonEmission": 1432.9,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 115.35,
+                "lat": 38.48,
+                "name": "博野站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 11.3,
+                "carbonEmission": 1517,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 115.48,
+                "lat": 38.47,
+                "name": "蠡县站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 11.1,
+                "carbonEmission": 1610.4,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 115.53,
+                "lat": 38.435,
+                "name": "肃宁北站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 10.8,
+                "carbonEmission": 1703.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 115.72,
+                "lat": 38.44,
+                "name": "太师庄站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 10.6,
+                "carbonEmission": 1787.5,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 115.92,
+                "lat": 38.44,
+                "name": "河间站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 10.7,
+                "carbonEmission": 1854.8,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 116.12,
+                "lat": 38.42,
+                "name": "行别营站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 11.1,
+                "carbonEmission": 1902.6,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 116.32,
+                "lat": 38.4,
+                "name": "黎民居站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 11.6,
+                "carbonEmission": 1932.6,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 116.52,
+                "lat": 38.38,
+                "name": "杜生站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 12.1,
+                "carbonEmission": 1950.9,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 116.72,
+                "lat": 38.36,
+                "name": "沧州西站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 12.4,
+                "carbonEmission": 1966.6,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 116.92,
+                "lat": 38.34,
+                "name": "李天木站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 12.5,
+                "carbonEmission": 1989.2,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 117.12,
+                "lat": 38.33,
+                "name": "黄骅南站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 12.3,
+                "carbonEmission": 2026.7,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 117.28,
+                "lat": 38.32,
+                "name": "段庄站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 12,
+                "carbonEmission": 2083.4,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 117.33,
+                "lat": 38.37,
+                "name": "黄骅港站",
+                "type": "station",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 11.8,
+                "carbonEmission": 2158.8,
+                "unit": "tCO2e"
+              },
+              {
+                "lng": 117.42,
+                "lat": 38.35,
+                "name": "港口站",
+                "type": "marshalling",
+                "latestAccountingTime": "2026-05-01",
+                "carbonIntensity": 11.9,
+                "carbonEmission": 2248,
+                "unit": "tCO2e"
+              }
+            ],
+            "statPeriod": "2026年5月"
+          },
+          "lines": {
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {
+                  "sectionName": "朔黄铁路全线",
+                  "direction": "up",
+                  "sectionId": "SHH-FULL-UP",
+                  "energyIntensity": 28.5,
+                  "carbonIntensity": 8.8,
+                  "statPeriod": "2026年5月",
+                  "lengthKm": 618.3
+                },
+                "geometry": {
+                  "type": "LineString",
+                  "coordinates": [
+                    [
+                      111.76,
+                      39.09
+                    ],
+                    [
+                      112.19676,
+                      39.08003
+                    ],
+                    [
+                      112.20681,
+                      39.08494
+                    ],
+                    [
+                      112.21287,
+                      39.0852
+                    ],
+                    [
+                      112.22302,
+                      39.08003
+                    ],
+                    [
+                      112.23056,
+                      39.07821
+                    ],
+                    [
+                      112.23729,
+                      39.07917
+                    ],
+                    [
+                      112.24325,
+                      39.07862
+                    ],
+                    [
+                      112.2582,
+                      39.0683
+                    ],
+                    [
+                      112.26899,
+                      39.05499
+                    ],
+                    [
+                      112.27011,
+                      39.04713
+                    ],
+                    [
+                      112.28023,
+                      39.03431
+                    ],
+                    [
+                      112.28246,
+                      39.02191
+                    ],
+                    [
+                      112.28782,
+                      39.01482
+                    ],
+                    [
+                      112.29142,
+                      39.00682
+                    ],
+                    [
+                      112.28854,
+                      38.99939
+                    ],
+                    [
+                      112.28069,
+                      38.98699
+                    ],
+                    [
+                      112.28075,
+                      38.98461
+                    ],
+                    [
+                      112.28306,
+                      38.9826
+                    ],
+                    [
+                      112.28944,
+                      38.9829
+                    ],
+                    [
+                      112.29503,
+                      38.98569
+                    ],
+                    [
+                      112.30622,
+                      38.98624
+                    ],
+                    [
+                      112.40542,
+                      38.95287
+                    ],
+                    [
+                      112.44805,
+                      38.94747
+                    ],
+                    [
+                      112.45094,
+                      38.94561
+                    ],
+                    [
+                      112.45491,
+                      38.93816
+                    ],
+                    [
+                      112.467,
+                      38.93072
+                    ],
+                    [
+                      112.47408,
+                      38.93154
+                    ],
+                    [
+                      112.49018,
+                      38.93931
+                    ],
+                    [
+                      112.49207,
+                      38.94203
+                    ],
+                    [
+                      112.49159,
+                      38.94897
+                    ],
+                    [
+                      112.49288,
+                      38.9526
+                    ],
+                    [
+                      112.498,
+                      38.95362
+                    ],
+                    [
+                      112.50284,
+                      38.95115
+                    ],
+                    [
+                      112.50446,
+                      38.94843
+                    ],
+                    [
+                      112.50392,
+                      38.94602
+                    ],
+                    [
+                      112.48768,
+                      38.92457
+                    ],
+                    [
+                      112.48311,
+                      38.92014
+                    ],
+                    [
+                      112.48226,
+                      38.91105
+                    ],
+                    [
+                      112.48313,
+                      38.90805
+                    ],
+                    [
+                      112.5139,
+                      38.88681
+                    ],
+                    [
+                      112.52357,
+                      38.88544
+                    ],
+                    [
+                      112.53162,
+                      38.87712
+                    ],
+                    [
+                      112.54338,
+                      38.87271
+                    ],
+                    [
+                      112.5497,
+                      38.86639
+                    ],
+                    [
+                      112.56389,
+                      38.8644
+                    ],
+                    [
+                      112.56854,
+                      38.86206
+                    ],
+                    [
+                      112.57036,
+                      38.85936
+                    ],
+                    [
+                      112.56987,
+                      38.85419
+                    ],
+                    [
+                      112.57252,
+                      38.85126
+                    ],
+                    [
+                      112.59226,
+                      38.84531
+                    ],
+                    [
+                      112.59516,
+                      38.84579
+                    ],
+                    [
+                      112.60089,
+                      38.84987
+                    ],
+                    [
+                      112.6069,
+                      38.85162
+                    ],
+                    [
+                      112.61248,
+                      38.84993
+                    ],
+                    [
+                      112.61367,
+                      38.84744
+                    ],
+                    [
+                      112.61316,
+                      38.84529
+                    ],
+                    [
+                      112.60788,
+                      38.84069
+                    ],
+                    [
+                      112.60409,
+                      38.83559
+                    ],
+                    [
+                      112.60102,
+                      38.83424
+                    ],
+                    [
+                      112.59348,
+                      38.83443
+                    ],
+                    [
+                      112.5858,
+                      38.82864
+                    ],
+                    [
+                      112.58622,
+                      38.82502
+                    ],
+                    [
+                      112.59084,
+                      38.82186
+                    ],
+                    [
+                      112.59462,
+                      38.81747
+                    ],
+                    [
+                      112.59859,
+                      38.80456
+                    ],
+                    [
+                      112.60473,
+                      38.80015
+                    ],
+                    [
+                      112.60783,
+                      38.79284
+                    ],
+                    [
+                      112.61701,
+                      38.78585
+                    ],
+                    [
+                      112.62139,
+                      38.78074
+                    ],
+                    [
+                      112.62213,
+                      38.77255
+                    ],
+                    [
+                      112.62338,
+                      38.77007
+                    ],
+                    [
+                      112.6469,
+                      38.7576
+                    ],
+                    [
+                      112.65709,
+                      38.74928
+                    ],
+                    [
+                      112.66013,
+                      38.72888
+                    ],
+                    [
+                      112.67786,
+                      38.70477
+                    ],
+                    [
+                      112.69019,
+                      38.67944
+                    ],
+                    [
+                      112.70455,
+                      38.65897
+                    ],
+                    [
+                      112.70663,
+                      38.65406
+                    ],
+                    [
+                      112.70898,
+                      38.65238
+                    ],
+                    [
+                      112.72851,
+                      38.64692
+                    ],
+                    [
+                      112.74606,
+                      38.62687
+                    ],
+                    [
+                      112.74897,
+                      38.62488
+                    ],
+                    [
+                      112.75975,
+                      38.6204
+                    ],
+                    [
+                      112.77436,
+                      38.61788
+                    ],
+                    [
+                      112.78261,
+                      38.61457
+                    ],
+                    [
+                      112.79108,
+                      38.61561
+                    ],
+                    [
+                      112.79744,
+                      38.6148
+                    ],
+                    [
+                      112.81938,
+                      38.60578
+                    ],
+                    [
+                      112.83341,
+                      38.59443
+                    ],
+                    [
+                      112.85271,
+                      38.58522
+                    ],
+                    [
+                      112.89612,
+                      38.56847
+                    ],
+                    [
+                      112.90032,
+                      38.56775
+                    ],
+                    [
+                      112.96297,
+                      38.57951
+                    ],
+                    [
+                      113.04391,
+                      38.61025
+                    ],
+                    [
+                      113.06279,
+                      38.62237
+                    ],
+                    [
+                      113.07164,
+                      38.63062
+                    ],
+                    [
+                      113.0822,
+                      38.63347
+                    ],
+                    [
+                      113.08957,
+                      38.63756
+                    ],
+                    [
+                      113.13398,
+                      38.6439
+                    ],
+                    [
+                      113.139,
+                      38.64347
+                    ],
+                    [
+                      113.17281,
+                      38.61777
+                    ],
+                    [
+                      113.18517,
+                      38.61266
+                    ],
+                    [
+                      113.19013,
+                      38.60818
+                    ],
+                    [
+                      113.19226,
+                      38.60038
+                    ],
+                    [
+                      113.19455,
+                      38.59788
+                    ],
+                    [
+                      113.20702,
+                      38.5908
+                    ],
+                    [
+                      113.21638,
+                      38.58808
+                    ],
+                    [
+                      113.22935,
+                      38.58061
+                    ],
+                    [
+                      113.23139,
+                      38.57873
+                    ],
+                    [
+                      113.23279,
+                      38.57347
+                    ],
+                    [
+                      113.23498,
+                      38.57075
+                    ],
+                    [
+                      113.2426,
+                      38.56646
+                    ],
+                    [
+                      113.24709,
+                      38.5336
+                    ],
+                    [
+                      113.24911,
+                      38.52897
+                    ],
+                    [
+                      113.25305,
+                      38.52579
+                    ],
+                    [
+                      113.26723,
+                      38.52342
+                    ],
+                    [
+                      113.2766,
+                      38.51665
+                    ],
+                    [
+                      113.28378,
+                      38.51314
+                    ],
+                    [
+                      113.287,
+                      38.50458
+                    ],
+                    [
+                      113.31258,
+                      38.45538
+                    ],
+                    [
+                      113.31228,
+                      38.45189
+                    ],
+                    [
+                      113.30442,
+                      38.44652
+                    ],
+                    [
+                      113.30238,
+                      38.44302
+                    ],
+                    [
+                      113.30294,
+                      38.43725
+                    ],
+                    [
+                      113.30599,
+                      38.43387
+                    ],
+                    [
+                      113.33439,
+                      38.43061
+                    ],
+                    [
+                      113.34097,
+                      38.43135
+                    ],
+                    [
+                      113.34829,
+                      38.43384
+                    ],
+                    [
+                      113.35143,
+                      38.43703
+                    ],
+                    [
+                      113.3558,
+                      38.45575
+                    ],
+                    [
+                      113.35878,
+                      38.45828
+                    ],
+                    [
+                      113.36211,
+                      38.45841
+                    ],
+                    [
+                      113.37167,
+                      38.45518
+                    ],
+                    [
+                      113.38107,
+                      38.45602
+                    ],
+                    [
+                      113.38367,
+                      38.45394
+                    ],
+                    [
+                      113.38717,
+                      38.44752
+                    ],
+                    [
+                      113.39352,
+                      38.44411
+                    ],
+                    [
+                      113.4182,
+                      38.4433
+                    ],
+                    [
+                      113.4319,
+                      38.44082
+                    ],
+                    [
+                      113.47623,
+                      38.43714
+                    ],
+                    [
+                      113.48699,
+                      38.43293
+                    ],
+                    [
+                      113.49619,
+                      38.43431
+                    ],
+                    [
+                      113.50915,
+                      38.43149
+                    ],
+                    [
+                      113.52582,
+                      38.43032
+                    ],
+                    [
+                      113.53271,
+                      38.42546
+                    ],
+                    [
+                      113.55158,
+                      38.42279
+                    ],
+                    [
+                      113.56588,
+                      38.41802
+                    ],
+                    [
+                      113.57465,
+                      38.41844
+                    ],
+                    [
+                      113.59278,
+                      38.41597
+                    ],
+                    [
+                      113.60271,
+                      38.4079
+                    ],
+                    [
+                      113.61446,
+                      38.40804
+                    ],
+                    [
+                      113.6212,
+                      38.40446
+                    ],
+                    [
+                      113.64632,
+                      38.39702
+                    ],
+                    [
+                      113.69677,
+                      38.38424
+                    ],
+                    [
+                      113.70836,
+                      38.38609
+                    ],
+                    [
+                      113.71833,
+                      38.39301
+                    ],
+                    [
+                      113.72808,
+                      38.39546
+                    ],
+                    [
+                      113.746,
+                      38.39042
+                    ],
+                    [
+                      113.75373,
+                      38.39053
+                    ],
+                    [
+                      113.76418,
+                      38.38705
+                    ],
+                    [
+                      113.78989,
+                      38.37486
+                    ],
+                    [
+                      113.82702,
+                      38.36678
+                    ],
+                    [
+                      113.83282,
+                      38.36439
+                    ],
+                    [
+                      113.8412,
+                      38.35775
+                    ],
+                    [
+                      113.85309,
+                      38.34398
+                    ],
+                    [
+                      113.85362,
+                      38.32938
+                    ],
+                    [
+                      113.84987,
+                      38.32166
+                    ],
+                    [
+                      113.85736,
+                      38.31171
+                    ],
+                    [
+                      113.85752,
+                      38.30256
+                    ],
+                    [
+                      113.8587,
+                      38.29985
+                    ],
+                    [
+                      113.86798,
+                      38.29135
+                    ],
+                    [
+                      113.87372,
+                      38.28971
+                    ],
+                    [
+                      113.89571,
+                      38.28858
+                    ],
+                    [
+                      113.91338,
+                      38.2851
+                    ],
+                    [
+                      113.91624,
+                      38.28346
+                    ],
+                    [
+                      113.92032,
+                      38.2783
+                    ],
+                    [
+                      113.92767,
+                      38.27416
+                    ],
+                    [
+                      113.9384,
+                      38.27289
+                    ],
+                    [
+                      113.95092,
+                      38.27405
+                    ],
+                    [
+                      113.96705,
+                      38.26669
+                    ],
+                    [
+                      113.96911,
+                      38.26484
+                    ],
+                    [
+                      113.97211,
+                      38.25798
+                    ],
+                    [
+                      113.97778,
+                      38.25497
+                    ],
+                    [
+                      113.9976,
+                      38.25479
+                    ],
+                    [
+                      114.01867,
+                      38.25143
+                    ],
+                    [
+                      114.05313,
+                      38.25926
+                    ],
+                    [
+                      114.0617,
+                      38.26351
+                    ],
+                    [
+                      114.13117,
+                      38.26001
+                    ],
+                    [
+                      114.149,
+                      38.26134
+                    ],
+                    [
+                      114.1639,
+                      38.26395
+                    ],
+                    [
+                      114.16873,
+                      38.2672
+                    ],
+                    [
+                      114.1859,
+                      38.30577
+                    ],
+                    [
+                      114.20697,
+                      38.33745
+                    ],
+                    [
+                      114.2105,
+                      38.34082
+                    ],
+                    [
+                      114.22709,
+                      38.34812
+                    ],
+                    [
+                      114.23555,
+                      38.34996
+                    ],
+                    [
+                      114.25173,
+                      38.35605
+                    ],
+                    [
+                      114.34159,
+                      38.37178
+                    ],
+                    [
+                      114.47805,
+                      38.42255
+                    ],
+                    [
+                      114.49552,
+                      38.4343
+                    ],
+                    [
+                      114.50087,
+                      38.43629
+                    ],
+                    [
+                      114.55286,
+                      38.44751
+                    ],
+                    [
+                      114.60178,
+                      38.45
+                    ],
+                    [
+                      114.60591,
+                      38.4519
+                    ],
+                    [
+                      114.66262,
+                      38.49081
+                    ],
+                    [
+                      114.69359,
+                      38.48843
+                    ],
+                    [
+                      114.72389,
+                      38.49494
+                    ],
+                    [
+                      114.91066,
+                      38.48972
+                    ],
+                    [
+                      114.95304,
+                      38.48754
+                    ],
+                    [
+                      114.98889,
+                      38.49145
+                    ],
+                    [
+                      115.0419,
+                      38.47579
+                    ],
+                    [
+                      115.09683,
+                      38.47061
+                    ],
+                    [
+                      115.18487,
+                      38.44795
+                    ],
+                    [
+                      115.26979,
+                      38.44279
+                    ],
+                    [
+                      115.33299,
+                      38.44136
+                    ],
+                    [
+                      115.36387,
+                      38.43057
+                    ],
+                    [
+                      115.49958,
+                      38.44626
+                    ],
+                    [
+                      115.54291,
+                      38.461
+                    ],
+                    [
+                      115.59192,
+                      38.4653
+                    ],
+                    [
+                      115.5988,
+                      38.46399
+                    ],
+                    [
+                      115.62323,
+                      38.44846
+                    ],
+                    [
+                      115.6287,
+                      38.44683
+                    ],
+                    [
+                      115.66034,
+                      38.4455
+                    ],
+                    [
+                      115.67696,
+                      38.44982
+                    ],
+                    [
+                      115.79585,
+                      38.44365
+                    ],
+                    [
+                      115.86214,
+                      38.44583
+                    ],
+                    [
+                      115.89239,
+                      38.45415
+                    ],
+                    [
+                      115.91829,
+                      38.44987
+                    ],
+                    [
+                      115.97595,
+                      38.44533
+                    ],
+                    [
+                      115.99914,
+                      38.44807
+                    ],
+                    [
+                      116.02892,
+                      38.4492
+                    ],
+                    [
+                      116.09148,
+                      38.46003
+                    ],
+                    [
+                      116.10979,
+                      38.46184
+                    ],
+                    [
+                      116.18833,
+                      38.46003
+                    ],
+                    [
+                      116.30996,
+                      38.44687
+                    ],
+                    [
+                      116.3634,
+                      38.4442
+                    ],
+                    [
+                      116.39117,
+                      38.43969
+                    ],
+                    [
+                      116.40551,
+                      38.43894
+                    ],
+                    [
+                      116.42468,
+                      38.4328
+                    ],
+                    [
+                      116.45721,
+                      38.41405
+                    ],
+                    [
+                      116.50205,
+                      38.404
+                    ],
+                    [
+                      116.55257,
+                      38.39033
+                    ],
+                    [
+                      116.6012,
+                      38.3885
+                    ],
+                    [
+                      116.64909,
+                      38.38921
+                    ],
+                    [
+                      116.66245,
+                      38.38635
+                    ],
+                    [
+                      116.68811,
+                      38.3871
+                    ],
+                    [
+                      116.72457,
+                      38.38203
+                    ],
+                    [
+                      116.77343,
+                      38.37201
+                    ],
+                    [
+                      116.87275,
+                      38.36873
+                    ],
+                    [
+                      116.8836,
+                      38.36539
+                    ],
+                    [
+                      116.91623,
+                      38.36037
+                    ],
+                    [
+                      116.92046,
+                      38.3586
+                    ],
+                    [
+                      116.9267,
+                      38.35308
+                    ],
+                    [
+                      116.93093,
+                      38.35106
+                    ],
+                    [
+                      116.99327,
+                      38.33405
+                    ],
+                    [
+                      117.02073,
+                      38.32985
+                    ],
+                    [
+                      117.03315,
+                      38.32571
+                    ],
+                    [
+                      117.0384,
+                      38.32594
+                    ],
+                    [
+                      117.15781,
+                      38.35221
+                    ],
+                    [
+                      117.19528,
+                      38.34156
+                    ],
+                    [
+                      117.2154,
+                      38.33795
+                    ],
+                    [
+                      117.23155,
+                      38.33845
+                    ],
+                    [
+                      117.27916,
+                      38.33547
+                    ],
+                    [
+                      117.39281,
+                      38.32351
+                    ],
+                    [
+                      117.46992,
+                      38.32209
+                    ],
+                    [
+                      117.48252,
+                      38.31801
+                    ],
+                    [
+                      117.51218,
+                      38.31596
+                    ],
+                    [
+                      117.57123,
+                      38.30144
+                    ],
+                    [
+                      117.60631,
+                      38.28824
+                    ],
+                    [
+                      117.66031,
+                      38.29037
+                    ],
+                    [
+                      117.73022,
+                      38.27768
+                    ],
+                    [
+                      117.76026,
+                      38.28339
+                    ],
+                    [
+                      117.79439,
+                      38.28325
+                    ]
+                  ]
+                }
+              },
+              {
+                "type": "Feature",
+                "properties": {
+                  "sectionName": "朔黄铁路全线",
+                  "direction": "down",
+                  "sectionId": "SHH-FULL-DOWN",
+                  "energyIntensity": 26.2,
+                  "carbonIntensity": 8.2,
+                  "statPeriod": "2026年5月",
+                  "lengthKm": 618.4
+                },
+                "geometry": {
+                  "type": "LineString",
+                  "coordinates": [
+                    [
+                      111.76,
+                      39.075
+                    ],
+                    [
+                      112.19676,
+                      39.06503
+                    ],
+                    [
+                      112.20681,
+                      39.06994
+                    ],
+                    [
+                      112.21287,
+                      39.0702
+                    ],
+                    [
+                      112.22302,
+                      39.06503
+                    ],
+                    [
+                      112.23056,
+                      39.06321
+                    ],
+                    [
+                      112.23729,
+                      39.06417
+                    ],
+                    [
+                      112.24325,
+                      39.06362
+                    ],
+                    [
+                      112.2582,
+                      39.0533
+                    ],
+                    [
+                      112.26899,
+                      39.03999
+                    ],
+                    [
+                      112.27011,
+                      39.03213
+                    ],
+                    [
+                      112.28023,
+                      39.01931
+                    ],
+                    [
+                      112.28246,
+                      39.00691
+                    ],
+                    [
+                      112.28782,
+                      38.99982
+                    ],
+                    [
+                      112.29142,
+                      38.99182
+                    ],
+                    [
+                      112.28854,
+                      38.98439
+                    ],
+                    [
+                      112.28069,
+                      38.97199
+                    ],
+                    [
+                      112.28075,
+                      38.96961
+                    ],
+                    [
+                      112.28306,
+                      38.9676
+                    ],
+                    [
+                      112.28944,
+                      38.9679
+                    ],
+                    [
+                      112.29503,
+                      38.97069
+                    ],
+                    [
+                      112.30622,
+                      38.97124
+                    ],
+                    [
+                      112.40542,
+                      38.93787
+                    ],
+                    [
+                      112.44805,
+                      38.93247
+                    ],
+                    [
+                      112.45094,
+                      38.93061
+                    ],
+                    [
+                      112.45491,
+                      38.92316
+                    ],
+                    [
+                      112.467,
+                      38.91572
+                    ],
+                    [
+                      112.47408,
+                      38.91654
+                    ],
+                    [
+                      112.49018,
+                      38.92431
+                    ],
+                    [
+                      112.49207,
+                      38.92703
+                    ],
+                    [
+                      112.49159,
+                      38.93397
+                    ],
+                    [
+                      112.49288,
+                      38.9376
+                    ],
+                    [
+                      112.498,
+                      38.93862
+                    ],
+                    [
+                      112.50284,
+                      38.93615
+                    ],
+                    [
+                      112.50446,
+                      38.93343
+                    ],
+                    [
+                      112.50392,
+                      38.93102
+                    ],
+                    [
+                      112.48768,
+                      38.90957
+                    ],
+                    [
+                      112.48311,
+                      38.90514
+                    ],
+                    [
+                      112.48226,
+                      38.89605
+                    ],
+                    [
+                      112.48313,
+                      38.89305
+                    ],
+                    [
+                      112.5139,
+                      38.87181
+                    ],
+                    [
+                      112.52357,
+                      38.87044
+                    ],
+                    [
+                      112.53162,
+                      38.86212
+                    ],
+                    [
+                      112.54338,
+                      38.85771
+                    ],
+                    [
+                      112.5497,
+                      38.85139
+                    ],
+                    [
+                      112.56389,
+                      38.8494
+                    ],
+                    [
+                      112.56854,
+                      38.84706
+                    ],
+                    [
+                      112.57036,
+                      38.84436
+                    ],
+                    [
+                      112.56987,
+                      38.83919
+                    ],
+                    [
+                      112.57252,
+                      38.83626
+                    ],
+                    [
+                      112.59226,
+                      38.83031
+                    ],
+                    [
+                      112.59516,
+                      38.83079
+                    ],
+                    [
+                      112.60089,
+                      38.83487
+                    ],
+                    [
+                      112.6069,
+                      38.83662
+                    ],
+                    [
+                      112.61248,
+                      38.83493
+                    ],
+                    [
+                      112.61367,
+                      38.83244
+                    ],
+                    [
+                      112.61316,
+                      38.83029
+                    ],
+                    [
+                      112.60788,
+                      38.82569
+                    ],
+                    [
+                      112.60409,
+                      38.82059
+                    ],
+                    [
+                      112.60102,
+                      38.81924
+                    ],
+                    [
+                      112.59348,
+                      38.81943
+                    ],
+                    [
+                      112.5858,
+                      38.81364
+                    ],
+                    [
+                      112.58622,
+                      38.81002
+                    ],
+                    [
+                      112.59084,
+                      38.80686
+                    ],
+                    [
+                      112.59462,
+                      38.80247
+                    ],
+                    [
+                      112.59859,
+                      38.78956
+                    ],
+                    [
+                      112.60473,
+                      38.78515
+                    ],
+                    [
+                      112.60783,
+                      38.77784
+                    ],
+                    [
+                      112.61701,
+                      38.77085
+                    ],
+                    [
+                      112.62139,
+                      38.76574
+                    ],
+                    [
+                      112.62213,
+                      38.75755
+                    ],
+                    [
+                      112.62338,
+                      38.75507
+                    ],
+                    [
+                      112.6469,
+                      38.7426
+                    ],
+                    [
+                      112.65709,
+                      38.73428
+                    ],
+                    [
+                      112.66013,
+                      38.71388
+                    ],
+                    [
+                      112.67786,
+                      38.68977
+                    ],
+                    [
+                      112.69019,
+                      38.66444
+                    ],
+                    [
+                      112.70455,
+                      38.64397
+                    ],
+                    [
+                      112.70663,
+                      38.63906
+                    ],
+                    [
+                      112.70898,
+                      38.63738
+                    ],
+                    [
+                      112.72851,
+                      38.63192
+                    ],
+                    [
+                      112.74606,
+                      38.61187
+                    ],
+                    [
+                      112.74897,
+                      38.60988
+                    ],
+                    [
+                      112.75975,
+                      38.6054
+                    ],
+                    [
+                      112.77436,
+                      38.60288
+                    ],
+                    [
+                      112.78261,
+                      38.59957
+                    ],
+                    [
+                      112.79108,
+                      38.60061
+                    ],
+                    [
+                      112.79744,
+                      38.5998
+                    ],
+                    [
+                      112.81938,
+                      38.59078
+                    ],
+                    [
+                      112.83341,
+                      38.57943
+                    ],
+                    [
+                      112.85271,
+                      38.57022
+                    ],
+                    [
+                      112.89612,
+                      38.55347
+                    ],
+                    [
+                      112.90032,
+                      38.55275
+                    ],
+                    [
+                      112.96297,
+                      38.56451
+                    ],
+                    [
+                      113.04391,
+                      38.59525
+                    ],
+                    [
+                      113.06279,
+                      38.60737
+                    ],
+                    [
+                      113.07164,
+                      38.61562
+                    ],
+                    [
+                      113.0822,
+                      38.61847
+                    ],
+                    [
+                      113.08957,
+                      38.62256
+                    ],
+                    [
+                      113.13398,
+                      38.6289
+                    ],
+                    [
+                      113.139,
+                      38.62847
+                    ],
+                    [
+                      113.17281,
+                      38.60277
+                    ],
+                    [
+                      113.18517,
+                      38.59766
+                    ],
+                    [
+                      113.19013,
+                      38.59318
+                    ],
+                    [
+                      113.19226,
+                      38.58538
+                    ],
+                    [
+                      113.19455,
+                      38.58288
+                    ],
+                    [
+                      113.20702,
+                      38.5758
+                    ],
+                    [
+                      113.21638,
+                      38.57308
+                    ],
+                    [
+                      113.22935,
+                      38.56561
+                    ],
+                    [
+                      113.23139,
+                      38.56373
+                    ],
+                    [
+                      113.23279,
+                      38.55847
+                    ],
+                    [
+                      113.23498,
+                      38.55575
+                    ],
+                    [
+                      113.2426,
+                      38.55146
+                    ],
+                    [
+                      113.24709,
+                      38.5186
+                    ],
+                    [
+                      113.24911,
+                      38.51397
+                    ],
+                    [
+                      113.25305,
+                      38.51079
+                    ],
+                    [
+                      113.26723,
+                      38.50842
+                    ],
+                    [
+                      113.2766,
+                      38.50165
+                    ],
+                    [
+                      113.28378,
+                      38.49814
+                    ],
+                    [
+                      113.287,
+                      38.48958
+                    ],
+                    [
+                      113.31258,
+                      38.44038
+                    ],
+                    [
+                      113.31228,
+                      38.43689
+                    ],
+                    [
+                      113.30442,
+                      38.43152
+                    ],
+                    [
+                      113.30238,
+                      38.42802
+                    ],
+                    [
+                      113.30294,
+                      38.42225
+                    ],
+                    [
+                      113.30599,
+                      38.41887
+                    ],
+                    [
+                      113.33439,
+                      38.41561
+                    ],
+                    [
+                      113.34097,
+                      38.41635
+                    ],
+                    [
+                      113.34829,
+                      38.41884
+                    ],
+                    [
+                      113.35143,
+                      38.42203
+                    ],
+                    [
+                      113.3558,
+                      38.44075
+                    ],
+                    [
+                      113.35878,
+                      38.44328
+                    ],
+                    [
+                      113.36211,
+                      38.44341
+                    ],
+                    [
+                      113.37167,
+                      38.44018
+                    ],
+                    [
+                      113.38107,
+                      38.44102
+                    ],
+                    [
+                      113.38367,
+                      38.43894
+                    ],
+                    [
+                      113.38717,
+                      38.43252
+                    ],
+                    [
+                      113.39352,
+                      38.42911
+                    ],
+                    [
+                      113.4182,
+                      38.4283
+                    ],
+                    [
+                      113.4319,
+                      38.42582
+                    ],
+                    [
+                      113.47623,
+                      38.42214
+                    ],
+                    [
+                      113.48699,
+                      38.41793
+                    ],
+                    [
+                      113.49619,
+                      38.41931
+                    ],
+                    [
+                      113.50915,
+                      38.41649
+                    ],
+                    [
+                      113.52582,
+                      38.41532
+                    ],
+                    [
+                      113.53271,
+                      38.41046
+                    ],
+                    [
+                      113.55158,
+                      38.40779
+                    ],
+                    [
+                      113.56588,
+                      38.40302
+                    ],
+                    [
+                      113.57465,
+                      38.40344
+                    ],
+                    [
+                      113.59278,
+                      38.40097
+                    ],
+                    [
+                      113.60271,
+                      38.3929
+                    ],
+                    [
+                      113.61446,
+                      38.39304
+                    ],
+                    [
+                      113.6212,
+                      38.38946
+                    ],
+                    [
+                      113.64632,
+                      38.38202
+                    ],
+                    [
+                      113.69677,
+                      38.36924
+                    ],
+                    [
+                      113.70836,
+                      38.37109
+                    ],
+                    [
+                      113.71833,
+                      38.37801
+                    ],
+                    [
+                      113.72808,
+                      38.38046
+                    ],
+                    [
+                      113.746,
+                      38.37542
+                    ],
+                    [
+                      113.75373,
+                      38.37553
+                    ],
+                    [
+                      113.76418,
+                      38.37205
+                    ],
+                    [
+                      113.78989,
+                      38.35986
+                    ],
+                    [
+                      113.82702,
+                      38.35178
+                    ],
+                    [
+                      113.83282,
+                      38.34939
+                    ],
+                    [
+                      113.8412,
+                      38.34275
+                    ],
+                    [
+                      113.85309,
+                      38.32898
+                    ],
+                    [
+                      113.85362,
+                      38.31438
+                    ],
+                    [
+                      113.84987,
+                      38.30666
+                    ],
+                    [
+                      113.85736,
+                      38.29671
+                    ],
+                    [
+                      113.85752,
+                      38.28756
+                    ],
+                    [
+                      113.8587,
+                      38.28485
+                    ],
+                    [
+                      113.86798,
+                      38.27635
+                    ],
+                    [
+                      113.87372,
+                      38.27471
+                    ],
+                    [
+                      113.89571,
+                      38.27358
+                    ],
+                    [
+                      113.91338,
+                      38.2701
+                    ],
+                    [
+                      113.91624,
+                      38.26846
+                    ],
+                    [
+                      113.92032,
+                      38.2633
+                    ],
+                    [
+                      113.92767,
+                      38.25916
+                    ],
+                    [
+                      113.9384,
+                      38.25789
+                    ],
+                    [
+                      113.95092,
+                      38.25905
+                    ],
+                    [
+                      113.96705,
+                      38.25169
+                    ],
+                    [
+                      113.96911,
+                      38.24984
+                    ],
+                    [
+                      113.97211,
+                      38.24298
+                    ],
+                    [
+                      113.97778,
+                      38.23997
+                    ],
+                    [
+                      113.9976,
+                      38.23979
+                    ],
+                    [
+                      114.01867,
+                      38.23643
+                    ],
+                    [
+                      114.05313,
+                      38.24426
+                    ],
+                    [
+                      114.0617,
+                      38.24851
+                    ],
+                    [
+                      114.13117,
+                      38.24501
+                    ],
+                    [
+                      114.149,
+                      38.24634
+                    ],
+                    [
+                      114.1639,
+                      38.24895
+                    ],
+                    [
+                      114.16873,
+                      38.2522
+                    ],
+                    [
+                      114.1859,
+                      38.29077
+                    ],
+                    [
+                      114.20697,
+                      38.32245
+                    ],
+                    [
+                      114.2105,
+                      38.32582
+                    ],
+                    [
+                      114.22709,
+                      38.33312
+                    ],
+                    [
+                      114.23555,
+                      38.33496
+                    ],
+                    [
+                      114.25173,
+                      38.34105
+                    ],
+                    [
+                      114.34159,
+                      38.35678
+                    ],
+                    [
+                      114.47805,
+                      38.40755
+                    ],
+                    [
+                      114.49552,
+                      38.4193
+                    ],
+                    [
+                      114.50087,
+                      38.42129
+                    ],
+                    [
+                      114.55286,
+                      38.43251
+                    ],
+                    [
+                      114.60178,
+                      38.435
+                    ],
+                    [
+                      114.60591,
+                      38.4369
+                    ],
+                    [
+                      114.66262,
+                      38.47581
+                    ],
+                    [
+                      114.69359,
+                      38.47343
+                    ],
+                    [
+                      114.72389,
+                      38.47994
+                    ],
+                    [
+                      114.91066,
+                      38.47472
+                    ],
+                    [
+                      114.95304,
+                      38.47254
+                    ],
+                    [
+                      114.98889,
+                      38.47645
+                    ],
+                    [
+                      115.0419,
+                      38.46079
+                    ],
+                    [
+                      115.09683,
+                      38.45561
+                    ],
+                    [
+                      115.18487,
+                      38.43295
+                    ],
+                    [
+                      115.26979,
+                      38.42779
+                    ],
+                    [
+                      115.33299,
+                      38.42636
+                    ],
+                    [
+                      115.36387,
+                      38.41557
+                    ],
+                    [
+                      115.49958,
+                      38.43126
+                    ],
+                    [
+                      115.54291,
+                      38.446
+                    ],
+                    [
+                      115.59192,
+                      38.4503
+                    ],
+                    [
+                      115.5988,
+                      38.44899
+                    ],
+                    [
+                      115.62323,
+                      38.43346
+                    ],
+                    [
+                      115.6287,
+                      38.43183
+                    ],
+                    [
+                      115.66034,
+                      38.4305
+                    ],
+                    [
+                      115.67696,
+                      38.43482
+                    ],
+                    [
+                      115.79585,
+                      38.42865
+                    ],
+                    [
+                      115.86214,
+                      38.43083
+                    ],
+                    [
+                      115.89239,
+                      38.43915
+                    ],
+                    [
+                      115.91829,
+                      38.43487
+                    ],
+                    [
+                      115.97595,
+                      38.43033
+                    ],
+                    [
+                      115.99914,
+                      38.43307
+                    ],
+                    [
+                      116.02892,
+                      38.4342
+                    ],
+                    [
+                      116.09148,
+                      38.44503
+                    ],
+                    [
+                      116.10979,
+                      38.44684
+                    ],
+                    [
+                      116.18833,
+                      38.44503
+                    ],
+                    [
+                      116.30996,
+                      38.43187
+                    ],
+                    [
+                      116.3634,
+                      38.4292
+                    ],
+                    [
+                      116.39117,
+                      38.42469
+                    ],
+                    [
+                      116.40551,
+                      38.42394
+                    ],
+                    [
+                      116.42468,
+                      38.4178
+                    ],
+                    [
+                      116.45721,
+                      38.39905
+                    ],
+                    [
+                      116.50205,
+                      38.389
+                    ],
+                    [
+                      116.55257,
+                      38.37533
+                    ],
+                    [
+                      116.6012,
+                      38.3735
+                    ],
+                    [
+                      116.64909,
+                      38.37421
+                    ],
+                    [
+                      116.66245,
+                      38.37135
+                    ],
+                    [
+                      116.68811,
+                      38.3721
+                    ],
+                    [
+                      116.72457,
+                      38.36703
+                    ],
+                    [
+                      116.77343,
+                      38.35701
+                    ],
+                    [
+                      116.87275,
+                      38.35373
+                    ],
+                    [
+                      116.8836,
+                      38.35039
+                    ],
+                    [
+                      116.91623,
+                      38.34537
+                    ],
+                    [
+                      116.92046,
+                      38.3436
+                    ],
+                    [
+                      116.9267,
+                      38.33808
+                    ],
+                    [
+                      116.93093,
+                      38.33606
+                    ],
+                    [
+                      116.99327,
+                      38.31905
+                    ],
+                    [
+                      117.02073,
+                      38.31485
+                    ],
+                    [
+                      117.03315,
+                      38.31071
+                    ],
+                    [
+                      117.0384,
+                      38.31094
+                    ],
+                    [
+                      117.15781,
+                      38.33721
+                    ],
+                    [
+                      117.19528,
+                      38.32656
+                    ],
+                    [
+                      117.2154,
+                      38.32295
+                    ],
+                    [
+                      117.23155,
+                      38.32345
+                    ],
+                    [
+                      117.27916,
+                      38.32047
+                    ],
+                    [
+                      117.39281,
+                      38.30851
+                    ],
+                    [
+                      117.46992,
+                      38.30709
+                    ],
+                    [
+                      117.48252,
+                      38.30301
+                    ],
+                    [
+                      117.51218,
+                      38.30096
+                    ],
+                    [
+                      117.57123,
+                      38.28644
+                    ],
+                    [
+                      117.60631,
+                      38.27324
+                    ],
+                    [
+                      117.66031,
+                      38.27537
+                    ],
+                    [
+                      117.73022,
+                      38.26268
+                    ],
+                    [
+                      117.76026,
+                      38.26839
+                    ],
+                    [
+                      117.79439,
+                      38.26825
+                    ]
+                  ]
+                }
+              }
+            ]
+          },
+          "meta": {
+            "lineName": "朔黄铁路",
+            "totalLengthKm": 594,
+            "sectionCount": 34,
+            "pointCount": 35,
+            "statPeriod": "2026年5月",
+            "updateTime": "2026-05-24 08:00:00",
+            "stationOrder": [
+              "神池南站",
+              "宁武西站",
+              "龙宫站",
+              "北大牛站",
+              "原平南站",
+              "回凤站",
+              "东冶站",
+              "南湾站",
+              "滴流蹬站",
+              "猴刎站",
+              "小觉站",
+              "古月站",
+              "温塘站",
+              "西柏坡站",
+              "三汲站",
+              "灵寿站",
+              "行唐站",
+              "新曲站",
+              "定州西站",
+              "定州东站",
+              "安国站",
+              "博野站",
+              "蠡县站",
+              "肃宁北站",
+              "太师庄站",
+              "河间站",
+              "行别营站",
+              "黎民居站",
+              "杜生站",
+              "沧州西站",
+              "李天木站",
+              "黄骅南站",
+              "段庄站",
+              "黄骅港站",
+              "港口站"
+            ]
+          }
+        },
+        "showToolbar": true,
+        "showLegend": false,
+        "showBaseLine": true,
+        "showDirectionArrows": true,
+        "showPointLabels": true,
+        "showHaloEffect": true,
+        "stationLabelScope": "important",
+        "pointColorMode": "contrast",
+        "intensityGamma": 0.65,
+        "showIntensityOnLabel": true,
+        "activeMetric": "carbon",
+        "activeDirection": "all",
+        "showHighOnly": false,
+        "lineDisplayMode": "flow",
+        "pointBaseSize": 8,
+        "pointSizeScale": 10,
+        "haloSize": 7,
+        "haloOpacity": 0.45,
+        "radiationMinPx": 28,
+        "radiationMaxPx": 82,
+        "radiationInnerAlpha": 0.95,
+        "showLineHeatmap": false,
+        "showReferenceLines": true,
+        "heatmapGridStep": 0.05,
+        "heatmapInfluenceRadius": 0.07,
+        "heatmapPointSize": 12,
+        "heatmapBlurSize": 8,
+        "heatmapOpacity": 0.42,
+        "heatmapAllDirectionMode": "max",
+        "lineWidth": 3,
+        "referenceLineWidth": 2.5,
+        "lineFlowSpeed": 40,
+        "lineFlowTrailLength": 0.88,
+        "lineFlowSymbolSize": 5,
+        "flowDwellEnabled": true,
+        "flowDwellDurationSec": 2,
+        "flowTourSpeedRatio": 1.2,
+        "lineFlowRippleScaleMin": 2.4,
+        "lineFlowRippleScaleMax": 5.2,
+        "lineFlowRipplePeriodMin": 3.2,
+        "lineFlowRipplePeriodMax": 5.2,
+        "lineBloomIntensity": 1.5,
+        "labelFontSize": 15,
+        "labelColor": "#ffffff",
+        "labelYOffset": -10,
+        "geoZoom": 1.3,
+        "enableRipple": true,
+        "enableLineFlowRipple": false,
+        "lineCurveness": 0.2,
+        "mapPaddingRatio": 0.06,
+        "mapPaddingRatioX": 0.18,
+        "mapLayoutSize": "90%"
+      }
+    },
+    {
+      "id": "dash-border-3d",
+      "isGroup": false,
+      "attr": {
+        "x": 16,
+        "y": 180,
+        "w": 420,
+        "h": 360,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 8
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 0.85,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#6586ec",
+          "#2cf7fe"
+        ],
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-border-line",
+      "isGroup": false,
+      "attr": {
+        "x": 16,
+        "y": 560,
+        "w": 420,
+        "h": 300,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 8
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 0.85,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#6586ec",
+          "#2cf7fe"
+        ],
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-border-pie",
+      "isGroup": false,
+      "attr": {
+        "x": 1484,
+        "y": 180,
+        "w": 420,
+        "h": 380,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 8
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 0.85,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#6586ec",
+          "#2cf7fe"
+        ],
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-border-table",
+      "isGroup": false,
+      "attr": {
+        "x": 1484,
+        "y": 560,
+        "w": 420,
+        "h": 500,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 8
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 0.85,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Border02",
+      "chartConfig": {
+        "key": "Border02",
+        "chartKey": "VBorder02",
+        "conKey": "VCBorder02",
+        "title": "边框-02",
+        "category": "Borders",
+        "categoryName": "边框",
+        "package": "Decorates",
+        "chartFrame": "static",
+        "image": "border02.png"
+      },
+      "option": {
+        "colors": [
+          "#6586ec",
+          "#2cf7fe"
+        ],
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-btn-overall",
+      "isGroup": false,
+      "attr": {
+        "x": 32,
+        "y": 118,
+        "w": 96,
+        "h": 36,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 16
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "总数据",
+        "fontSize": 14,
+        "fontColor": "#E6F7FF",
+        "paddingX": 8,
+        "paddingY": 6,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 1,
+        "borderColor": "#2EC7FF",
+        "borderRadius": 4,
+        "letterSpacing": 0,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "rgba(2,12,24,0.55)",
+        "stationScopeAction": "overall",
+        "highlightWhenOverall": true
+      }
+    },
+    {
+      "id": "dash-3d-001",
+      "isGroup": false,
+      "attr": {
+        "x": 32,
+        "y": 220,
+        "w": 388,
+        "h": 300,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "ThreeCarbonSurface",
+      "chartConfig": {
+        "key": "ThreeCarbonSurface",
+        "chartKey": "VThreeCarbonSurface",
+        "conKey": "VCThreeCarbonSurface",
+        "title": "3D碳排放热力曲面图",
+        "category": "Three",
+        "categoryName": "三维",
+        "package": "Decorates",
+        "chartFrame": "common",
+        "image": "threeCarbonSurface.png"
+      },
+      "option": {
+        "dataset": {
+          "timeType": "month",
+          "years": [
+            2023,
+            2024,
+            2025,
+            2026
+          ],
+          "times": [
+            "1月",
+            "2月",
+            "3月",
+            "4月",
+            "5月",
+            "6月",
+            "7月",
+            "8月",
+            "9月",
+            "10月",
+            "11月",
+            "12月"
+          ],
+          "values": [
+            [
+              1280.5,
+              1310.2,
+              1295,
+              1240.8,
+              1180.3,
+              1120.6,
+              1095.4,
+              1105.1,
+              1150.7,
+              1200.2,
+              1255.8,
+              1275
+            ],
+            [
+              1235.5,
+              1265.2,
+              1250,
+              1195.8,
+              1135.3,
+              1075.6,
+              1050.4,
+              1060.1,
+              1105.7,
+              1155.2,
+              1210.8,
+              1230
+            ],
+            [
+              1190.5,
+              1220.2,
+              1205,
+              1150.8,
+              1090.3,
+              1030.6,
+              1005.4,
+              1015.1,
+              1060.7,
+              1110.2,
+              1165.8,
+              1185
+            ],
+            [
+              1145.5,
+              1175.2,
+              1160,
+              1105.8,
+              1045.3,
+              985.6,
+              960.4,
+              970.1,
+              1015.7,
+              1065.2,
+              1120.8,
+              1140
+            ]
+          ],
+          "unit": "tCO2e"
+        },
+        "heightScale": 56,
+        "showWireframe": true,
+        "wireframeOpacity": 0.3,
+        "colorLow": "#0B5CFF",
+        "colorMidLow": "#00D4FF",
+        "colorMid": "#00FFB2",
+        "colorMidHigh": "#FFE600",
+        "colorHigh": "#FF3B30",
+        "backgroundColor": "transparent",
+        "gridColor": "#00ffff",
+        "gridOpacity": 0.15,
+        "axisColor": "#2EC7FF",
+        "labelColor": "#ffffff",
+        "enableTooltip": true,
+        "tooltipTrigger": "mixed",
+        "showColorLegend": false,
+        "enableIntroSpin": true,
+        "granularity": "month"
+      }
+    },
+    {
+      "id": "dash-line-001",
+      "isGroup": false,
+      "attr": {
+        "x": 32,
+        "y": 600,
+        "w": 388,
+        "h": 240,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "LineCommon",
+      "chartConfig": {
+        "key": "LineCommon",
+        "chartKey": "VLineCommon",
+        "conKey": "VCLineCommon",
+        "title": "折线图",
+        "category": "Lines",
+        "categoryName": "折线图",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "line.png"
+      },
+      "option": {
+        "tooltip": {
+          "show": true,
+          "trigger": "axis",
+          "axisPointer": {
+            "type": "line"
+          }
+        },
+        "xAxis": {
+          "show": true,
+          "type": "category"
+        },
+        "yAxis": {
+          "show": true,
+          "type": "value"
+        },
+        "legend": {
+          "show": true,
+          "textStyle": {
+            "color": "#ccc"
+          }
+        },
+        "dataset": {
+          "dimensions": [
+            "month",
+            "actual",
+            "forecast"
+          ],
+          "source": [
+            {
+              "month": "2025-06",
+              "actual": 1075,
+              "forecast": null
+            },
+            {
+              "month": "2025-07",
+              "actual": 1050,
+              "forecast": null
+            },
+            {
+              "month": "2025-08",
+              "actual": 1060,
+              "forecast": null
+            },
+            {
+              "month": "2025-09",
+              "actual": 1105,
+              "forecast": null
+            },
+            {
+              "month": "2025-10",
+              "actual": 1155,
+              "forecast": null
+            },
+            {
+              "month": "2025-11",
+              "actual": 1210,
+              "forecast": null
+            },
+            {
+              "month": "2025-12",
+              "actual": 1140,
+              "forecast": null
+            },
+            {
+              "month": "2026-01",
+              "actual": 1120,
+              "forecast": null
+            },
+            {
+              "month": "2026-02",
+              "actual": 1095,
+              "forecast": null
+            },
+            {
+              "month": "2026-03",
+              "actual": 1080,
+              "forecast": null
+            },
+            {
+              "month": "2026-04",
+              "actual": 1135,
+              "forecast": null
+            },
+            {
+              "month": "2026-05",
+              "actual": 1140,
+              "forecast": 1140
+            },
+            {
+              "month": "2026-06",
+              "actual": null,
+              "forecast": 1120
+            },
+            {
+              "month": "2026-07",
+              "actual": null,
+              "forecast": 1095
+            },
+            {
+              "month": "2026-08",
+              "actual": null,
+              "forecast": 1080
+            }
+          ]
+        },
+        "series": [
+          {
+            "type": "line",
+            "name": "实际",
+            "encode": {
+              "x": "month",
+              "y": "actual"
+            },
+            "lineStyle": {
+              "width": 3,
+              "color": "#2EC7FF"
+            },
+            "symbolSize": 6,
+            "connectNulls": false
+          },
+          {
+            "type": "line",
+            "name": "预测",
+            "encode": {
+              "x": "month",
+              "y": "forecast"
+            },
+            "lineStyle": {
+              "width": 2,
+              "type": "dashed",
+              "color": "#FFE600"
+            },
+            "symbolSize": 5,
+            "connectNulls": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "dash-tab-001",
+      "isGroup": false,
+      "attr": {
+        "x": 1500,
+        "y": 196,
+        "w": 388,
+        "h": 32,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 12
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": [
+          {
+            "interactOn": "change",
+            "interactComponentId": "dash-pie-001",
+            "interactFn": {
+              "structureType": "data"
+            }
+          }
+        ]
+      },
+      "key": "InputsTab",
+      "chartConfig": {
+        "key": "InputsTab",
+        "chartKey": "VInputsTab",
+        "conKey": "VCInputsTab",
+        "title": "标签选择器",
+        "category": "Inputs",
+        "categoryName": "控件",
+        "package": "Informations",
+        "chartFrame": "static",
+        "image": "inputs_tab.png"
+      },
+      "option": {
+        "componentInteractEventKey": "data",
+        "tabLabel": "排放源",
+        "tabType": "segment",
+        "dataset": [
+          {
+            "label": "排放源",
+            "value": "source"
+          },
+          {
+            "label": "排放类型",
+            "value": "type"
+          },
+          {
+            "label": "业务环节",
+            "value": "segment"
+          }
+        ]
+      },
+      "interactActions": [
+        {
+          "interactType": "change",
+          "interactName": "选择完成",
+          "componentEmitEvents": {
+            "data": [
+              {
+                "value": "data",
+                "label": "选择项"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "dash-pie-001",
+      "isGroup": false,
+      "attr": {
+        "x": 1500,
+        "y": 236,
+        "w": 388,
+        "h": 300,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {
+            "structureType": "source"
+          }
+        }
+      },
+      "filter": "const type = res?.structureType || 'source'\nconst all = {\n  \"source\": {\n    \"dimensions\": [\n      \"name\",\n      \"value\"\n    ],\n    \"source\": [\n      {\n        \"name\": \"外购电力\",\n        \"value\": 38\n      },\n      {\n        \"name\": \"机车燃油\",\n        \"value\": 42\n      },\n      {\n        \"name\": \"废弃物处理\",\n        \"value\": 8\n      },\n      {\n        \"name\": \"其他\",\n        \"value\": 12\n      }\n    ]\n  },\n  \"type\": {\n    \"dimensions\": [\n      \"name\",\n      \"value\"\n    ],\n    \"source\": [\n      {\n        \"name\": \"直接排放\",\n        \"value\": 55\n      },\n      {\n        \"name\": \"间接排放\",\n        \"value\": 45\n      }\n    ]\n  },\n  \"segment\": {\n    \"dimensions\": [\n      \"name\",\n      \"value\"\n    ],\n    \"source\": [\n      {\n        \"name\": \"机车运行\",\n        \"value\": 48\n      },\n      {\n        \"name\": \"车站运营\",\n        \"value\": 32\n      },\n      {\n        \"name\": \"维护修理\",\n        \"value\": 20\n      }\n    ]\n  }\n}\nreturn all[type] || all.source",
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "PieCommon",
+      "chartConfig": {
+        "key": "PieCommon",
+        "chartKey": "VPieCommon",
+        "conKey": "VCPieCommon",
+        "title": "饼图",
+        "category": "Pies",
+        "categoryName": "饼图",
+        "package": "Charts",
+        "chartFrame": "echarts",
+        "image": "pie.png"
+      },
+      "option": {
+        "isCarousel": false,
+        "type": "ring",
+        "tooltip": {
+          "show": false,
+          "trigger": "item"
+        },
+        "legend": {
+          "show": true,
+          "type": "plain",
+          "orient": "vertical",
+          "right": 8,
+          "top": "middle",
+          "itemWidth": 8,
+          "itemHeight": 8,
+          "itemGap": 12,
+          "textStyle": {
+            "color": "#B9B8CE",
+            "fontSize": 11
+          }
+        },
+        "dataset": {
+          "dimensions": [
+            "name",
+            "value"
+          ],
+          "source": [
+            {
+              "name": "外购电力",
+              "value": 38
+            },
+            {
+              "name": "机车燃油",
+              "value": 42
+            },
+            {
+              "name": "废弃物处理",
+              "value": 8
+            },
+            {
+              "name": "其他",
+              "value": 12
+            }
+          ]
+        },
+        "series": [
+          {
+            "type": "pie",
+            "radius": [
+              "38%",
+              "54%"
+            ],
+            "center": [
+              "36%",
+              "54%"
+            ],
+            "roseType": false,
+            "avoidLabelOverlap": false,
+            "itemStyle": {
+              "show": true,
+              "borderRadius": 10,
+              "borderColor": "#fff",
+              "borderWidth": 2
+            },
+            "label": {
+              "show": false,
+              "position": "outside"
+            },
+            "labelLine": {
+              "show": false
+            },
+            "emphasis": {
+              "scale": true,
+              "scaleSize": 6,
+              "label": {
+                "show": true,
+                "position": "outside",
+                "formatter": "{b} {d}%",
+                "fontSize": 13,
+                "fontWeight": "normal",
+                "color": "#e6f7ff"
+              },
+              "labelLine": {
+                "show": true,
+                "length": 10,
+                "length2": 8,
+                "lineStyle": {
+                  "color": "rgba(230, 247, 255, 0.6)"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "dash-table-001",
+      "isGroup": false,
+      "attr": {
+        "x": 1500,
+        "y": 600,
+        "w": 388,
+        "h": 440,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 10
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TableScrollBoard",
+      "chartConfig": {
+        "key": "TableScrollBoard",
+        "chartKey": "VTableScrollBoard",
+        "conKey": "VCTableScrollBoard",
+        "title": "轮播列表",
+        "category": "Tables",
+        "categoryName": "表格",
+        "package": "Tables",
+        "chartFrame": "common",
+        "image": "table_scrollboard.png"
+      },
+      "option": {
+        "header": [
+          "站点",
+          "碳排放",
+          "强度"
+        ],
+        "dataset": [
+          [
+            "港口站",
+            "2248",
+            "11.9"
+          ],
+          [
+            "黄骅港站",
+            "2159",
+            "11.8"
+          ],
+          [
+            "段庄站",
+            "2083",
+            "12"
+          ],
+          [
+            "黄骅南站",
+            "2027",
+            "12.3"
+          ],
+          [
+            "李天木站",
+            "1989",
+            "12.5"
+          ],
+          [
+            "沧州西站",
+            "1967",
+            "12.4"
+          ],
+          [
+            "杜生站",
+            "1951",
+            "12.1"
+          ],
+          [
+            "黎民居站",
+            "1933",
+            "11.6"
+          ],
+          [
+            "行别营站",
+            "1903",
+            "11.1"
+          ],
+          [
+            "河间站",
+            "1855",
+            "10.7"
+          ],
+          [
+            "太师庄站",
+            "1788",
+            "10.6"
+          ],
+          [
+            "肃宁北站",
+            "1704",
+            "10.8"
+          ],
+          [
+            "蠡县站",
+            "1610",
+            "11.1"
+          ],
+          [
+            "博野站",
+            "1517",
+            "11.3"
+          ],
+          [
+            "安国站",
+            "1433",
+            "11.2"
+          ],
+          [
+            "定州东站",
+            "1365",
+            "10.9"
+          ],
+          [
+            "定州西站",
+            "1317",
+            "10.4"
+          ],
+          [
+            "新曲站",
+            "1287",
+            "9.9"
+          ],
+          [
+            "行唐站",
+            "1268",
+            "9.5"
+          ],
+          [
+            "灵寿站",
+            "1253",
+            "9.5"
+          ],
+          [
+            "三汲站",
+            "1230",
+            "9.6"
+          ],
+          [
+            "西柏坡站",
+            "1193",
+            "9.9"
+          ],
+          [
+            "温塘站",
+            "1137",
+            "10.1"
+          ],
+          [
+            "古月站",
+            "1062",
+            "10"
+          ],
+          [
+            "小觉站",
+            "973",
+            "9.7"
+          ],
+          [
+            "猴刎站",
+            "878",
+            "9.2"
+          ],
+          [
+            "滴流蹬站",
+            "788",
+            "8.7"
+          ],
+          [
+            "南湾站",
+            "710",
+            "8.3"
+          ],
+          [
+            "东冶站",
+            "651",
+            "8.3"
+          ],
+          [
+            "回凤站",
+            "611",
+            "8.5"
+          ],
+          [
+            "原平南站",
+            "587",
+            "8.7"
+          ],
+          [
+            "北大牛站",
+            "571",
+            "8.9"
+          ],
+          [
+            "龙宫站",
+            "553",
+            "8.9"
+          ],
+          [
+            "宁武西站",
+            "525",
+            "8.5"
+          ],
+          [
+            "神池南站",
+            "480",
+            "8"
+          ]
+        ],
+        "index": true,
+        "columnWidth": [
+          50,
+          120,
+          100,
+          80
+        ],
+        "align": [
+          "center",
+          "right",
+          "right",
+          "right"
+        ],
+        "rowNum": 8,
+        "waitTime": 2,
+        "headerHeight": 35,
+        "carousel": "single",
+        "headerBGC": "#00BAFF",
+        "oddRowBGC": "#003B51",
+        "evenRowBGC": "#0A2732"
+      }
+    },
+    {
+      "id": "dash-kpi-001",
+      "isGroup": false,
+      "attr": {
+        "x": 200,
+        "y": 92,
+        "w": 220,
+        "h": 72,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {
+            "kpiField": "yearTotal"
+          }
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Number",
+      "chartConfig": {
+        "key": "Number",
+        "chartKey": "VNumber",
+        "conKey": "VCNumber",
+        "title": "数字计数",
+        "category": "Mores",
+        "categoryName": "更多",
+        "package": "Decorates",
+        "chartFrame": "common",
+        "image": "number.png"
+      },
+      "option": {
+        "dataset": 14250,
+        "from": 0,
+        "dur": 3,
+        "precision": 0,
+        "showSeparator": true,
+        "numberSize": 28,
+        "numberColor": "#4ddbff",
+        "prefixText": "",
+        "prefixColor": "#8ec8e8",
+        "suffixText": "万tCO₂e",
+        "suffixColor": "#8ec8e8"
+      }
+    },
+    {
+      "id": "dash-kpi-002",
+      "isGroup": false,
+      "attr": {
+        "x": 432,
+        "y": 92,
+        "w": 220,
+        "h": 72,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {
+            "kpiField": "monthTotal"
+          }
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Number",
+      "chartConfig": {
+        "key": "Number",
+        "chartKey": "VNumber",
+        "conKey": "VCNumber",
+        "title": "数字计数",
+        "category": "Mores",
+        "categoryName": "更多",
+        "package": "Decorates",
+        "chartFrame": "common",
+        "image": "number.png"
+      },
+      "option": {
+        "dataset": 1140,
+        "from": 0,
+        "dur": 3,
+        "precision": 0,
+        "showSeparator": true,
+        "numberSize": 28,
+        "numberColor": "#4ddbff",
+        "prefixText": "",
+        "prefixColor": "#8ec8e8",
+        "suffixText": "万tCO₂e",
+        "suffixColor": "#8ec8e8"
+      }
+    },
+    {
+      "id": "dash-kpi-003",
+      "isGroup": false,
+      "attr": {
+        "x": 664,
+        "y": 92,
+        "w": 220,
+        "h": 72,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {
+            "kpiField": "yoyPercent"
+          }
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Number",
+      "chartConfig": {
+        "key": "Number",
+        "chartKey": "VNumber",
+        "conKey": "VCNumber",
+        "title": "数字计数",
+        "category": "Mores",
+        "categoryName": "更多",
+        "package": "Decorates",
+        "chartFrame": "common",
+        "image": "number.png"
+      },
+      "option": {
+        "dataset": -3.2,
+        "from": 0,
+        "dur": 3,
+        "precision": 1,
+        "showSeparator": true,
+        "numberSize": 28,
+        "numberColor": "#4ddbff",
+        "prefixText": "",
+        "prefixColor": "#8ec8e8",
+        "suffixText": "%",
+        "suffixColor": "#8ec8e8"
+      }
+    },
+    {
+      "id": "dash-kpi-004",
+      "isGroup": false,
+      "attr": {
+        "x": 896,
+        "y": 92,
+        "w": 220,
+        "h": 72,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {
+            "kpiField": "pointCount"
+          }
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "Number",
+      "chartConfig": {
+        "key": "Number",
+        "chartKey": "VNumber",
+        "conKey": "VCNumber",
+        "title": "数字计数",
+        "category": "Mores",
+        "categoryName": "更多",
+        "package": "Decorates",
+        "chartFrame": "common",
+        "image": "number.png"
+      },
+      "option": {
+        "dataset": 35,
+        "from": 0,
+        "dur": 3,
+        "precision": 0,
+        "showSeparator": true,
+        "numberSize": 28,
+        "numberColor": "#4ddbff",
+        "prefixText": "",
+        "prefixColor": "#8ec8e8",
+        "suffixText": "个",
+        "suffixColor": "#8ec8e8"
+      }
+    },
+    {
+      "id": "dash-title",
+      "isGroup": false,
+      "attr": {
+        "x": 480,
+        "y": 16,
+        "w": 960,
+        "h": 44,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "铁路运输绿色低碳节能技术数据可视化平台",
+        "fontSize": 26,
+        "fontColor": "#e6f7ff",
+        "paddingX": 10,
+        "paddingY": 10,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 5,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-subtitle",
+      "isGroup": false,
+      "attr": {
+        "x": 520,
+        "y": 58,
+        "w": 880,
+        "h": 28,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "朔黄铁路碳排放全景视图",
+        "fontSize": 18,
+        "fontColor": "#e6f7ff",
+        "paddingX": 10,
+        "paddingY": 10,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 5,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-period",
+      "isGroup": false,
+      "attr": {
+        "x": 520,
+        "y": 86,
+        "w": 880,
+        "h": 24,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "统计周期：2025年6月—2026年5月 · 内置演示数据",
+        "fontSize": 14,
+        "fontColor": "#e6f7ff",
+        "paddingX": 10,
+        "paddingY": 10,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 5,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-lbl-3d",
+      "isGroup": false,
+      "attr": {
+        "x": 32,
+        "y": 192,
+        "w": 300,
+        "h": 24,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "碳排放三维全景",
+        "fontSize": 14,
+        "fontColor": "#e6f7ff",
+        "paddingX": 10,
+        "paddingY": 10,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 5,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-lbl-line",
+      "isGroup": false,
+      "attr": {
+        "x": 32,
+        "y": 572,
+        "w": 300,
+        "h": 24,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "近12个月排放趋势",
+        "fontSize": 14,
+        "fontColor": "#e6f7ff",
+        "paddingX": 10,
+        "paddingY": 10,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 5,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-lbl-pie",
+      "isGroup": false,
+      "attr": {
+        "x": 1500,
+        "y": 168,
+        "w": 300,
+        "h": 24,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "排放结构分析",
+        "fontSize": 14,
+        "fontColor": "#e6f7ff",
+        "paddingX": 10,
+        "paddingY": 10,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 5,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    },
+    {
+      "id": "dash-lbl-table",
+      "isGroup": false,
+      "attr": {
+        "x": 1500,
+        "y": 572,
+        "w": 300,
+        "h": 24,
+        "offsetX": 0,
+        "offsetY": 0,
+        "zIndex": 15
+      },
+      "styles": {
+        "filterShow": false,
+        "hueRotate": 0,
+        "saturate": 1,
+        "contrast": 1,
+        "brightness": 1,
+        "opacity": 1,
+        "rotateZ": 0,
+        "rotateX": 0,
+        "rotateY": 0,
+        "skewX": 0,
+        "skewY": 0,
+        "blendMode": "normal",
+        "animations": []
+      },
+      "preview": {
+        "overFlowHidden": false
+      },
+      "status": {
+        "lock": false,
+        "hide": false
+      },
+      "request": {
+        "requestDataType": 0,
+        "requestHttpType": "get",
+        "requestUrl": "",
+        "requestIntervalUnit": "second",
+        "requestContentType": 0,
+        "requestParamsBodyType": "none",
+        "requestSQLContent": {
+          "sql": "select * from  where"
+        },
+        "requestParams": {
+          "Body": {
+            "form-data": {},
+            "x-www-form-urlencoded": {},
+            "json": "",
+            "xml": ""
+          },
+          "Header": {},
+          "Params": {}
+        }
+      },
+      "events": {
+        "baseEvent": {},
+        "advancedEvents": {},
+        "interactEvents": []
+      },
+      "key": "TextCommon",
+      "chartConfig": {
+        "key": "TextCommon",
+        "chartKey": "VTextCommon",
+        "conKey": "VCTextCommon",
+        "title": "文字",
+        "category": "Texts",
+        "categoryName": "文本",
+        "package": "Informations",
+        "chartFrame": "common",
+        "image": "text_static.png"
+      },
+      "option": {
+        "link": "",
+        "linkHead": "http://",
+        "dataset": "核算点排放排行",
+        "fontSize": 14,
+        "fontColor": "#e6f7ff",
+        "paddingX": 10,
+        "paddingY": 10,
+        "textAlign": "center",
+        "fontWeight": "normal",
+        "borderWidth": 0,
+        "borderColor": "#ffffff",
+        "borderRadius": 5,
+        "letterSpacing": 5,
+        "writingMode": "horizontal-tb",
+        "backgroundColor": "#00000000"
+      }
+    }
+  ]
+}

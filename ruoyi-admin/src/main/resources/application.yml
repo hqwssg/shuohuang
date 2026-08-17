@@ -1,0 +1,115 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: ruoyi-admin
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+        loginUsername: ruoyi
+        loginPassword: 123456
+    dynamic:
+      druid:
+        initial-size: 5
+        min-idle: 5
+        maxActive: 20
+        maxWait: 60000
+        connectTimeout: 30000
+        socketTimeout: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,slf4j
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/carbon_emissions?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          username: root
+          password: 1275410782h
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  quartz:
+    job-store-type: memory
+
+mybatis:
+  typeAliasesPackage: com.ruoyi.system,com.ruoyi.gen.domain,com.ruoyi.job.domain
+  mapperLocations: classpath*:mapper/**/*.xml
+
+pagehelper:
+  helperDialect: mysql
+  supportMethodsArguments: true
+  params: count=countSql
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+security:
+  captcha:
+    enabled: true
+    type: math
+  ignore:
+    whites:
+      - /auth/logout
+      - /auth/login
+      - /auth/register
+      - /code
+      - /csrf
+      - /error
+      - /v3/api-docs/**
+      - /swagger-ui/**
+      - /swagger-ui.html
+      - /webjars/**
+      - /statics/**
+
+springdoc:
+  serverUrl: http://localhost:8081
+  api-docs:
+    enabled: true
+  info:
+    title: RuoYi Admin API
+    description: Single Spring Boot API
+    contact:
+      name: RuoYi
+      url: https://ruoyi.vip
+
+gen:
+  author: ruoyi
+  packageName: com.ruoyi.system
+  autoRemovePre: false
+  tablePrefix: sys_
+  allowOverwrite: false
+
+file:
+  domain: http://127.0.0.1:8081
+  path: D:/ruoyi/uploadPath
+  prefix: /statics
+
+minio:
+  url: http://127.0.0.1:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: test
+
+referer:
+  enabled: false
+  allowed-domains: localhost,127.0.0.1,ruoyi.vip,www.ruoyi.vip

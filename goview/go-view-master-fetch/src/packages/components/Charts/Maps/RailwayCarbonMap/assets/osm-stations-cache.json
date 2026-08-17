@@ -1,0 +1,29 @@
+{
+  "elements": [
+    {
+      "type": "node",
+      "id": 648177309,
+      "lat": 39.9051441,
+      "lon": 116.1652002,
+      "tags": {
+        "name": "厂东门",
+        "name:zh": "厂东门",
+        "name:zh-Hans": "厂东门",
+        "name:zh-Hant": "廠東門",
+        "railway": "halt"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4066204001,
+      "lat": 37.9972719,
+      "lon": 112.4315906,
+      "tags": {
+        "name": "土堂站",
+        "public_transport": "station",
+        "railway": "halt",
+        "train": "yes"
+      }
+    }
+  ]
+}

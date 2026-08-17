@@ -1,0 +1,2 @@
+INSERT IGNORE INTO thermal_emission_factor (emission_factor_name, emission_factor, unit, source, description) VALUES 
+('全国统一热力排放因子缺省值', 0.11, ' tCO₂/GJ', '缺省值', '全国层面未发布统一分区热力排放因子时，公开规则明确热力消费排放因子‌缺省推荐值为0.11 tCO₂/GJ‌，适用于国家温室气体排放因子数据库未发布对应数据的场景。该数值被《公共机构碳排放核算指南》、环境影响评价报告书等多个权威文件采纳，是目前全国通用的默认参考值。');

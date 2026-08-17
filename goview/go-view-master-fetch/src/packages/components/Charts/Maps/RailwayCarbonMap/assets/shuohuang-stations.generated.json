@@ -1,0 +1,285 @@
+{
+  "stations": [
+    {
+      "name": "神池南站",
+      "lng": 111.76,
+      "lat": 39.09,
+      "chainageKm": 0,
+      "source": "manual",
+      "distanceToLineM": 0
+    },
+    {
+      "name": "宁武西站",
+      "lng": 112.3,
+      "lat": 39.03,
+      "chainageKm": 49,
+      "source": "manual",
+      "distanceToLineM": 1631
+    },
+    {
+      "name": "龙宫站",
+      "lng": 112.55,
+      "lat": 38.98,
+      "chainageKm": 76.8,
+      "source": "manual",
+      "distanceToLineM": 5188
+    },
+    {
+      "name": "北大牛站",
+      "lng": 112.72,
+      "lat": 38.92,
+      "chainageKm": 96.6,
+      "source": "manual",
+      "distanceToLineM": 12137
+    },
+    {
+      "name": "原平南站",
+      "lng": 112.72,
+      "lat": 38.75,
+      "chainageKm": 115.9,
+      "source": "manual",
+      "distanceToLineM": 5834
+    },
+    {
+      "name": "回凤站",
+      "lng": 112.85,
+      "lat": 38.68,
+      "chainageKm": 135,
+      "source": "manual",
+      "distanceToLineM": 8671
+    },
+    {
+      "name": "东冶站",
+      "lng": 113.05,
+      "lat": 38.62,
+      "chainageKm": 157.7,
+      "source": "manual",
+      "distanceToLineM": 515
+    },
+    {
+      "name": "南湾站",
+      "lng": 113.22,
+      "lat": 38.58,
+      "chainageKm": 176.3,
+      "source": "manual",
+      "distanceToLineM": 549
+    },
+    {
+      "name": "滴流蹬站",
+      "lng": 113.38,
+      "lat": 38.52,
+      "chainageKm": 205.3,
+      "source": "manual",
+      "distanceToLineM": 7114
+    },
+    {
+      "name": "猴刎站",
+      "lng": 113.52,
+      "lat": 38.48,
+      "chainageKm": 218.1,
+      "source": "manual",
+      "distanceToLineM": 5460
+    },
+    {
+      "name": "小觉站",
+      "lng": 113.68,
+      "lat": 38.44,
+      "chainageKm": 232.3,
+      "source": "manual",
+      "distanceToLineM": 5487
+    },
+    {
+      "name": "古月站",
+      "lng": 113.82,
+      "lat": 38.4,
+      "chainageKm": 246.2,
+      "source": "manual",
+      "distanceToLineM": 3413
+    },
+    {
+      "name": "温塘站",
+      "lng": 113.98,
+      "lat": 38.36,
+      "chainageKm": 265.1,
+      "source": "manual",
+      "distanceToLineM": 9888
+    },
+    {
+      "name": "西柏坡站",
+      "lng": 114.12,
+      "lat": 38.28,
+      "chainageKm": 281.1,
+      "source": "manual",
+      "distanceToLineM": 2156
+    },
+    {
+      "name": "三汲站",
+      "lng": 114.28,
+      "lat": 38.26,
+      "chainageKm": 299.6,
+      "source": "manual",
+      "distanceToLineM": 10999
+    },
+    {
+      "name": "灵寿站",
+      "lng": 114.42,
+      "lat": 38.3,
+      "chainageKm": 311,
+      "source": "manual",
+      "distanceToLineM": 10272
+    },
+    {
+      "name": "行唐站",
+      "lng": 114.58,
+      "lat": 38.38,
+      "chainageKm": 329,
+      "source": "manual",
+      "distanceToLineM": 7646
+    },
+    {
+      "name": "新曲站",
+      "lng": 114.72,
+      "lat": 38.42,
+      "chainageKm": 342,
+      "source": "manual",
+      "distanceToLineM": 7987
+    },
+    {
+      "name": "定州西站",
+      "lng": 114.88,
+      "lat": 38.48,
+      "chainageKm": 357.3,
+      "source": "manual",
+      "distanceToLineM": 1175
+    },
+    {
+      "name": "定州东站",
+      "lng": 115.05,
+      "lat": 38.48,
+      "chainageKm": 372.4,
+      "source": "manual",
+      "distanceToLineM": 550
+    },
+    {
+      "name": "安国站",
+      "lng": 115.22,
+      "lat": 38.47,
+      "chainageKm": 387.6,
+      "source": "manual",
+      "distanceToLineM": 2683
+    },
+    {
+      "name": "博野站",
+      "lng": 115.35,
+      "lat": 38.48,
+      "chainageKm": 397.8,
+      "source": "manual",
+      "distanceToLineM": 4580
+    },
+    {
+      "name": "蠡县站",
+      "lng": 115.48,
+      "lat": 38.47,
+      "chainageKm": 411,
+      "source": "manual",
+      "distanceToLineM": 2865
+    },
+    {
+      "name": "肃宁北站",
+      "lng": 115.53,
+      "lat": 38.435,
+      "chainageKm": 414.7,
+      "source": "manual",
+      "distanceToLineM": 2229
+    },
+    {
+      "name": "太师庄站",
+      "lng": 115.72,
+      "lat": 38.44,
+      "chainageKm": 432.8,
+      "source": "manual",
+      "distanceToLineM": 842
+    },
+    {
+      "name": "河间站",
+      "lng": 115.92,
+      "lat": 38.44,
+      "chainageKm": 450.5,
+      "source": "manual",
+      "distanceToLineM": 1078
+    },
+    {
+      "name": "行别营站",
+      "lng": 116.12,
+      "lat": 38.42,
+      "chainageKm": 468.1,
+      "source": "manual",
+      "distanceToLineM": 4624
+    },
+    {
+      "name": "黎民居站",
+      "lng": 116.32,
+      "lat": 38.4,
+      "chainageKm": 485.7,
+      "source": "manual",
+      "distanceToLineM": 5147
+    },
+    {
+      "name": "杜生站",
+      "lng": 116.52,
+      "lat": 38.38,
+      "chainageKm": 504.5,
+      "source": "manual",
+      "distanceToLineM": 2028
+    },
+    {
+      "name": "沧州西站",
+      "lng": 116.72,
+      "lat": 38.36,
+      "chainageKm": 522,
+      "source": "manual",
+      "distanceToLineM": 2487
+    },
+    {
+      "name": "李天木站",
+      "lng": 116.92,
+      "lat": 38.34,
+      "chainageKm": 540.4,
+      "source": "manual",
+      "distanceToLineM": 1567
+    },
+    {
+      "name": "黄骅南站",
+      "lng": 117.12,
+      "lat": 38.33,
+      "chainageKm": 557.8,
+      "source": "manual",
+      "distanceToLineM": 1495
+    },
+    {
+      "name": "段庄站",
+      "lng": 117.28,
+      "lat": 38.32,
+      "chainageKm": 572.5,
+      "source": "manual",
+      "distanceToLineM": 1697
+    },
+    {
+      "name": "黄骅港站",
+      "lng": 117.33,
+      "lat": 38.37,
+      "chainageKm": 576.4,
+      "source": "manual",
+      "distanceToLineM": 4401
+    },
+    {
+      "name": "港口站",
+      "lng": 117.42,
+      "lat": 38.35,
+      "chainageKm": 584.6,
+      "source": "manual",
+      "distanceToLineM": 3001
+    }
+  ],
+  "generatedAt": "2026-06-08T03:23:07.631Z"
+}

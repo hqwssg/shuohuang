@@ -1,0 +1,5 @@
+INSERT INTO electricity_carbon_emission_factor (factor_name, factor_value, unit, description) VALUES ('2023年全国电力碳排放因子', 0.5306, 'kgCO₂/kWh', '生态环境部和国家统计局‌2025年12月31日联合发布的2023年官方数据，包含所有电源类型的全国电力平均二氧化碳排放因子。');
+INSERT INTO electricity_carbon_emission_factor (factor_name, factor_value, unit, description) VALUES ('2022山西省电力碳排放因子', ‌0.7096, 'kgCO₂/kWh', '生态环境部、国家统计局正式发布的2022年完整官方省级电力平均二氧化碳排放因子。');
+INSERT INTO electricity_carbon_emission_factor (factor_name, factor_value, unit, description) VALUES ('2022河北省电力碳排放因子', ‌0.7252, 'kgCO₂/kWh', '生态环境部、国家统计局正式发布的2022年完整官方省级电力平均二氧化碳排放因子。');
+INSERT INTO electricity_carbon_emission_factor (factor_name, factor_value, unit, description) VALUES ('2022山东省电力碳排放因子', 0.641, 'kgCO₂/kWh', '生态环境部、国家统计局正式发布的2023年完整官方省级电力平均二氧化碳排放因子。');
+INSERT INTO electricity_carbon_emission_factor (factor_name, factor_value, unit, description) VALUES ('2022天津市电力碳排放因子', 0.7041, 'kgCO₂/kWh', '生态环境部、国家统计局正式发布的2024年完整官方省级电力平均二氧化碳排放因子。');

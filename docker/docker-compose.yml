@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  ruoyi-db:
+    container_name: ruoyi-db
+    image: mysql:5.7
+    restart: always
+    build:
+      context: ./mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d
+      - ./mysql/logs:/logs
+      - ./mysql/data:/var/lib/mysql
+    command:
+      - mysqld
+      - --innodb-buffer-pool-size=80M
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+8:00
+      - --lower-case-table-names=1
+    environment:
+      MYSQL_DATABASE: carbon_emissions
+      MYSQL_ROOT_PASSWORD: password
+
+  ruoyi-web:
+    container_name: ruoyi-web
+    restart: always
+    build:
+      context: ./web-main
+      dockerfile: dockerfile
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATA_REDIS_HOST: 127.0.0.1
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_URL: "jdbc:mysql://ruoyi-db:3306/carbon_emissions?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_USERNAME: root
+      SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_PASSWORD: password
+      FILE_DOMAIN: "${WEB_PUBLIC_URL:-http://localhost}/prod-api"
+      FILE_PATH: /home/ruoyi/uploadPath
+    ports:
+      - "80:80"
+    volumes:
+      - ./web-main/uploadPath:/home/ruoyi/uploadPath
+      - ./web-main/redis-data:/data
+    depends_on:
+      - ruoyi-db
+
+  ruoyi-screen:
+    container_name: ruoyi-screen
+    restart: always
+    build:
+      context: ./web-screen
+      dockerfile: dockerfile
+    environment:
+      SERVER_PORT: 8083
+      SPRING_DATASOURCE_URL: "jdbc:sqlite:/home/goview/sqllite/goview.db"
+      V2_XNLJMAP_OSS: file:/home/goview/upload/
+      V2_FILEURL: /home/goview/upload
+      V2_HTTPURL: "${SCREEN_PUBLIC_URL:-http://localhost:3000}/"
+    ports:
+      - "3000:80"
+    volumes:
+      - ./web-screen/upload:/home/goview/upload
+      - ./web-screen/sqllite:/home/goview/sqllite
