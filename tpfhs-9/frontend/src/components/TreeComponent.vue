@@ -34,6 +34,24 @@
           <el-icon :size="14"><Plus /></el-icon>
         </span>
         
+        <span
+          v-if="node.typeId === 2"
+          class="add-multiple-btn"
+          title="添加多个采集节点"
+          @click.stop="handleAddMultipleCollectionNodes(node)"
+        >
+          <el-icon :size="14"><Collection /></el-icon>
+        </span>
+
+        <span
+          v-if="node.typeId === 1 || node.typeId === 2"
+          class="mount-template-btn"
+          title="挂载节点模版"
+          @click.stop="handleMountTemplate(node)"
+        >
+          <el-icon :size="14"><Connection /></el-icon>
+        </span>
+        
         <span 
           v-if="node.id !== 1"
           class="delete-btn"
@@ -69,6 +87,8 @@
           :options="options"
           @select="$emit('select', $event)"
           @add="$emit('add', $event)"
+          @addMultiple="$emit('addMultiple', $event)"
+          @mountTemplate="$emit('mountTemplate', $event)"
           @delete="$emit('delete', $event)"
           @moveUp="$emit('moveUp', $event)"
           @moveDown="$emit('moveDown', $event)"
@@ -79,7 +99,7 @@
 </template>
 
 <script setup>import { ref, provide } from 'vue';
-import { ArrowRight, Plus, Minus, ArrowUp, ArrowDown, Folder, FolderOpened, Document, ShoppingCart } from '@element-plus/icons-vue';
+import { ArrowRight, Plus, Minus, ArrowUp, ArrowDown, Folder, FolderOpened, Document, ShoppingCart, Collection, Connection } from '@element-plus/icons-vue';
 const props = defineProps({
  treeData: {
  type: Array,
@@ -94,7 +114,7 @@ const props = defineProps({
  default: () => ({})
  }
 });
-const emit = defineEmits(['select', 'add', 'delete', 'moveUp', 'moveDown']);
+const emit = defineEmits(['select', 'add', 'addMultiple', 'mountTemplate', 'delete', 'moveUp', 'moveDown']);
 const expandedNodes = ref([]);
 provide('expandedNodes', expandedNodes);
 const toggleExpand = (node) => {
@@ -114,6 +134,17 @@ const canAddChild = (node) => {
 };
 const handleAddChild = (node) => {
  emit('add', node);
+};
+const handleAddMultipleCollectionNodes = (node) => {
+  emit('addMultiple', node);
+};
+/**
+ * 点击树节点"挂载节点模版"按钮时触发，向父组件抛出 mountTemplate 事件
+ * 由父组件（App.vue）打开"节点模版选择"弹窗并执行挂载逻辑
+ * @param {Object} node 当前点击的目标父节点（typeId=1/2 的"排放核算点"，挂载位置）
+ */
+const handleMountTemplate = (node) => {
+  emit('mountTemplate', node);
 };
 const handleDeleteNode = (node) => {
  emit('delete', node);
@@ -254,6 +285,54 @@ const getNodeIcon = (typeName) => {
 .add-btn:hover {
   background-color: #1890ff;
   border-color: #1890ff;
+  color: #fff;
+}
+
+.add-multiple-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  color: #595959;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.node-item:hover .add-multiple-btn {
+  opacity: 1;
+}
+
+.add-multiple-btn:hover {
+  background-color: #722ed1;
+  border-color: #722ed1;
+  color: #fff;
+}
+
+.mount-template-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  color: #595959;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.node-item:hover .mount-template-btn {
+  opacity: 1;
+}
+
+.mount-template-btn:hover {
+  background-color: #13c2c2;
+  border-color: #13c2c2;
   color: #fff;
 }
 

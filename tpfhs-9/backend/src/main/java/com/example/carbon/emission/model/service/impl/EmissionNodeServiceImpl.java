@@ -22,10 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,9 +53,6 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
     private EmissionNodeInfoRepository nodeInfoRepository;
     
     @Autowired
-    private ObjectMapper objectMapper;
-    
-    @Autowired
     private SystemConfigRepository systemConfigRepository;
     
     /**
@@ -85,11 +80,26 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         "电力", "EP"
     );
     
+    /**
+     * 获取所有节点的树形结构（无模版过滤）
+     * 
+     * @return 节点树结构DTO，包含所有节点信息
+     */
     @Override
     public NodeDTO getTree() {
         return getTree(null);
     }
     
+    /**
+     * 获取指定模版下的节点树形结构
+     * 
+     * 从数据库查询所有节点数据，构建父子关系映射，
+     * 然后递归构建完整的节点树。
+     * 如果根节点不存在，会自动创建一个默认根节点。
+     * 
+     * @param templateId 模版ID，为null时返回所有节点
+     * @return 节点树结构DTO
+     */
     public NodeDTO getTree(Long templateId) {
         List<EmissionNode> allNodes;
         if (templateId != null) {
@@ -220,6 +230,30 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         return dto;
     }
     
+    /**
+     * 创建新节点
+     * 
+     * 根据请求参数创建节点，包括：
+     * 1. 验证节点类型是否存在
+     * 2. 如果指定了父节点，从父节点获取模版ID
+     * 3. 设置节点基本信息（名称、类型、排序等）
+     * 4. 保存节点到数据库
+     * 5. 如果有配置信息，保存节点配置
+     * 6. 如果是核算子节点(typeId=2)且有节点信息，保存节点信息
+     * 7. 如果是运输节点(typeId=4)，自动创建数据采集子节点
+     * 8. 更新模版时间戳
+     * 
+     * @param request 创建节点请求，包含：
+     *        - name: 节点名称（必填）
+     *        - typeId: 节点类型ID（必填）
+     *        - parentId: 父节点ID（可选）
+     *        - templateId: 模版ID（可选，若指定父节点则从父节点获取）
+     *        - locomotiveType: 机车类型（可选）
+     *        - config: 节点配置（可选）
+     *        - nodeInfo: 节点信息（核算子节点时必填）
+     *        - createdBy: 创建人ID
+     * @return 创建后的节点DTO
+     */
     @Override
     @Transactional
     public NodeDTO createNode(CreateNodeRequest request) {
@@ -320,11 +354,7 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         EmissionNode savedDataNode = nodeRepository.save(dataNode);
         
         NodeConfigDTO config = new NodeConfigDTO();
-        config.setStatisticalCaliber("生产排放");
         config.setEmissionCategory("化石燃料");
-        config.setDataSource("手工录入");
-        config.setAllocationRatio(new BigDecimal("100.00"));
-        config.setHasSubTable(false);
         
         saveConfig(savedDataNode.getId(), config, userId);
     }
@@ -354,42 +384,16 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
             .orElse(new EmissionNodeConfig());
         
         config.setNodeId(nodeId);
-        config.setStatisticalCaliber(configDTO.getStatisticalCaliber());
         config.setEmissionCategory(configDTO.getEmissionCategory());
         config.setEmissionSubcategory(configDTO.getEmissionSubcategory());
         config.setCarbonEmissionFactor(configDTO.getCarbonEmissionFactor());
         config.setCarbonEmissionFactorDescription(configDTO.getCarbonEmissionFactorDescription());
-        config.setDataSource(configDTO.getDataSource());
-        
-        // 新增字段：核算场景、能耗用途、是否累计量、是否移动源
-        config.setAccountingScenario(configDTO.getAccountingScenario());
-        config.setEnergyUse(configDTO.getEnergyUse());
-        config.setIsCumulative(configDTO.getIsCumulative() != null ? configDTO.getIsCumulative() : "true");
-        config.setIsMobileSource(configDTO.getIsMobileSource() != null ? configDTO.getIsMobileSource() : "false");
-        config.setMeasurementUnit(configDTO.getMeasurementUnit());
-        config.setDataSourceSystem(configDTO.getDataSourceSystem());
-        config.setAcquisitionMethod(configDTO.getAcquisitionMethod());
-        
-        config.setAllocationRatio(configDTO.getAllocationRatio() != null ? configDTO.getAllocationRatio() : new BigDecimal("100.00"));
-        config.setHasSubTable(configDTO.getHasSubTable() != null ? configDTO.getHasSubTable() : false);
-        config.setErrorConstraint(configDTO.getErrorConstraint());
-        config.setUpdateCycle(configDTO.getUpdateCycle());
-        config.setUpdateTime(configDTO.getUpdateTime());
-        
-        // 序列化任务配置为JSON字符串
-        if (configDTO.getTaskConfig() != null) {
-            try {
-                config.setTaskConfig(objectMapper.writeValueAsString(configDTO.getTaskConfig()));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException("Failed to serialize taskConfig", e);
-            }
-        } else {
-            config.setTaskConfig(null);
-        }
         
         config.setCollectionDescription(configDTO.getCollectionDescription());
         config.setEquipmentCode(configDTO.getEquipmentCode());
-        //config.setMeasurementUnit(configDTO.getMeasurementUnit());
+        // 采集点关联信息（排放数据采集点通过"选择采集点"关联）
+        config.setCollectionPointType(configDTO.getCollectionPointType());
+        config.setCollectionPointId(configDTO.getCollectionPointId());
         
         // 设置创建人和更新人
         if (userId != null) {
@@ -402,6 +406,21 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         configRepository.save(config);
     }
     
+    /**
+     * 更新节点信息
+     * 
+     * 根据请求参数更新节点的名称、配置和信息。
+     * 如果请求中包含config或nodeInfo，则分别更新对应的数据。
+     * 更新后会更新模版的时间戳。
+     * 
+     * @param id 节点ID
+     * @param request 更新请求，可包含：
+     *        - name: 新的节点名称（可选）
+     *        - config: 新的节点配置（可选）
+     *        - nodeInfo: 新的节点信息（可选）
+     *        - updatedBy: 更新人ID
+     * @return 更新后的节点DTO
+     */
     @Override
     @Transactional
     public NodeDTO updateNode(Long id, UpdateNodeRequest request) {
@@ -431,6 +450,15 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
         return getNodeById(savedNode.getId());
     }
     
+    /**
+     * 删除节点
+     * 
+     * 删除指定ID的节点，会级联删除其子节点和相关配置数据。
+     * 删除后会更新模版的时间戳。
+     * 
+     * @param id 要删除的节点ID
+     * @throws RuntimeException 当节点不存在时抛出异常
+     */
     @Override
     @Transactional
     public void deleteNode(Long id) {
@@ -459,42 +487,23 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
     @Transactional
     public NodeConfigDTO updateNodeConfig(Long nodeId, NodeConfigDTO configDTO, Long userId) {
         saveConfig(nodeId, configDTO, userId);
+        // 节点配置变更同样属于模版内容修改：更新时间戳并重置校验结果
+        nodeRepository.findById(nodeId).ifPresent(node -> updateTemplateTimestamp(node.getTemplateId()));
         return getNodeConfigInternal(nodeId);
     }
     
     private NodeConfigDTO convertToDTO(EmissionNodeConfig config) {
         NodeConfigDTO dto = new NodeConfigDTO();
         dto.setNodeId(config.getNodeId());
-        dto.setStatisticalCaliber(config.getStatisticalCaliber());
         dto.setEmissionCategory(config.getEmissionCategory());
         dto.setEmissionSubcategory(config.getEmissionSubcategory());
         dto.setCarbonEmissionFactor(config.getCarbonEmissionFactor());
         dto.setCarbonEmissionFactorDescription(config.getCarbonEmissionFactorDescription());
-        dto.setDataSource(config.getDataSource());
-        dto.setAccountingScenario(config.getAccountingScenario());
-        dto.setEnergyUse(config.getEnergyUse());
-        dto.setIsCumulative(config.getIsCumulative());
-        dto.setIsMobileSource(config.getIsMobileSource());
-        dto.setMeasurementUnit(config.getMeasurementUnit());
-        dto.setDataSourceSystem(config.getDataSourceSystem());
-        dto.setAcquisitionMethod(config.getAcquisitionMethod());
-        dto.setAllocationRatio(config.getAllocationRatio());
-        dto.setHasSubTable(config.getHasSubTable());
-        dto.setErrorConstraint(config.getErrorConstraint());
-        dto.setUpdateCycle(config.getUpdateCycle());
-        dto.setUpdateTime(config.getUpdateTime());
-        
-        if (config.getTaskConfig() != null && !config.getTaskConfig().isEmpty()) {
-            try {
-                dto.setTaskConfig(objectMapper.readValue(config.getTaskConfig(), Object.class));
-            } catch (JsonProcessingException e) {
-                dto.setTaskConfig(config.getTaskConfig());
-            }
-        }
         
         dto.setCollectionDescription(config.getCollectionDescription());
         dto.setEquipmentCode(config.getEquipmentCode());
-        //dto.setMeasurementUnit(config.getMeasurementUnit());
+        dto.setCollectionPointType(config.getCollectionPointType());
+        dto.setCollectionPointId(config.getCollectionPointId());
         
         return dto;
     }
@@ -505,11 +514,26 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
                 template.setUpdatedAt(java.time.LocalDateTime.now());
                 Integer version = template.getVersion();
                 template.setVersion(version != null ? version + 1 : 1);
+                // 模版内容被修改（节点增删改），校验结果自动重置为未检查
+                template.setCheckResult(0);
+                template.setCheckTime(null);
+                template.setCheckMessage(null);
                 templateRepository.save(template);
             });
         }
     }
     
+    /**
+     * 移动节点位置
+     * 
+     * 在同级节点之间移动节点（上移或下移），通过交换排序顺序实现。
+     * 节点只能在同级节点间移动，不能跨级移动。
+     * 如果节点已在最前/最后位置，移动操作无效。
+     * 
+     * @param nodeId 要移动的节点ID
+     * @param direction 移动方向："up"（上移）或 "down"（下移）
+     * @throws RuntimeException 当节点不存在时抛出异常
+     */
     @Override
     @Transactional
     public void moveNode(Long nodeId, String direction) {
@@ -881,7 +905,181 @@ public class EmissionNodeServiceImpl implements EmissionNodeService {
             
             current = p;
         }
-        
+
         return "";
+    }
+
+    /**
+     * 挂载节点模版
+     *
+     * 将指定节点模版（templateType=1）所包含的全部子节点复制到当前模版树中，
+     * 挂载到目标父节点（typeId=1/2 的"排放核算点"）之下。
+     * 每个被复制的节点都会通过 source_node_id 字段记录其来源节点ID。
+     *
+     * 实现要点：
+     * 1. 校验目标父节点存在且 typeId 为 1（根节点）或 2（核算子节点）
+     * 2. 校验来源模版存在且为节点模版（templateType=1）
+     * 3. 定位来源模版的根节点（parentId 为 null），复制其全部子节点（不含根节点本身）
+     *    到目标父节点之下，递归复制整个子树
+     * 4. 通过 nodeIdMap 维护来源节点ID→新节点ID的映射，保证父子关系正确
+     * 5. 每个新节点 source_node_id 记录其来源节点ID
+     * 6. 同步复制 emission_node_config 与 emission_node_info（核算子节点）
+     * 7. 顶层挂载节点 sort_order 从目标父节点下现有最大 sort_order+1 开始递增，
+     *    子树内部保持来源 sort_order
+     *
+     * @param parentId           目标父节点ID（挂载位置）
+     * @param sourceTemplateId   节点模版ID（来源模版）
+     * @param createdBy          创建人ID
+     * @return 挂载后的目标父节点DTO
+     */
+    @Override
+    @Transactional
+    public NodeDTO mountNodeTemplate(Long parentId, Long sourceTemplateId, Long createdBy) {
+        EmissionNode parent = nodeRepository.findById(parentId)
+            .orElseThrow(() -> new RuntimeException("目标父节点不存在: " + parentId));
+
+        if (parent.getTypeId() == null || (parent.getTypeId() != 1 && parent.getTypeId() != 2)) {
+            throw new RuntimeException("仅可在根节点或核算子节点下挂载节点模版");
+        }
+
+        Long targetTemplateId = parent.getTemplateId();
+
+        Template sourceTemplate = templateRepository.findById(sourceTemplateId)
+            .orElseThrow(() -> new RuntimeException("来源节点模版不存在: " + sourceTemplateId));
+        if (sourceTemplate.getTemplateType() == null || sourceTemplate.getTemplateType() != 1) {
+            throw new RuntimeException("仅可挂载节点模版（templateType=1）");
+        }
+
+        List<EmissionNode> sourceNodes = nodeRepository.findByTemplateId(sourceTemplateId);
+        if (sourceNodes.isEmpty()) {
+            throw new RuntimeException("来源节点模版无任何节点");
+        }
+
+        // 定位来源模版的根节点（parentId 为 null）
+        EmissionNode sourceRoot = sourceNodes.stream()
+            .filter(n -> n.getParentId() == null)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("来源节点模版缺少根节点"));
+
+        // 来源根节点的直接子节点 → 挂载到目标父节点之下
+        List<EmissionNode> topLevelSourceNodes = sourceNodes.stream()
+            .filter(n -> sourceRoot.getId().equals(n.getParentId()))
+            .sorted((a, b) -> {
+                Integer sa = a.getSortOrder();
+                Integer sb = b.getSortOrder();
+                return Integer.compare(sa != null ? sa : 0, sb != null ? sb : 0);
+            })
+            .collect(Collectors.toList());
+
+        if (topLevelSourceNodes.isEmpty()) {
+            // 来源模版根节点下无子节点，无可挂载内容
+            return getNodeById(parentId);
+        }
+
+        // 目标父节点下现有最大 sort_order，新顶层节点从 maxOrder+1 开始递增
+        Integer existingCount = nodeRepository.countByTemplateIdAndParentId(targetTemplateId, parentId);
+        int baseSortOrder = existingCount != null ? existingCount : 0;
+
+        // 构建来源节点 parentId→children 索引，供递归复制使用
+        Map<Long, List<EmissionNode>> sourceChildrenMap = sourceNodes.stream()
+            .filter(n -> n.getParentId() != null)
+            .collect(Collectors.groupingBy(EmissionNode::getParentId));
+
+        Map<Long, Long> nodeIdMap = new HashMap<>();
+        int[] sortOrderCounter = { baseSortOrder };
+
+        for (EmissionNode topNode : topLevelSourceNodes) {
+            copySubtreeNode(topNode, parent.getId(), targetTemplateId, true,
+                sortOrderCounter, sourceChildrenMap, nodeIdMap, createdBy);
+        }
+
+        updateTemplateTimestamp(targetTemplateId);
+
+        return getNodeById(parentId);
+    }
+
+    /**
+     * 递归复制来源子树到目标模版
+     *
+     * @param sourceNode          当前来源节点
+     * @param targetParentId      新父节点ID（顶层=目标父节点；子层=nodeIdMap 映射结果）
+     * @param targetTemplateId   目标模版ID
+     * @param isTopLevel         是否为顶层挂载节点（决定 sort_order 计算方式）
+     * @param sortOrderCounter   顶层节点 sort_order 计数器（数组形式以支持可变递增）
+     * @param sourceChildrenMap  来源节点 parentId→children 索引
+     * @param nodeIdMap           来源ID→新ID 映射（递归过程中累加）
+     * @param createdBy          创建人ID
+     */
+    private void copySubtreeNode(EmissionNode sourceNode, Long targetParentId, Long targetTemplateId,
+                                 boolean isTopLevel, int[] sortOrderCounter,
+                                 Map<Long, List<EmissionNode>> sourceChildrenMap,
+                                 Map<Long, Long> nodeIdMap, Long createdBy) {
+        EmissionNode newNode = new EmissionNode();
+        newNode.setName(sourceNode.getName());
+        newNode.setTypeId(sourceNode.getTypeId());
+        newNode.setParentId(targetParentId);
+        newNode.setTemplateId(targetTemplateId);
+        newNode.setLocomotiveType(sourceNode.getLocomotiveType());
+        // 记录来源节点ID，建立复制节点与来源节点的对应关系
+        newNode.setSourceNodeId(sourceNode.getId());
+        if (isTopLevel) {
+            // 顶层节点：递增 sort_order，避免与目标父节点下现有同级节点冲突
+            newNode.setSortOrder(sortOrderCounter[0]++);
+        } else {
+            // 子树内部：保持来源 sort_order
+            newNode.setSortOrder(sourceNode.getSortOrder());
+        }
+        newNode.setCreatedBy(createdBy);
+        newNode.setUpdatedBy(createdBy);
+
+        EmissionNode savedNode = nodeRepository.save(newNode);
+        nodeIdMap.put(sourceNode.getId(), savedNode.getId());
+
+        // 复制 emission_node_config
+        configRepository.findByNodeId(sourceNode.getId()).ifPresent(sourceConfig -> {
+            EmissionNodeConfig newConfig = new EmissionNodeConfig();
+            newConfig.setNodeId(savedNode.getId());
+            newConfig.setEmissionCategory(sourceConfig.getEmissionCategory());
+            newConfig.setEmissionSubcategory(sourceConfig.getEmissionSubcategory());
+            newConfig.setCarbonEmissionFactor(sourceConfig.getCarbonEmissionFactor());
+            newConfig.setCarbonEmissionFactorDescription(sourceConfig.getCarbonEmissionFactorDescription());
+            newConfig.setCollectionDescription(sourceConfig.getCollectionDescription());
+            newConfig.setEquipmentCode(sourceConfig.getEquipmentCode());
+            newConfig.setCollectionPointType(sourceConfig.getCollectionPointType());
+            newConfig.setCollectionPointId(sourceConfig.getCollectionPointId());
+            newConfig.setCollectionPointStatus(sourceConfig.getCollectionPointStatus());
+            newConfig.setCreatedBy(createdBy);
+            newConfig.setUpdatedBy(createdBy);
+            configRepository.save(newConfig);
+        });
+
+        // 复制 emission_node_info（核算子节点 typeId=2 通常携带）
+        nodeInfoRepository.findByNodeId(sourceNode.getId()).ifPresent(sourceInfo -> {
+            EmissionNodeInfo newInfo = new EmissionNodeInfo();
+            newInfo.setNodeId(savedNode.getId());
+            newInfo.setNodeCode(sourceInfo.getNodeCode());
+            newInfo.setShortName(sourceInfo.getShortName());
+            newInfo.setIncludeInCalculation(sourceInfo.getIncludeInCalculation() != null
+                ? sourceInfo.getIncludeInCalculation() : true);
+            newInfo.setNodeCategory(sourceInfo.getNodeCategory());
+            newInfo.setUnitDescription(sourceInfo.getUnitDescription());
+            newInfo.setOrgBoundaryDescription(sourceInfo.getOrgBoundaryDescription());
+            newInfo.setOperationBoundaryDescription(sourceInfo.getOperationBoundaryDescription());
+            newInfo.setCreatedBy(createdBy);
+            newInfo.setUpdatedBy(createdBy);
+            nodeInfoRepository.save(newInfo);
+        });
+
+        // 递归复制子节点
+        List<EmissionNode> sourceChildren = sourceChildrenMap.getOrDefault(sourceNode.getId(), new ArrayList<>());
+        sourceChildren.sort((a, b) -> {
+            Integer sa = a.getSortOrder();
+            Integer sb = b.getSortOrder();
+            return Integer.compare(sa != null ? sa : 0, sb != null ? sb : 0);
+        });
+        for (EmissionNode child : sourceChildren) {
+            copySubtreeNode(child, savedNode.getId(), targetTemplateId, false,
+                sortOrderCounter, sourceChildrenMap, nodeIdMap, createdBy);
+        }
     }
 }

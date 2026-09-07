@@ -7,10 +7,19 @@
       @navigate="handleNavigate"
       @logout="handleLogout"
     />
-    <TemplateList 
-      v-else-if="currentView === 'template-list'" 
+    <TemplateList
+      v-else-if="currentView === 'template-list'"
       :current-user="currentUser"
       @open-template="handleOpenTemplate"
+      @edit-factor-template="handleEditFactorTemplate"
+      @back="handleBackToHome"
+      @logout="handleLogout"
+    />
+    <CarbonParamsSettings
+      v-else-if="currentView === 'params-settings'"
+      :current-user="currentUser"
+      :initial-factor-template-id="autoOpenFactorTemplateId"
+      @back="handleBackToHome"
       @logout="handleLogout"
     />
     <App 
@@ -27,14 +36,29 @@ import { ref, onMounted } from 'vue'
 import Login from './components/Login.vue'
 import HomePage from './components/HomePage.vue'
 import TemplateList from './components/TemplateList.vue'
+import CarbonParamsSettings from './components/CarbonParamsSettings.vue'
 import App from './App.vue'
 
 const currentView = ref('login')
 const currentUser = ref(null)
 const currentTemplate = ref(null)
+// 从模版管理页跳转"编辑因子"时携带的因子模版ID（CarbonParamsSettings 据此自动打开对应因子模版）
+const autoOpenFactorTemplateId = ref(null)
+const embedded = ref(false)
 
 onMounted(() => {
-  console.log('Initial currentView:', currentView.value)
+  const params = new URLSearchParams(window.location.search)
+  embedded.value = params.get('embedded') === '1'
+
+  if (embedded.value) {
+    currentUser.value = {
+      userId: Number(params.get('userId')) || 1,
+      userName: params.get('userName') || 'admin',
+      nickName: params.get('name') || params.get('userName') || '若依用户'
+    }
+    currentView.value = params.get('view') === 'params' ? 'params-settings' : 'template-list'
+    return
+  }
   
   const savedUser = localStorage.getItem('user')
   if (savedUser) {
@@ -75,6 +99,23 @@ const handleBackToTemplateList = () => {
   console.log('Back to template list')
   currentTemplate.value = null
   currentView.value = 'template-list'
+}
+
+const handleBackToHome = () => {
+  autoOpenFactorTemplateId.value = null
+  if (embedded.value) {
+    const parentOrigin = document.referrer ? new URL(document.referrer).origin : '*'
+    window.parent.postMessage({ type: 'carbon:navigate-home' }, parentOrigin)
+    return
+  }
+  currentView.value = 'home'
+}
+
+// 从核算模版编辑弹窗跳转编辑某个因子模版的因子配置
+const handleEditFactorTemplate = (factorTemplateId) => {
+  console.log('Edit factor template:', factorTemplateId)
+  autoOpenFactorTemplateId.value = factorTemplateId
+  currentView.value = 'params-settings'
 }
 
 const handleLogout = () => {

@@ -1,23 +1,26 @@
 import { hasAnyPermission, hasAnyRole } from '@/utils/permissionMatch'
 
-function resolveGoviewUrl() {
+function resolveGoviewBaseUrl() {
   const configuredUrl = process.env.VUE_APP_GOVIEW_URL
   const legacyLocalUrl = 'http://localhost:3000/index.html#/project'
 
   if (configuredUrl && configuredUrl !== 'auto' && configuredUrl !== legacyLocalUrl) {
-    return configuredUrl
+    return configuredUrl.split('/index.html')[0].replace(/\/$/, '')
   }
 
   if (typeof window === 'undefined') {
-    return legacyLocalUrl
+    return 'http://localhost:3000'
   }
 
   const { protocol, hostname } = window.location
   const screenPort = hostname === '127.0.0.1' || hostname === 'localhost' ? '13000' : '53231'
-  return `${protocol}//${hostname}:${screenPort}/index.html#/project`
+  return `${protocol}//${hostname}:${screenPort}`
 }
 
-export const GOVIEW_URL = resolveGoviewUrl()
+const goviewBaseUrl = resolveGoviewBaseUrl()
+export const GOVIEW_PROJECT_ID = process.env.VUE_APP_GOVIEW_PROJECT_ID || '2066429772333690882'
+export const GOVIEW_ADMIN_URL = `${goviewBaseUrl}/index.html#/project`
+export const GOVIEW_URL = `${goviewBaseUrl}/index.html#/chart/preview/${GOVIEW_PROJECT_ID}`
 
 export const carbonModules = [
   {
@@ -28,6 +31,7 @@ export const carbonModules = [
     path: '/carbon/model',
     routeName: 'CarbonModel',
     permissions: [
+      'carbon:model:view',
       'goview:project:view',
       'goview:project:create',
       'goview:project:edit',
@@ -36,6 +40,15 @@ export const carbonModules = [
       'goview:chart:edit',
       'goview:data:view'
     ]
+  },
+  {
+    key: 'params',
+    title: '碳排放核算参数设置',
+    icon: 'el-icon-set-up',
+    color: 'purple',
+    path: '/carbon/params',
+    routeName: 'CarbonParams',
+    permissions: ['carbon:params:view']
   },
   {
     key: 'screen',
@@ -90,7 +103,22 @@ export const carbonModules = [
       'system:menu:list',
       'system:dept:list',
       'system:post:list',
-      'system:config:list'
+      'system:config:list',
+      'carbon:system:view'
+    ]
+  },
+  {
+    key: 'logs',
+    title: '日志审计',
+    icon: 'el-icon-document-checked',
+    color: 'violet',
+    path: '/carbon/logs',
+    routeName: 'CarbonLogs',
+    permissions: [
+      'carbon:logs:view',
+      'system:operlog:list',
+      'system:logininfor:list',
+      'monitor:job:list'
     ]
   }
 ]
@@ -102,7 +130,7 @@ export const carbonSystemLinks = [
   { title: '角色管理', icon: 'el-icon-s-custom', path: '/system/role', group: 'permission', description: '配置角色、数据范围和授权范围', permissions: ['system:role:list'] },
   { title: '菜单管理', icon: 'el-icon-menu', path: '/system/menu', group: 'permission', description: '维护菜单、按钮权限和路由入口', permissions: ['system:menu:list'] },
   { title: '参数设置', icon: 'el-icon-setting', path: '/system/config', group: 'configuration', description: '维护系统参数、业务开关和缓存配置', permissions: ['system:config:list', 'goview:system:setting'] },
-  { title: 'GoView 设置', icon: 'el-icon-monitor', path: GOVIEW_URL, group: 'configuration', description: '进入可视化平台配置主题、语言和系统项', external: true, permissions: ['goview:system:theme', 'goview:system:lang', 'goview:system:setting'] }
+  { title: 'GoView 设置', icon: 'el-icon-monitor', path: GOVIEW_ADMIN_URL, group: 'configuration', description: '进入可视化平台配置主题、语言和系统项', external: true, permissions: ['goview:system:theme', 'goview:system:lang', 'goview:system:setting'] }
 ]
 
 export const carbonSystemGroups = [

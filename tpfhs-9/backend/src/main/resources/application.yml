@@ -1,11 +1,17 @@
 server:
-  port: 8080
+  port: ${CARBON_SERVER_PORT:8082}
 
 spring:
+  profiles:
+    group:
+      # 激活 local profile 时同时激活 job profile（本地测试 Web 容器 + 定时任务同时运行）
+      # 注意：spring.profiles.include 不能放在 profile 专属文件（application-local.yml）中，
+      # 因此统一在主配置文件用 profile group 实现
+      local: job
   datasource:
-    url: jdbc:mysql://localhost:3306/carbon_emission?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci
-    username: root
-    password: 123456
+    url: ${CARBON_DB_URL:jdbc:mysql://localhost:3306/carbon_emissions?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=utf8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci}
+    username: ${CARBON_DB_USERNAME:root}
+    password: ${CARBON_DB_PASSWORD:1275410782h}
     driver-class-name: com.mysql.cj.jdbc.Driver
   
   jpa:
@@ -19,7 +25,7 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: ${CARBON_SQL_INIT_MODE:never}
 
 logging:
   level:
@@ -29,3 +35,9 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+integration:
+  ruoyi-audit:
+    enabled: ${RUOYI_AUDIT_ENABLED:true}
+    endpoint: ${RUOYI_AUDIT_ENDPOINT:http://127.0.0.1:8081/internal/carbon/audit/operation}
+    secret: ${GOVIEW_AUDIT_SECRET:local-integration-secret}

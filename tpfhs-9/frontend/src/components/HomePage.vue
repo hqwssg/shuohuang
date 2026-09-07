@@ -1,3 +1,20 @@
+<!--
+  功能首页组件
+  功能描述：
+    1. 用户登录成功后自动进入该首页
+    2. 显示当前登录用户信息（昵称或用户名）
+    3. 提供两个主要功能入口：
+       - "碳排放模型管理"：点击后跳转到模版列表页面
+       - "碳排放核算参数设置"：预留入口（待后续实现）
+    4. 支持用户退出登录功能
+  
+  组件属性：
+    - currentUser (Object): 当前登录用户信息，包含 userId、userName、nickName、deptId
+  
+  组件事件：
+    - navigate: 页面导航事件，参数为目标页面标识
+    - logout: 退出登录事件
+-->
 <template>
   <div class="home-page">
     <div class="home-header">
@@ -7,7 +24,7 @@
       </div>
       <div class="user-info">
         <span class="user-name">{{ currentUser?.nickName || currentUser?.userName }}</span>
-        <el-button @click="$emit('logout')" type="text">退出登录</el-button>
+        <el-button @click="$emit('logout')" link>退出登录</el-button>
       </div>
     </div>
     
@@ -28,6 +45,14 @@
 </template>
 
 <script setup>
+/**
+ * 定义组件属性
+ * @property {Object} currentUser - 当前登录用户信息对象
+ * @property {number} currentUser.userId - 用户ID
+ * @property {string} currentUser.userName - 用户名
+ * @property {string} currentUser.nickName - 用户昵称（优先显示）
+ * @property {number} currentUser.deptId - 部门ID
+ */
 defineProps({
   currentUser: {
     type: Object,
@@ -35,6 +60,13 @@ defineProps({
   }
 })
 
+/**
+ * 定义组件事件
+ * @event navigate - 页面导航事件
+ *   - 当点击"碳排放模型管理"时，触发参数为 'template-list'
+ *   - 当点击"碳排放核算参数设置"时，触发参数为 'params-settings'
+ * @event logout - 退出登录事件
+ */
 defineEmits(['navigate', 'logout'])
 </script>
 

@@ -17,70 +17,44 @@ public class EmissionNodeConfig {
     
     @Column(name = "node_id", nullable = false)
     private Long nodeId;
-    
-    @Column(name = "statistical_caliber", length = 100)
-    private String statisticalCaliber;
-    
+
     @Column(name = "emission_category", length = 100)
     private String emissionCategory;
-    
+
     @Column(name = "emission_subcategory", length = 100)
     private String emissionSubcategory;
-    
+
     @Column(name = "carbon_emission_factor", precision = 15, scale = 6)
     private BigDecimal carbonEmissionFactor;
-    
+
     @Column(name = "carbon_emission_factor_description", columnDefinition = "TEXT")
     private String carbonEmissionFactorDescription;
-    
-    @Column(name = "data_source", length = 50)
-    private String dataSource;
-    
-    @Column(name = "accounting_scenario", length = 100)
-    private String accountingScenario;
-    
-    @Column(name = "energy_use", length = 100)
-    private String energyUse;
-    
-    @Column(name = "is_cumulative", length = 10)
-    private String isCumulative = "true";
-    
-    @Column(name = "is_mobile_source", length = 10)
-    private String isMobileSource = "false";
-    
-    @Column(name = "measurement_unit", length = 50)
-    private String measurementUnit;
-    
-    @Column(name = "data_source_system", length = 100)
-    private String dataSourceSystem;
-    
-    @Column(name = "acquisition_method", columnDefinition = "TEXT")
-    private String acquisitionMethod;
-    
-    @Column(name = "allocation_ratio", precision = 5, scale = 2)
-    private BigDecimal allocationRatio = new BigDecimal("100.00");
-    
-    @Column(name = "has_sub_table")
-    private Boolean hasSubTable = false;
-    
-    @Column(name = "error_constraint", precision = 5, scale = 2)
-    private BigDecimal errorConstraint;
-    
-    @Column(name = "update_cycle", length = 50)
-    private String updateCycle;
-    
-    @Column(name = "update_time", length = 50)
-    private String updateTime;
-    
-    @Column(name = "task_config", columnDefinition = "TEXT")
-    private String taskConfig;
-    
+
     @Column(name = "collection_description", columnDefinition = "TEXT")
     private String collectionDescription;
     
     @Column(name = "equipment_code", length = 100)
     private String equipmentCode;
-    
+
+    /**
+     * 采集点类型：1-电力表，2-化石燃料，3-外购热能
+     */
+    @Column(name = "collection_point_type")
+    private Integer collectionPointType;
+
+    /**
+     * 采集点ID，根据采集点类型指向对应采集点表的主键
+     * （emission_meter_info / emission_fossil_fuel_meter_info / emission_purchased_heat_meter_info）
+     */
+    @Column(name = "collection_point_id")
+    private Long collectionPointId;
+
+    /**
+     * 采集点状态：1-启用，2-禁用，3-被删除（找不到对应记录），4-离线
+     */
+    @Column(name = "collection_point_status")
+    private Integer collectionPointStatus = 1;
+
     @Column(name = "created_by")
     private Long createdBy;
     

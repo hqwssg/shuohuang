@@ -11,8 +11,6 @@ public class NodeConfigDTO {
     
     private Long updatedBy;
     
-    private String statisticalCaliber;
-    
     private String emissionCategory;
     
     private String emissionSubcategory;
@@ -21,35 +19,17 @@ public class NodeConfigDTO {
     
     private String carbonEmissionFactorDescription;
     
-    private String dataSource;
-    
-    private String accountingScenario;
-    
-    private String energyUse;
-    
-    private String isCumulative;
-    
-    private String isMobileSource;
-    
-    private String measurementUnit;
-    
-    private String dataSourceSystem;
-    
-    private String acquisitionMethod;
-    
-    private BigDecimal allocationRatio;
-    
-    private Boolean hasSubTable;
-    
-    private BigDecimal errorConstraint;
-    
-    private String updateCycle;
-    
-    private String updateTime;
-    
-    private Object taskConfig;
-    
     private String collectionDescription;
     
     private String equipmentCode;
+
+    /**
+     * 采集点类型：1-电力表，2-化石燃料，3-外购热能
+     */
+    private Integer collectionPointType;
+
+    /**
+     * 采集点ID，根据采集点类型指向对应采集点表的主键
+     */
+    private Long collectionPointId;
 }

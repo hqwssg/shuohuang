@@ -57,7 +57,9 @@ public class TemplateServiceImpl implements TemplateService {
         template.setDescription(request.getDescription());
         template.setCreatedBy(request.getCreatedBy());
         template.setUpdatedBy(request.getCreatedBy());
-        
+        // 模版类型：未指定时默认为1（节点模版）
+        template.setTemplateType(request.getTemplateType() != null ? request.getTemplateType() : 1);
+
         Template saved = templateRepository.save(template);
         return convertToDTO(saved);
     }
@@ -67,35 +69,56 @@ public class TemplateServiceImpl implements TemplateService {
     public TemplateDTO updateTemplate(Long id, String name, Long updatedBy) {
         Template template = templateRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("模版不存在"));
-        
+
         if (name != null && !name.isEmpty()) {
             template.setName(name);
         }
         template.setUpdatedBy(updatedBy);
-        
+        // 模版被修改，校验结果自动重置为未检查
+        resetCheckStatus(template);
+
         Template saved = templateRepository.save(template);
         return convertToDTO(saved);
     }
-    
+
     @Override
     @Transactional
-    public TemplateDTO updateTemplate(Long id, String description, Boolean enabled, String taskConfig, Long updatedBy) {
+    public TemplateDTO updateTemplate(Long id, String description, Boolean enabled, Integer templateType, String taskConfig, Long factorTemplateId, Long updatedBy) {
         Template template = templateRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("模版不存在"));
-        
+
         if (description != null) {
             template.setDescription(description);
         }
         if (enabled != null) {
             template.setEnabled(enabled);
         }
+        // 模版类型：1-节点模版；2-核算模版
+        if (templateType != null) {
+            template.setTemplateType(templateType);
+        }
         if (taskConfig != null) {
             template.setTaskConfig(taskConfig);
         }
+        // factorTemplateId 允许设为 null（清除关联）
+        template.setFactorTemplateId(factorTemplateId);
         template.setUpdatedBy(updatedBy);
-        
+        // 模版被修改，校验结果自动重置为未检查
+        resetCheckStatus(template);
+
         Template saved = templateRepository.save(template);
         return convertToDTO(saved);
+    }
+
+    /**
+     * 模版被修改后重置校验状态为未检查（check_result=0，清空校验时间与告警信息）
+     *
+     * @param template 待重置的模版实体
+     */
+    private void resetCheckStatus(Template template) {
+        template.setCheckResult(0);
+        template.setCheckTime(null);
+        template.setCheckMessage(null);
     }
     
     @Override
@@ -111,6 +134,7 @@ public class TemplateServiceImpl implements TemplateService {
         copy.setUpdatedBy(createdBy);
         copy.setVersion(1);
         copy.setEnabled(source.getEnabled());
+        copy.setTemplateType(source.getTemplateType() != null ? source.getTemplateType() : 1);
         copy.setTaskConfig(source.getTaskConfig());
         
         Template saved = templateRepository.save(copy);
@@ -138,16 +162,12 @@ public class TemplateServiceImpl implements TemplateService {
             configRepository.findByNodeId(sourceNode.getId()).ifPresent(sourceConfig -> {
                 EmissionNodeConfig newConfig = new EmissionNodeConfig();
                 newConfig.setNodeId(nodeIdMap.get(sourceNode.getId()));
-                newConfig.setStatisticalCaliber(sourceConfig.getStatisticalCaliber());
                 newConfig.setEmissionCategory(sourceConfig.getEmissionCategory());
                 newConfig.setEmissionSubcategory(sourceConfig.getEmissionSubcategory());
                 newConfig.setCarbonEmissionFactor(sourceConfig.getCarbonEmissionFactor());
-                newConfig.setDataSource(sourceConfig.getDataSource());
-                newConfig.setAllocationRatio(sourceConfig.getAllocationRatio());
-                newConfig.setHasSubTable(sourceConfig.getHasSubTable());
-                newConfig.setErrorConstraint(sourceConfig.getErrorConstraint());
-                newConfig.setUpdateCycle(sourceConfig.getUpdateCycle());
-                newConfig.setUpdateTime(sourceConfig.getUpdateTime());
+                newConfig.setCarbonEmissionFactorDescription(sourceConfig.getCarbonEmissionFactorDescription());
+                newConfig.setCollectionPointType(sourceConfig.getCollectionPointType());
+                newConfig.setCollectionPointId(sourceConfig.getCollectionPointId());
                 newConfig.setCreatedBy(createdBy);
                 newConfig.setUpdatedBy(createdBy);
                 
@@ -178,7 +198,12 @@ public class TemplateServiceImpl implements TemplateService {
         dto.setUpdatedAt(template.getUpdatedAt());
         dto.setVersion(template.getVersion());
         dto.setEnabled(template.getEnabled());
+        dto.setTemplateType(template.getTemplateType() != null ? template.getTemplateType() : 1);
         dto.setTaskConfig(template.getTaskConfig());
+        dto.setFactorTemplateId(template.getFactorTemplateId());
+        dto.setCheckResult(template.getCheckResult() != null ? template.getCheckResult() : 0);
+        dto.setCheckTime(template.getCheckTime());
+        dto.setCheckMessage(template.getCheckMessage());
         
         if (template.getCreatedBy() != null) {
             userRepository.findById(template.getCreatedBy())

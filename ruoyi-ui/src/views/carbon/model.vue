@@ -38,6 +38,7 @@ export default {
     modelFrameUrl() {
       const url = new URL(this.modelUrl, window.location.origin)
       url.searchParams.set('embedded', '1')
+      url.searchParams.set('view', 'model')
       url.searchParams.set('userId', this.$store.getters.id || 1)
       url.searchParams.set('userName', this.$store.getters.name || '')
       url.searchParams.set('name', this.$store.getters.nickName || this.$store.getters.name || '若依用户')
@@ -45,6 +46,11 @@ export default {
     }
   },
   methods: {
+    handleFrameMessage(event) {
+      if (event.data && event.data.type === 'carbon:navigate-home') {
+        this.$router.push('/carbon/index')
+      }
+    },
     reloadFrame() {
       this.loading = true
       this.frameKey += 1
@@ -52,6 +58,12 @@ export default {
     openModel() {
       window.open(this.modelFrameUrl, '_blank')
     }
+  },
+  mounted() {
+    window.addEventListener('message', this.handleFrameMessage)
+  },
+  beforeDestroy() {
+    window.removeEventListener('message', this.handleFrameMessage)
   }
 }
 </script>

@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.com.v2.common.base.BaseController;
+import cn.com.v2.common.audit.RuoYiAudit;
 import cn.com.v2.common.config.V2Config;
 import cn.com.v2.common.domain.AjaxResult;
 import cn.com.v2.common.domain.ResultTable;
@@ -80,7 +81,7 @@ public class GoviewProjectController  extends BaseController{
 	@ResponseBody
 	public ResultTable list(Tablepar tablepar){
 		Page<GoviewProject> page= new Page<GoviewProject>(tablepar.getPage(), tablepar.getLimit());
-		IPage<GoviewProject> iPages=iGoviewProjectService.page(page, new LambdaQueryWrapper<GoviewProject>());
+		IPage<GoviewProject> iPages=iGoviewProjectService.page(page, new QueryWrapper<GoviewProject>());
 		ResultTable resultTable=new ResultTable();
 		resultTable.setData(iPages.getRecords());
 		resultTable.setCode(200);
@@ -98,6 +99,7 @@ public class GoviewProjectController  extends BaseController{
 	//@Log(title = "项目表新增", action = "111")
 	@ApiOperation(value = "新增", notes = "新增")
 	@PostMapping("/create")
+	@RuoYiAudit(title = "GoView项目管理", businessType = 1)
 	@ResponseBody
 	public AjaxResult add(@RequestBody GoviewProject goviewProject){
 		goviewProject.setCreateTime(DateUtil.now());
@@ -119,6 +121,7 @@ public class GoviewProjectController  extends BaseController{
 	//@Log(title = "项目表删除", action = "111")
 	@ApiOperation(value = "删除", notes = "删除")
 	@DeleteMapping("/delete")
+	@RuoYiAudit(title = "GoView项目管理", businessType = 3)
 	@ResponseBody
 	public AjaxResult remove(String ids){
 		List<String> lista=ConvertUtil.toListStrArray(ids);
@@ -132,6 +135,7 @@ public class GoviewProjectController  extends BaseController{
 	
 	@ApiOperation(value = "修改保存", notes = "修改保存")
     @PostMapping("/edit")
+    @RuoYiAudit(title = "GoView项目管理", businessType = 2)
     @ResponseBody
     public AjaxResult editSave(@RequestBody GoviewProject goviewProject)
     {
@@ -145,13 +149,14 @@ public class GoviewProjectController  extends BaseController{
 	
 	@ApiOperation(value = "项目重命名", notes = "项目重命名")
     @PostMapping("/rename")
+    @RuoYiAudit(title = "GoView项目管理", businessType = 2)
     @ResponseBody
     public AjaxResult rename(@RequestBody GoviewProject goviewProject)
     {
 		
-		LambdaUpdateWrapper<GoviewProject> updateWrapper=new LambdaUpdateWrapper<GoviewProject>();
-		updateWrapper.eq(GoviewProject::getId, goviewProject.getId());
-		updateWrapper.set(GoviewProject::getProjectName, goviewProject.getProjectName());
+		UpdateWrapper<GoviewProject> updateWrapper=new UpdateWrapper<GoviewProject>();
+		updateWrapper.eq("id", goviewProject.getId());
+		updateWrapper.set("project_name", goviewProject.getProjectName());
 		Boolean b=iGoviewProjectService.update(updateWrapper);
 		if(b){
         	return success();
@@ -162,13 +167,14 @@ public class GoviewProjectController  extends BaseController{
 	
 	//发布/取消项目状态
     @PutMapping("/publish")
+	@RuoYiAudit(title = "GoView项目发布", businessType = 2)
 	@ResponseBody
     public AjaxResult updateVisible(@RequestBody GoviewProject goviewProject){
     	if(goviewProject.getState()==-1||goviewProject.getState()==1) {
     	
-    		LambdaUpdateWrapper<GoviewProject> updateWrapper=new LambdaUpdateWrapper<GoviewProject>();
-    		updateWrapper.eq(GoviewProject::getId, goviewProject.getId());
-    		updateWrapper.set(GoviewProject::getState, goviewProject.getState());
+			UpdateWrapper<GoviewProject> updateWrapper=new UpdateWrapper<GoviewProject>();
+			updateWrapper.eq("id", goviewProject.getId());
+			updateWrapper.set("state", goviewProject.getState());
     		Boolean b=iGoviewProjectService.update(updateWrapper);
     		if(b){
             	return success();
@@ -201,6 +207,7 @@ public class GoviewProjectController  extends BaseController{
 	
 	@ApiOperation(value = "保存项目数据", notes = "保存项目数据")
 	@PostMapping("/save/data")
+	@RuoYiAudit(title = "GoView大屏数据", businessType = 2, saveRequestData = false)
 	@ResponseBody
 	public AjaxResult saveData(GoviewProjectData data) {
 		
@@ -208,7 +215,8 @@ public class GoviewProjectController  extends BaseController{
 		if(goviewProject==null) {
 			return error("没有该项目ID");
 		}
-		GoviewProjectData goviewProjectData= iGoviewProjectDataService.getOne(new LambdaQueryWrapper<GoviewProjectData>().eq(GoviewProjectData::getProjectId, goviewProject.getId()));
+		GoviewProjectData goviewProjectData= iGoviewProjectDataService.getOne(
+				new QueryWrapper<GoviewProjectData>().eq("project_id", goviewProject.getId()));
 		if(goviewProjectData!=null) {
 			 data.setId(goviewProjectData.getId());
 			 iGoviewProjectDataService.updateById(data);
@@ -227,6 +235,7 @@ public class GoviewProjectController  extends BaseController{
 	 * @throws Exception
 	 */
 	@PostMapping("/upload")
+	@RuoYiAudit(title = "GoView文件管理", businessType = 6, saveRequestData = false)
 	public AjaxResult upload(@RequestBody MultipartFile object) throws IOException{
 		String fileName = object.getOriginalFilename();
 		//默认文件格式

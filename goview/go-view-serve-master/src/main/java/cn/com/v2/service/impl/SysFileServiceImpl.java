@@ -1,6 +1,6 @@
 package cn.com.v2.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.com.v2.mapper.SysFileMapper;
 import cn.com.v2.model.SysFile;
@@ -23,7 +23,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
 	
 	@Override
 	public SysFile selectByExamplefileName(String filename) {
-		SysFile sysFile=sysFileMapper.selectOne(new LambdaQueryWrapper<SysFile>().eq(SysFile::getFileName, filename));
+		SysFile sysFile=sysFileMapper.selectOne(new QueryWrapper<SysFile>().eq("file_name", filename));
         return sysFile;
 	}
 

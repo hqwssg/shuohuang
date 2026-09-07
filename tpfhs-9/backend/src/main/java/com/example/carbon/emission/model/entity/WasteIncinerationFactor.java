@@ -56,7 +56,7 @@ public class WasteIncinerationFactor {
     private BigDecimal ce;
 
     /**
-     * 碳排放因子（计算方式：CCW * FCF * CE * 2）
+     * 碳排放因子（计算方式：CCW * FCF * CE * 44/12）
      */
     @Column(name = "emission_factor", precision = 15, scale = 6)
     private BigDecimal emissionFactor;

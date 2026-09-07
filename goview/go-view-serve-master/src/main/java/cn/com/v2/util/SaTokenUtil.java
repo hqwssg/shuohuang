@@ -20,7 +20,7 @@ public class SaTokenUtil {
     	Object object=StpUtil.getSession().get("user");
     	if(object!=null){
     		SysUser tsysUser=new SysUser();
-    		BeanUtils.copyProperties(tsysUser, object);
+			BeanUtils.copyProperties(object, tsysUser);
     		return tsysUser;
     	}
     	return null;

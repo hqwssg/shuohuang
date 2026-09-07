@@ -37,6 +37,7 @@ services:
       SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_URL: "jdbc:mysql://ruoyi-db:3306/carbon_emissions?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true"
       SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_USERNAME: root
       SPRING_DATASOURCE_DYNAMIC_DATASOURCE_MASTER_PASSWORD: password
+      GOVIEW_AUDIT_SECRET: "${GOVIEW_AUDIT_SECRET}"
       FILE_DOMAIN: "${WEB_PUBLIC_URL:-http://localhost}/prod-api"
       FILE_PATH: /home/ruoyi/uploadPath
     ports:
@@ -59,8 +60,13 @@ services:
       V2_XNLJMAP_OSS: file:/home/goview/upload/
       V2_FILEURL: /home/goview/upload
       V2_HTTPURL: "${SCREEN_PUBLIC_URL:-http://localhost:3000}/"
+      RUOYI_AUDIT_ENABLED: "true"
+      RUOYI_AUDIT_URL: "http://ruoyi-web:8081/internal/goview/audit"
+      GOVIEW_AUDIT_SECRET: "${GOVIEW_AUDIT_SECRET}"
     ports:
       - "3000:80"
     volumes:
       - ./web-screen/upload:/home/goview/upload
       - ./web-screen/sqllite:/home/goview/sqllite
+    depends_on:
+      - ruoyi-web

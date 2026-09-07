@@ -166,7 +166,10 @@ const handleConfirm = async () => {
       if (result.success) {
         emit('select', {
           factorValue: result.factorValue,
-          description: result.description
+          description: result.description,
+          factorId: selectedFactor.value?.id ?? null,
+          factorName: selectedFactor.value?.name ?? '',
+          factorUnit: selectedFactor.value?.unit ?? ''
         });
       } else {
         alert(result.message || '计算失败');
@@ -225,7 +228,10 @@ const handleConfirm = async () => {
       if (result.success) {
         emit('select', {
           factorValue: result.factorValue,
-          description: result.description
+          description: result.description,
+          factorId: selectedFactor.value?.id ?? null,
+          factorName: selectedFactor.value?.name ?? '',
+          factorUnit: selectedFactor.value?.unit ?? ''
         });
       } else {
         alert(result.message || '计算失败');
@@ -239,7 +245,10 @@ const handleConfirm = async () => {
   } else {
     emit('select', {
       factorValue: selectedFactor.value.value,
-      description: selectedFactor.value.description
+      description: selectedFactor.value.description,
+      factorId: selectedFactor.value?.id ?? null,
+      factorName: selectedFactor.value?.name ?? '',
+      factorUnit: selectedFactor.value?.unit ?? ''
     });
   }
   

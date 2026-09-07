@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import cn.com.v2.common.base.BaseController;
+import cn.com.v2.common.audit.RuoYiAudit;
 import cn.com.v2.common.config.V2Config;
 import cn.com.v2.common.domain.AjaxResult;
 import cn.com.v2.model.SysFile;
@@ -56,6 +57,7 @@ public class FileController extends BaseController{
 	 */
 	@ApiOperation(value = "删除", notes = "删除")
 	@DeleteMapping("/remove")
+	@RuoYiAudit(title = "GoView文件管理", businessType = 3)
 	public AjaxResult remove(String ids){
 		Boolean b=iSysFileService.removeByIds(StrUtil.split(ids, ',',-1));
 		if(b){
@@ -68,6 +70,7 @@ public class FileController extends BaseController{
 	
 	@ApiOperation(value = "修改", notes = "修改")
 	@PutMapping("/update")
+	@RuoYiAudit(title = "GoView文件管理", businessType = 2, saveRequestData = false)
 	public AjaxResult update(String id,@RequestBody MultipartFile object) throws IllegalStateException, IOException{
 		SysFile sysFile=iSysFileService.getById(id);
 		if(sysFile!=null){
@@ -87,6 +90,7 @@ public class FileController extends BaseController{
 	 * @throws Exception
 	 */
 	@PostMapping("/upload")
+	@RuoYiAudit(title = "GoView文件管理", businessType = 6, saveRequestData = false)
 	public AjaxResult upload(@RequestBody MultipartFile object) throws IOException{
 		String fileName = object.getOriginalFilename();
 		//默认文件格式
@@ -133,6 +137,7 @@ public class FileController extends BaseController{
 	 * @throws IOException 
 	 */
 	@PostMapping("/uploadbase64")
+	@RuoYiAudit(title = "GoView文件管理", businessType = 6, saveRequestData = false)
 	public synchronized AjaxResult uploadbase64(String base64str) throws IOException{
 		if(StrUtil.isNotBlank(base64str)){
 			String suffixName=v2Config.getDefaultFormat();
@@ -217,6 +222,7 @@ public class FileController extends BaseController{
 	 * @throws Exception
 	 */
 	@PostMapping("/coverupload")
+	@RuoYiAudit(title = "GoView文件管理", businessType = 2, saveRequestData = false)
 	public AjaxResult coverupload(@RequestBody MultipartFile object,String key,String relativePath) throws IOException{
 		
 		String fileName = object.getOriginalFilename();
@@ -305,7 +311,7 @@ public class FileController extends BaseController{
 	@GetMapping("/list")
 	public Object list(long current, long size){
 		Page<SysFile> page= new Page<SysFile>(current, size);
-		IPage<SysFile> sysFile=iSysFileService.page(page, new LambdaQueryWrapper<SysFile>());
+		IPage<SysFile> sysFile=iSysFileService.page(page, new QueryWrapper<SysFile>());
 		return sysFile;
 	}
 	

@@ -32,7 +32,10 @@ public class EmissionNode {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Template template;
-    
+
+    @Column(name = "source_node_id")
+    private Long sourceNodeId = 0L;
+
     @Column(name = "sort_order")
     private Integer sortOrder = 0;
     

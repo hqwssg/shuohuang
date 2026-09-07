@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.com.v2.common.base.BaseController;
+import cn.com.v2.common.audit.RuoYiAuditClient;
 import cn.com.v2.common.domain.AjaxResult;
 import cn.com.v2.model.SysUser;
 import cn.com.v2.service.ISysUserService;
@@ -27,6 +28,8 @@ import io.swagger.annotations.ApiOperation;
 public class ApiController  extends BaseController {
 	@Autowired
 	private ISysUserService iSysUserService;
+	@Autowired
+	private RuoYiAuditClient auditClient;
 
 	@ApiOperation(value = "登陆", notes = "登陆")
 	@PostMapping("/login")
@@ -42,19 +45,25 @@ public class ApiController  extends BaseController {
 			return success().put("data", map);
 		} else {
 			if (StrUtil.isNotBlank(user.getUsername()) && StrUtil.isNotBlank(user.getPassword())) {
-				SysUser sysUser = iSysUserService.getOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, user.getUsername()).eq(SysUser::getPassword, SecureUtil.md5(user.getPassword())).last("LIMIT 1"));
+				SysUser sysUser = iSysUserService.getOne(new QueryWrapper<SysUser>()
+						.eq("username", user.getUsername())
+						.eq("password", SecureUtil.md5(user.getPassword()))
+						.last("LIMIT 1"));
 				if (sysUser != null) {
 					StpUtil.login(sysUser.getId());
 					SaTokenUtil.setUser(sysUser);
 					Map<String, Object> map = new HashMap<String, Object>();
 					map.put("userinfo", sysUser);
 					map.put("token", StpUtil.getTokenInfo());
+					auditClient.recordLogin(sysUser.getUsername(), true, getClientIp(request), "GoView 登录成功");
 
 					return success().put("data", map);
 				} else {
+					auditClient.recordLogin(user.getUsername(), false, getClientIp(request), "GoView 用户名或密码错误");
 					return error(500, "账户或者密码错误");
 				}
 			} else {
+				auditClient.recordLogin(user.getUsername(), false, getClientIp(request), "GoView 用户名或密码为空");
 				return error(500, "账户密码不能为空");
 			}
 		}
@@ -65,13 +74,24 @@ public class ApiController  extends BaseController {
 	@ApiOperation(value = "登陆", notes = "登陆")
 	@GetMapping("/logout")
 	@ResponseBody
-	public AjaxResult logout() {
+	public AjaxResult logout(HttpServletRequest request) {
 
 		// 判断是否登陆
+		String username = StpUtil.isLogin() ? SaTokenUtil.getLoginName() : "anonymous";
 		StpUtil.logout();
+		auditClient.recordLogin(username, true, getClientIp(request), "GoView 退出成功");
 
 		return success();
 
+	}
+
+	private String getClientIp(HttpServletRequest request) {
+		String forwarded = request.getHeader("X-Forwarded-For");
+		if (StrUtil.isNotBlank(forwarded)) {
+			return forwarded.split(",")[0].trim();
+		}
+		String realIp = request.getHeader("X-Real-IP");
+		return StrUtil.isBlank(realIp) ? request.getRemoteAddr() : realIp;
 	}
 	
 	

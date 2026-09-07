@@ -94,11 +94,25 @@ public interface EmissionNodeService {
     
     /**
      * 生成采集设备编号
-     * 
+     *
      * @param nodeId 采集点节点ID或父节点ID
      * @param emissionCategory 排放数据大类
      * @param newNodeId 新节点ID（可选，用于新建节点时生成编号）
      * @return 生成的设备编号
      */
     String generateEquipmentCode(Long nodeId, String emissionCategory, Long newNodeId);
+
+    /**
+     * 挂载节点模版
+     *
+     * 将指定节点模版（templateType=1）所包含的全部子节点复制到当前模版树中，
+     * 挂载到目标父节点（typeId=1/2 的"排放核算点"）之下。
+     * 每个被复制的节点都会通过 source_node_id 字段记录其来源节点ID。
+     *
+     * @param parentId           目标父节点ID（挂载位置）
+     * @param sourceTemplateId   节点模版ID（来源模版）
+     * @param createdBy          创建人ID
+     * @return 挂载后的目标父节点DTO
+     */
+    NodeDTO mountNodeTemplate(Long parentId, Long sourceTemplateId, Long createdBy);
 }

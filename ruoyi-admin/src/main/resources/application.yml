@@ -80,6 +80,16 @@ security:
       - /swagger-ui.html
       - /webjars/**
       - /statics/**
+      - /internal/goview/audit/operation
+      - /internal/goview/audit/login
+      - /internal/goview/audit/job
+      - /internal/carbon/audit/operation
+      - /internal/carbon/audit/job
+
+integration:
+  goview:
+    audit:
+      secret: ${GOVIEW_AUDIT_SECRET:local-integration-secret}
 
 springdoc:
   serverUrl: http://localhost:8081

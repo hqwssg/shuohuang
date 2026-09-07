@@ -202,7 +202,7 @@
                                   ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                        数据库层 (MySQL)                          │
-│  user | template | emission_node | emission_node_config         │
+│  user | template | sys_emission_node | sys_emission_node_config         │
 │  data_dict | data_dict_item | node_type                         │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -251,8 +251,8 @@
 |:-------------------- |:----- |
 | user                 | 用户信息表 |
 | template             | 模版信息表 |
-| emission_node        | 排放节点表 |
-| emission_node_config | 节点配置表 |
+| sys_emission_node        | 排放节点表 |
+| sys_emission_node_config | 节点配置表 |
 | data_dict            | 数据字典表 |
 | data_dict_item       | 字典项表  |
 | node_type            | 节点类型表 |
@@ -260,7 +260,7 @@
 ### 5.2 数据关系
 
 ```
-user ───< template ───< emission_node ───< emission_node_config
+user ───< template ───< sys_emission_node ───< sys_emission_node_config
                               │
                               ▼
                         node_type

@@ -1,0 +1,19 @@
+# ============================================================
+# 本地开发测试 Profile（Web + Job 同时运行）
+# 启动方式：java -jar xxx.jar --spring.profiles.active=local
+#           或 IDE 运行配置中添加 Active profiles: local
+#
+# 说明：
+# - job profile 由 application.yml 中的 spring.profiles.group 激活
+#   （Spring Boot 禁止在 profile 专属配置文件中使用 spring.profiles.include，
+#    否则启动报 InvalidConfigDataPropertyException）
+# - Web 容器默认即为 servlet（classpath 含 spring-boot-starter-web），
+#   本地无需任何额外配置即可同时启动 Web 容器（端口 8080）和定时任务
+# - 日志独立写入 logs/carbon-emission-local.log，便于区分
+#   （注意：相对路径基于进程工作目录，IDE 调试启动时工作目录为
+#   工作区根目录，故日志位于 <工作区根>/logs/ 下）
+# ============================================================
+
+logging:
+  file:
+    name: logs/carbon-emission-local.log

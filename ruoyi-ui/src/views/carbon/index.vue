@@ -59,9 +59,9 @@ export default {
 
 .module-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(180px, 240px));
+  grid-template-columns: repeat(4, minmax(180px, 240px));
   gap: 18px;
-  width: min(100%, 774px);
+  width: min(100%, 1014px);
 }
 
 .module-button {
@@ -105,6 +105,8 @@ export default {
   &.cyan i { color: #187f8d; }
   &.red i { color: #b84d4d; }
   &.gray i { color: #4a5568; }
+  &.purple i { color: #7a4ca5; }
+  &.violet i { color: #8a3f72; }
 }
 
 .empty-home {
@@ -119,7 +121,7 @@ export default {
   font-size: 20px;
 }
 
-@media (max-width: 820px) {
+@media (max-width: 1040px) {
   .module-grid {
     grid-template-columns: repeat(2, minmax(150px, 1fr));
   }

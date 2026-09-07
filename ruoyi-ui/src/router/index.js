@@ -96,6 +96,12 @@ export const constantRoutes = [
         meta: { title: '碳排放模型设置', icon: 'tree', permissions: getCarbonModulePermissions('model') }
       },
       {
+        path: 'params',
+        component: () => import('@/views/carbon/params'),
+        name: 'CarbonParams',
+        meta: { title: '碳排放核算参数设置', icon: 'component', permissions: getCarbonModulePermissions('params') }
+      },
+      {
         path: 'screen',
         component: () => import('@/views/carbon/screen'),
         name: 'CarbonScreen',
@@ -124,6 +130,12 @@ export const constantRoutes = [
         component: () => import('@/views/carbon/system'),
         name: 'CarbonSystem',
         meta: { title: '系统管理', icon: 'system', permissions: getCarbonModulePermissions('system') }
+      },
+      {
+        path: 'logs',
+        component: () => import('@/views/carbon/logs'),
+        name: 'CarbonLogs',
+        meta: { title: '日志审计', icon: 'log', permissions: getCarbonModulePermissions('logs') }
       }
     ]
   },

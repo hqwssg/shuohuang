@@ -42,6 +42,25 @@ public class EmissionNodeController {
     public ResponseEntity<NodeDTO> createNode(@RequestBody CreateNodeRequest request) {
         return ResponseEntity.ok(nodeService.createNode(request));
     }
+
+    /**
+     * 挂载节点模版
+     *
+     * 将指定节点模版（templateType=1）所包含的全部子节点复制到当前模版树中，
+     * 挂载到目标父节点（typeId=1/2 的"排放核算点"）之下。
+     * 请求体需包含 templateId（来源节点模版ID）与 createdBy（创建人ID）。
+     *
+     * @param parentId 目标父节点ID（挂载位置）
+     * @param body     请求体，包含 templateId 与 createdBy
+     * @return 挂载后的目标父节点DTO
+     */
+    @PostMapping("/{parentId}/mount-template")
+    public ResponseEntity<NodeDTO> mountNodeTemplate(@PathVariable Long parentId,
+                                                     @RequestBody Map<String, Long> body) {
+        Long sourceTemplateId = body.get("templateId");
+        Long createdBy = body.get("createdBy");
+        return ResponseEntity.ok(nodeService.mountNodeTemplate(parentId, sourceTemplateId, createdBy));
+    }
     
     @PutMapping("/{id}")
     public ResponseEntity<NodeDTO> updateNode(@PathVariable Long id, @RequestBody UpdateNodeRequest request) {

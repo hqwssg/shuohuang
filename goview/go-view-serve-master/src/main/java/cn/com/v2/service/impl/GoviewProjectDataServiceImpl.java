@@ -4,7 +4,7 @@ import cn.com.v2.model.GoviewProjectData;
 import cn.com.v2.mapper.GoviewProjectDataMapper;
 import cn.com.v2.service.IGoviewProjectDataService;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,7 @@ public class GoviewProjectDataServiceImpl extends ServiceImpl<GoviewProjectDataM
 	GoviewProjectDataMapper dataMapper;
 	@Override
 	public GoviewProjectData getProjectid(String projectId) {
-		LambdaQueryWrapper<GoviewProjectData> lambdaQueryWrapper=new LambdaQueryWrapper<GoviewProjectData>();
-		lambdaQueryWrapper.eq(GoviewProjectData::getProjectId, projectId);
-		return dataMapper.selectOne(lambdaQueryWrapper);
+		return dataMapper.selectOne(new QueryWrapper<GoviewProjectData>().eq("project_id", projectId));
 		
 	}
 

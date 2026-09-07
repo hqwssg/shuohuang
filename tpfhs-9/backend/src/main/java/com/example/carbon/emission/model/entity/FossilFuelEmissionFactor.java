@@ -68,7 +68,8 @@ public class FossilFuelEmissionFactor {
     private BigDecimal fuelOxidationRate;
     
     /**
-     * 碳排放因子（tCO2/GJ）
+     * 碳排放因子（tCO₂/t 或 tCO₂/万Nm³，根据计量单位不同而不同）
+     * 计算公式：(低位发热量 × 单位热值含碳量 × 燃料氧化率 × 44/12) / 1000
      */
     @Column(name = "emission_factor", precision = 15, scale = 6)
     private BigDecimal emissionFactor;

@@ -206,7 +206,7 @@ public class FossilFuelEmissionFactorServiceImpl implements FossilFuelEmissionFa
         entity.setFactorUnit(dto.getFactorUnit());
         entity.setDescription(dto.getDescription());
         entity.setCreatedBy(dto.getCreatedBy());
-        entity.setUpdatedBy(dto.getCreatedBy());
+        entity.setUpdatedBy(dto.getUpdatedBy());
         return entity;
     }
 }

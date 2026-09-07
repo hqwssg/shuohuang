@@ -10,7 +10,7 @@ public interface TemplateService {
     TemplateDTO getTemplateById(Long id);
     TemplateDTO createTemplate(CreateTemplateRequest request);
     TemplateDTO updateTemplate(Long id, String name, Long updatedBy);
-    TemplateDTO updateTemplate(Long id, String description, Boolean enabled, String taskConfig, Long updatedBy);
+    TemplateDTO updateTemplate(Long id, String description, Boolean enabled, Integer templateType, String taskConfig, Long factorTemplateId, Long updatedBy);
     TemplateDTO copyTemplate(Long sourceId, String newName, Long createdBy);
     void deleteTemplate(Long id);
 }

@@ -1,0 +1,16 @@
+# ============================================================
+# Job 端 Profile 配置（后台定时任务服务器专用）
+# 生产启动方式（需显式关闭 Web 容器，本文件不再设置该属性：
+# profile group 引入的 job 配置会覆盖 local 配置，导致本地
+# 测试时 Web 容器无法启动，故职责移至启动参数）：
+#   java -jar xxx.jar --spring.profiles.active=job --spring.main.web-application-type=none
+#
+# 本 Profile 的作用：
+# - 激活 @Profile("job") 的 Bean：EmissionScheduler（核算检查、
+#   采集计划扫描、固定延迟采集循环）、AsyncTaskService、
+#   AsyncThreadPoolConfig（asyncTaskExecutor 线程池）
+# - 数据库连接等基础配置与 application.yml 共用，无增量差异
+# - 日志使用 application.yml 默认配置（logs/carbon-emission.log），
+#   如需独立日志文件，启动时追加
+#   --logging.file.name=logs/carbon-emission-job.log
+# ============================================================
