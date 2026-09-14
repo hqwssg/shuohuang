@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportDeptProfileMapper">
+    <select id="selectByDeptId" resultType="com.ruoyi.carbon.report.domain.ReportDeptProfile">
+        select id, dept_id as deptId, legal_name as legalName, short_name as shortName,
+               entity_code as entityCode, default_compiler as defaultCompiler,
+               carbon_department as carbonDepartment, business_description as businessDescription,
+               company_overview as companyOverview, process_description as processDescription,
+               default_org_boundary as defaultOrgBoundary,
+               default_accounting_method as defaultAccountingMethod,
+               default_exclusion_note as defaultExclusionNote,
+               default_approver as defaultApprover, default_validator as defaultValidator,
+               default_reviewer as defaultReviewer, default_checker as defaultChecker,
+               default_authors as defaultAuthors, default_equipment_json as defaultEquipmentJson,
+               default_activity_prose_json as defaultActivityProseJson,
+               default_workload_json as defaultWorkloadJson,
+               default_chapter6_json as defaultChapter6Json,
+               header_template as headerTemplate,
+               version
+        from report_dept_profile
+        where dept_id = #{deptId}
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.carbon.report.domain.ReportDeptProfile" useGeneratedKeys="true" keyProperty="id">
+        insert into report_dept_profile (
+            dept_id, legal_name, short_name, entity_code, default_compiler, carbon_department,
+            business_description, company_overview, process_description, default_org_boundary,
+            default_accounting_method, default_exclusion_note, default_approver, default_validator,
+            default_reviewer, default_checker, default_authors, default_equipment_json,
+            default_activity_prose_json, default_workload_json, default_chapter6_json, header_template, version,
+            create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{legalName}, #{shortName}, #{entityCode}, #{defaultCompiler}, #{carbonDepartment},
+            #{businessDescription}, #{companyOverview}, #{processDescription}, #{defaultOrgBoundary},
+            #{defaultAccountingMethod}, #{defaultExclusionNote}, #{defaultApprover}, #{defaultValidator},
+            #{defaultReviewer}, #{defaultChecker}, #{defaultAuthors}, #{defaultEquipmentJson},
+            #{defaultActivityProseJson}, #{defaultWorkloadJson}, #{defaultChapter6Json}, #{headerTemplate}, 1,
+            #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.carbon.report.domain.ReportDeptProfile">
+        update report_dept_profile
+        set legal_name = #{legalName},
+            short_name = #{shortName},
+            entity_code = #{entityCode},
+            default_compiler = #{defaultCompiler},
+            carbon_department = #{carbonDepartment},
+            business_description = #{businessDescription},
+            company_overview = #{companyOverview},
+            process_description = #{processDescription},
+            default_org_boundary = #{defaultOrgBoundary},
+            default_accounting_method = #{defaultAccountingMethod},
+            default_exclusion_note = #{defaultExclusionNote},
+            default_approver = #{defaultApprover},
+            default_validator = #{defaultValidator},
+            default_reviewer = #{defaultReviewer},
+            default_checker = #{defaultChecker},
+            default_authors = #{defaultAuthors},
+            default_equipment_json = #{defaultEquipmentJson},
+            default_activity_prose_json = #{defaultActivityProseJson},
+            default_workload_json = #{defaultWorkloadJson},
+            default_chapter6_json = #{defaultChapter6Json},
+            header_template = #{headerTemplate},
+            version = version + 1,
+            update_by = #{updateBy},
+            update_time = now()
+        where dept_id = #{deptId}
+    </update>
+</mapper>

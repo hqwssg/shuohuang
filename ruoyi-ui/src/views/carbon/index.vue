@@ -1,21 +1,19 @@
 <template>
   <div class="carbon-home">
-    <div v-if="visibleModules.length" class="module-grid">
+    <div class="module-grid">
       <button
-        v-for="item in visibleModules"
+        v-for="item in moduleItems"
         :key="item.key"
         class="module-button"
-        :class="item.color"
+        :class="[item.color, { 'is-locked': !item.accessible }]"
         type="button"
+        :aria-label="item.accessible ? item.title : `${item.title}，当前账号无权限，点击查看说明`"
         @click="go(item)"
       >
         <i :class="item.icon"></i>
         <span>{{ item.title }}</span>
+        <i v-if="!item.accessible" class="el-icon-lock lock-icon"></i>
       </button>
-    </div>
-    <div v-else class="empty-home">
-      <i class="el-icon-lock"></i>
-      <span>暂无可访问功能</span>
     </div>
   </div>
 </template>
@@ -26,14 +24,21 @@ import { carbonModules, canAccessByPermissions } from '@/utils/carbonAccess'
 export default {
   name: 'CarbonIndex',
   computed: {
-    visibleModules() {
+    moduleItems() {
       const permissions = this.$store.getters.permissions
       const roles = this.$store.getters.roles
-      return carbonModules.filter(item => canAccessByPermissions(item, permissions, roles))
+      return carbonModules.map(item => ({
+        ...item,
+        accessible: canAccessByPermissions(item, permissions, roles)
+      }))
     }
   },
   methods: {
     go(item) {
+      if (!item.accessible) {
+        this.$message.warning(`当前账号没有“${item.title}”权限，请联系上级管理员分配对应角色`)
+        return
+      }
       if (item.external) {
         window.location.href = item.path
         return
@@ -65,6 +70,7 @@ export default {
 }
 
 .module-button {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,6 +105,27 @@ export default {
     transform: translateY(-2px);
   }
 
+  &.is-locked {
+    border-color: #e4e7ed;
+    background: #f7f8fa;
+    color: #8b95a5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+
+    > i:first-child {
+      color: #9aa4b2;
+    }
+  }
+
+  .lock-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #8b95a5;
+    font-size: 16px;
+  }
+
   &.green i { color: #1f8f6b; }
   &.blue i { color: #2265b4; }
   &.orange i { color: #b4691f; }
@@ -107,18 +134,6 @@ export default {
   &.gray i { color: #4a5568; }
   &.purple i { color: #7a4ca5; }
   &.violet i { color: #8a3f72; }
-}
-
-.empty-home {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: #8b97a8;
-  font-size: 15px;
-}
-
-.empty-home i {
-  font-size: 20px;
 }
 
 @media (max-width: 1040px) {

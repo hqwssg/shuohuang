@@ -7,8 +7,8 @@
       </div>
       <div class="menu-bar">
         <el-button @click="handleBack" link>返回列表</el-button>
-        <el-button @click="handleNewTemplate" link>新建模版</el-button>
-        <el-button @click="handleSaveAs" link>另存为</el-button>
+        <el-button @click="handleNewTemplate" link :disabled="!canEdit" title="需要碳排放模型编辑权限">新建模版</el-button>
+        <el-button @click="handleSaveAs" link :disabled="!canEdit" title="需要碳排放模型编辑权限">另存为</el-button>
       </div>
       <div class="undo-redo-bar" v-if="false">
         <el-button 
@@ -30,6 +30,15 @@
         <el-button @click="handleCancel" v-if="false">取消</el-button>
       </div>
     </header>
+
+    <el-alert
+      v-if="!canEdit"
+      title="当前账号处于只读模式，节点和模板修改操作不可用"
+      type="warning"
+      show-icon
+      :closable="false"
+      class="permission-alert"
+    />
     
     <div class="main-content">
       <div class="tree-panel">
@@ -41,6 +50,7 @@
             :tree-data="treeData"
             :selected-node="selectedNode"
             :options="options"
+            :readonly="!canEdit"
             @select="handleNodeSelect"
             @add="handleAddNode"
             @addMultiple="handleAddMultipleCollectionNodes"
@@ -57,17 +67,18 @@
           <span class="panel-title">属性显示栏</span>
           <div class="panel-actions">
             <el-button
-              v-if="selectedNode && (selectedNode.typeId === 1 || selectedNode.typeId === 2)"
+              v-if="canEdit && selectedNode && (selectedNode.typeId === 1 || selectedNode.typeId === 2)"
               size="small"
               @click="handleAddMultipleCollectionNodes(selectedNode)"
             >添加多个采集节点</el-button>
             <el-button
-              v-if="selectedNode && (selectedNode.typeId === 1 || selectedNode.typeId === 2)"
+              v-if="canEdit && selectedNode && (selectedNode.typeId === 1 || selectedNode.typeId === 2)"
               size="small"
               @click="handleMountTemplate(selectedNode)"
             >挂载节点模版</el-button>
             <el-button
               type="primary"
+              v-if="canEdit"
               size="small"
               :disabled="!selectedNode"
               @click="handleEditNode(selectedNode)"
@@ -442,15 +453,21 @@ import CarbonEmissionFactorDialog from './components/CarbonEmissionFactorDialog.
 import CollectionPointSelectDialog from './components/CollectionPointSelectDialog.vue';
 import { ElMessage } from 'element-plus';
 import { nodeApi, templateApi } from './api/auth';
+import { hasPermission } from './utils/permissions';
 
 const props = defineProps({
   currentTemplate: {
+    type: Object,
+    default: null
+  },
+  currentUser: {
     type: Object,
     default: null
   }
 });
 
 const emit = defineEmits(['back']);
+const canEdit = computed(() => hasPermission(props.currentUser, 'carbon:model:edit'));
 
 const treeData = ref([]);
 const selectedNode = ref(null);
@@ -1466,6 +1483,11 @@ const handleAddFactorInput = () => {
   height: 60px;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.permission-alert {
+  flex: 0 0 auto;
+  border-radius: 0;
 }
 
 .header-left {

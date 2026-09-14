@@ -11,6 +11,7 @@ import com.example.carbon.emission.model.repository.EmissionNodeRepository;
 import com.example.carbon.emission.model.repository.TemplateRepository;
 import com.example.carbon.emission.model.repository.UserRepository;
 import com.example.carbon.emission.model.service.TemplateService;
+import com.example.carbon.emission.model.security.CarbonDataScopeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +35,21 @@ public class TemplateServiceImpl implements TemplateService {
     
     @Autowired
     private EmissionNodeConfigRepository configRepository;
+
+    @Autowired(required = false)
+    private CarbonDataScopeService dataScope;
     
     @Override
     public List<TemplateDTO> getAllTemplates() {
         return templateRepository.findAllByOrderByCreatedAtDesc().stream()
+            .filter(template -> dataScope == null || dataScope.canReadSafely(template))
             .map(this::convertToDTO)
             .collect(Collectors.toList());
     }
     
     @Override
     public TemplateDTO getTemplateById(Long id) {
+        requireTemplate(id, false);
         Template template = templateRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("模版不存在"));
         return convertToDTO(template);
@@ -55,6 +61,7 @@ public class TemplateServiceImpl implements TemplateService {
         Template template = new Template();
         template.setName(request.getName());
         template.setDescription(request.getDescription());
+        if (dataScope != null) template.setDeptId(dataScope.current().deptId());
         template.setCreatedBy(request.getCreatedBy());
         template.setUpdatedBy(request.getCreatedBy());
         // 模版类型：未指定时默认为1（节点模版）
@@ -67,6 +74,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     @Transactional
     public TemplateDTO updateTemplate(Long id, String name, Long updatedBy) {
+        requireTemplate(id, true);
         Template template = templateRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("模版不存在"));
 
@@ -84,6 +92,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     @Transactional
     public TemplateDTO updateTemplate(Long id, String description, Boolean enabled, Integer templateType, String taskConfig, Long factorTemplateId, Long updatedBy) {
+        requireTemplate(id, true);
         Template template = templateRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("模版不存在"));
 
@@ -124,12 +133,14 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     @Transactional
     public TemplateDTO copyTemplate(Long sourceId, String newName, Long createdBy) {
+        requireTemplate(sourceId, false);
         Template source = templateRepository.findById(sourceId)
             .orElseThrow(() -> new RuntimeException("源模版不存在"));
         
         Template copy = new Template();
         copy.setName(newName);
         copy.setDescription(source.getDescription());
+        if (dataScope != null) copy.setDeptId(dataScope.current().deptId());
         copy.setCreatedBy(createdBy);
         copy.setUpdatedBy(createdBy);
         copy.setVersion(1);
@@ -181,6 +192,7 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     @Transactional
     public void deleteTemplate(Long id) {
+        requireTemplate(id, true);
         if (!templateRepository.existsById(id)) {
             throw new RuntimeException("模版不存在");
         }
@@ -192,6 +204,7 @@ public class TemplateServiceImpl implements TemplateService {
         dto.setId(template.getId());
         dto.setName(template.getName());
         dto.setDescription(template.getDescription());
+        dto.setDeptId(template.getDeptId());
         dto.setCreatedBy(template.getCreatedBy());
         dto.setCreatedAt(template.getCreatedAt());
         dto.setUpdatedBy(template.getUpdatedBy());
@@ -215,5 +228,9 @@ public class TemplateServiceImpl implements TemplateService {
         }
         
         return dto;
+    }
+
+    private void requireTemplate(Long id, boolean write) {
+        if (dataScope != null) dataScope.requireTemplate(id, write);
     }
 }

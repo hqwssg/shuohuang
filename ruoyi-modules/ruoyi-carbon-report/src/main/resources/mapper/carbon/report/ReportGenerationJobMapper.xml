@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportGenerationJobMapper">
+    <select id="selectById" resultType="com.ruoyi.carbon.report.domain.ReportGenerationJob">
+        select id, dept_id as deptId, report_id as reportId, status, output_kind as outputKind,
+               progress, snapshot_sha256 as snapshotSha256, input_snapshot_json as inputSnapshotJson,
+               ai_enabled as aiEnabled, docx_file_id as docxFileId, pdf_file_id as pdfFileId,
+               error_message as errorMessage, llm_call_count as llmCallCount
+        from report_generation_job
+        where id = #{id}
+    </select>
+
+    <select id="selectLatestSucceededSnapshot" resultType="java.lang.String">
+        select j.input_snapshot_json
+        from report_generation_job j
+        inner join report_task t on t.id = j.report_id and t.dept_id = j.dept_id
+        where j.dept_id = #{deptId}
+          and t.report_year = #{reportYear}
+          and t.deleted_flag = '0'
+          and j.status = 'succeeded'
+          and j.input_snapshot_json is not null
+        order by j.id desc
+        limit 1
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.carbon.report.domain.ReportGenerationJob" useGeneratedKeys="true" keyProperty="id">
+        insert into report_generation_job (
+            dept_id, report_id, status, output_kind, progress, snapshot_sha256, input_snapshot_json,
+            ai_enabled, docx_file_id, pdf_file_id, error_message, llm_call_count,
+            create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{reportId}, #{status}, #{outputKind}, #{progress}, #{snapshotSha256}, #{inputSnapshotJson},
+            #{aiEnabled}, #{docxFileId}, #{pdfFileId}, #{errorMessage}, #{llmCallCount},
+            #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.carbon.report.domain.ReportGenerationJob">
+        update report_generation_job
+        set status = #{status},
+            progress = #{progress},
+            docx_file_id = #{docxFileId},
+            pdf_file_id = #{pdfFileId},
+            error_message = #{errorMessage},
+            llm_call_count = #{llmCallCount},
+            update_time = now()
+        where id = #{id} and dept_id = #{deptId}
+    </update>
+
+    <update id="failStaleProcessing">
+        update report_generation_job
+        set status = 'failed',
+            error_message = 'application restarted',
+            update_time = now()
+        where status in ('queued', 'processing')
+    </update>
+
+    <select id="selectLatestSucceeded" resultType="com.ruoyi.carbon.report.domain.ReportGenerationJob">
+        select id, dept_id as deptId, report_id as reportId, status, output_kind as outputKind,
+               progress, snapshot_sha256 as snapshotSha256,
+               ai_enabled as aiEnabled, docx_file_id as docxFileId, pdf_file_id as pdfFileId,
+               error_message as errorMessage, llm_call_count as llmCallCount
+        from report_generation_job
+        where report_id = #{reportId}
+          and dept_id = #{deptId}
+          and status = 'succeeded'
+        order by id desc
+        limit 1
+    </select>
+
+    <select id="selectLatestDocxFileId" resultType="java.lang.Long">
+        select docx_file_id
+        from report_generation_job
+        where report_id = #{reportId}
+          and dept_id = #{deptId}
+          and status = 'succeeded'
+          and docx_file_id is not null
+        order by id desc
+        limit 1
+    </select>
+
+    <select id="selectLatestPdfFileId" resultType="java.lang.Long">
+        select pdf_file_id
+        from report_generation_job
+        where report_id = #{reportId}
+          and dept_id = #{deptId}
+          and status = 'succeeded'
+          and pdf_file_id is not null
+        order by id desc
+        limit 1
+    </select>
+</mapper>

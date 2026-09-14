@@ -1,9 +1,16 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import { getToken } from '@/utils/auth'
 
 const carbonRequest = axios.create({
   baseURL: process.env.VUE_APP_CARBON_API || '/carbon-api',
   timeout: 15000
+})
+
+carbonRequest.interceptors.request.use(config => {
+  const token = getToken()
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
 })
 
 carbonRequest.interceptors.response.use(

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportEquipmentMapper">
+    <select id="selectByReport" resultType="com.ruoyi.carbon.report.domain.ReportEquipment">
+        select id, dept_id as deptId, report_id as reportId, name, category, quantity, unit, model,
+               energy_type as energyType, remark, data_origin as dataOrigin, source_id as sourceId,
+               sort_order as sortOrder
+        from report_equipment
+        where report_id = #{reportId} and dept_id = #{deptId}
+        order by sort_order, id
+    </select>
+
+    <delete id="deleteByReport">
+        delete from report_equipment where report_id = #{reportId} and dept_id = #{deptId}
+    </delete>
+
+    <insert id="insert" parameterType="com.ruoyi.carbon.report.domain.ReportEquipment" useGeneratedKeys="true" keyProperty="id">
+        insert into report_equipment (
+            dept_id, report_id, name, category, quantity, unit, model, energy_type, remark,
+            data_origin, source_id, sort_order, create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{reportId}, #{name}, #{category}, #{quantity}, #{unit}, #{model}, #{energyType}, #{remark},
+            #{dataOrigin}, #{sourceId}, #{sortOrder}, #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+</mapper>

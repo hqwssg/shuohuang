@@ -3,7 +3,7 @@
     <div class="carbon-model-toolbar">
       <div class="toolbar-title">
         <h2>碳排放模型设置</h2>
-        <span>{{ modelUrl }}</span>
+        <span>{{ resolvedModelUrl }}</span>
       </div>
       <div class="toolbar-actions">
         <el-button icon="el-icon-s-home" @click="$router.push('/carbon/index')">返回首页</el-button>
@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { resolveServiceUrl } from '@/utils/serviceUrl'
+
 export default {
   name: 'CarbonModel',
   data() {
@@ -35,13 +37,13 @@ export default {
     }
   },
   computed: {
+    resolvedModelUrl() {
+      return resolveServiceUrl(this.modelUrl, '/carbon-model/').replace(/\/$/, '')
+    },
     modelFrameUrl() {
-      const url = new URL(this.modelUrl, window.location.origin)
+      const url = new URL(this.resolvedModelUrl)
       url.searchParams.set('embedded', '1')
       url.searchParams.set('view', 'model')
-      url.searchParams.set('userId', this.$store.getters.id || 1)
-      url.searchParams.set('userName', this.$store.getters.name || '')
-      url.searchParams.set('name', this.$store.getters.nickName || this.$store.getters.name || '若依用户')
       return url.toString()
     }
   },
@@ -72,7 +74,8 @@ export default {
 .carbon-model-page {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 84px);
+  min-height: 680px;
   padding: 16px;
   background: #f5f7fa;
   box-sizing: border-box;
@@ -121,7 +124,7 @@ export default {
 
 .model-frame-wrap {
   flex: 1;
-  min-height: 620px;
+  min-height: 0;
   border: 1px solid #dfe6ee;
   border-radius: 6px;
   overflow: hidden;
@@ -132,11 +135,13 @@ export default {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 620px;
+  min-height: 100%;
 }
 
 @media (max-width: 780px) {
   .carbon-model-page {
+    height: calc(100dvh - 84px);
+    min-height: 620px;
     padding: 10px;
   }
 

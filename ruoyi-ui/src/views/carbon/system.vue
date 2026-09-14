@@ -8,11 +8,11 @@
       <el-button icon="el-icon-s-home" @click="$router.push('/carbon/index')">返回首页</el-button>
     </div>
 
-    <div v-if="visibleLinks.length" class="system-layout">
+    <div class="system-layout">
       <aside class="system-tree-panel">
         <div class="tree-heading">
           <span>设置目录</span>
-          <small>{{ visibleLinks.length }} 项</small>
+          <small>{{ accessibleCount }}/{{ systemLinks.length }} 项可用</small>
         </div>
         <el-tree
           ref="systemTree"
@@ -25,10 +25,11 @@
           highlight-current
           @node-click="handleTreeNodeClick"
         >
-          <span slot-scope="{ node, data }" class="tree-node">
+          <span slot-scope="{ node, data }" class="tree-node" :class="{ 'is-locked': data.type === 'link' && !data.link.accessible }">
             <i :class="data.icon"></i>
             <span>{{ node.label }}</span>
             <small v-if="data.type === 'group'">{{ data.count }}</small>
+            <i v-else-if="!data.link.accessible" class="el-icon-lock tree-lock"></i>
           </span>
         </el-tree>
       </aside>
@@ -79,6 +80,8 @@
               :key="item.title"
               type="button"
               class="system-link"
+              :class="{ 'is-locked': !item.accessible }"
+              :aria-disabled="String(!item.accessible)"
               @click="selectLink(item)"
             >
               <i :class="item.icon"></i>
@@ -86,13 +89,12 @@
                 <strong>{{ item.title }}</strong>
                 <small>{{ item.description }}</small>
               </span>
-              <i class="el-icon-arrow-right action-icon"></i>
+              <i :class="item.accessible ? 'el-icon-arrow-right' : 'el-icon-lock'" class="action-icon"></i>
             </button>
           </div>
         </template>
       </main>
     </div>
-    <el-empty v-if="!visibleLinks.length" description="暂无可访问的系统管理功能" />
   </div>
 </template>
 
@@ -131,14 +133,20 @@ export default {
     }
   },
   computed: {
-    visibleLinks() {
+    systemLinks() {
       const permissions = this.$store.getters.permissions
       const roles = this.$store.getters.roles
-      return carbonSystemLinks.filter(item => canAccessByPermissions(item, permissions, roles))
+      return carbonSystemLinks.map(item => ({
+        ...item,
+        accessible: canAccessByPermissions(item, permissions, roles)
+      }))
+    },
+    accessibleCount() {
+      return this.systemLinks.filter(item => item.accessible).length
     },
     visibleGroups() {
       return carbonSystemGroups.map(group => {
-        const links = this.visibleLinks.filter(item => item.group === group.key)
+        const links = this.systemLinks.filter(item => item.group === group.key)
         return {
           ...group,
           links
@@ -163,7 +171,7 @@ export default {
       }))
     },
     selectedLink() {
-      return this.visibleLinks.find(item => getSystemLinkKey(item) === this.selectedNodeKey) || null
+      return this.systemLinks.find(item => item.accessible && getSystemLinkKey(item) === this.selectedNodeKey) || null
     },
     activeViewComponent() {
       if (!this.selectedLink || this.selectedLink.external) {
@@ -208,6 +216,10 @@ export default {
       this.showGroup(data.key)
     },
     selectLink(item) {
+      if (!item.accessible) {
+        this.$message.warning(`当前账号没有“${item.title}”权限，请联系上级管理员分配权限`)
+        return
+      }
       this.selectedGroup = item.group
       this.selectedNodeKey = getSystemLinkKey(item)
       this.setCurrentTreeKey(this.selectedNodeKey)
@@ -232,6 +244,8 @@ export default {
 .carbon-system {
   background: #f6f8fb;
   min-height: calc(100vh - 84px);
+  height: calc(100vh - 84px);
+  overflow: auto;
 }
 
 .carbon-toolbar {
@@ -257,6 +271,7 @@ export default {
   grid-template-columns: 320px minmax(0, 1fr);
   gap: 16px;
   align-items: start;
+  min-height: calc(100% - 76px);
 }
 
 .system-tree-panel,
@@ -340,6 +355,15 @@ export default {
     color: #2265b4;
     text-align: center;
     font-size: 12px;
+  }
+
+  &.is-locked {
+    color: #98a2b3;
+  }
+
+  .tree-lock {
+    margin-left: auto;
+    color: #98a2b3;
   }
 }
 
@@ -449,6 +473,21 @@ export default {
     box-shadow: 0 10px 22px rgba(31, 45, 61, .08);
     transform: translateY(-1px);
   }
+
+  &.is-locked {
+    border-color: #e6e9ef;
+    background: #f7f8fa;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+
+    > i:first-child,
+    strong,
+    small,
+    .action-icon {
+      color: #98a2b3;
+    }
+  }
 }
 
 .active-setting-header {
@@ -493,12 +532,12 @@ export default {
 }
 
 .embedded-wrapper {
-  min-height: 650px;
+  min-height: calc(100vh - 250px);
   background: #fff;
 }
 
 .embedded-system-view {
-  min-height: 650px;
+  min-height: calc(100vh - 250px);
   padding: 16px;
   background: #fff;
 }
@@ -506,9 +545,15 @@ export default {
 .system-frame {
   display: block;
   width: 100%;
-  min-height: 760px;
+  min-height: calc(100vh - 250px);
   border: 0;
   background: #fff;
+}
+
+.carbon-system ::v-deep .el-button--mini {
+  min-height: 34px;
+  padding: 8px 12px;
+  font-size: 13px;
 }
 
 @media (max-width: 1100px) {

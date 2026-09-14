@@ -69,7 +69,7 @@ public class DefaultFactor {
     /**
      * 所选因子值（快照；热水/蒸汽为经温度计算后的折算值）
      */
-    @Column(name = "factor_value")
+    @Column(name = "factor_value", precision = 18, scale = 6)
     private BigDecimal factorValue;
 
     /**

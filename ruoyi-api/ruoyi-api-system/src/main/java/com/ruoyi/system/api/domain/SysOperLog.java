@@ -50,6 +50,9 @@ public class SysOperLog extends BaseEntity
     @Excel(name = "部门名称")
     private String deptName;
 
+    /** Department ID used for server-side log data scoping. */
+    private Long deptId;
+
     /** 请求url */
     @Excel(name = "请求地址")
     private String operUrl;
@@ -171,6 +174,16 @@ public class SysOperLog extends BaseEntity
     public void setDeptName(String deptName)
     {
         this.deptName = deptName;
+    }
+
+    public Long getDeptId()
+    {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId)
+    {
+        this.deptId = deptId;
     }
 
     public String getOperUrl()

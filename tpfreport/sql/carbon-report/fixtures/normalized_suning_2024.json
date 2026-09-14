@@ -1,0 +1,1145 @@
+{
+  "entity_code": "suning",
+  "period_grain": "year",
+  "metadata": {
+    "entity_name": "国能朔黄铁路发展有限责任公司肃宁分公司",
+    "report_year": 2024,
+    "report_period": "2024年度",
+    "compiler": "龙源（北京）碳资产管理技术有限公司",
+    "compile_date": "2025-06-13",
+    "approver": "王建军",
+    "validator": "赵明华",
+    "reviewer": "李国平",
+    "checker": "陈志强",
+    "authors": "刘洋、周敏",
+    "report_number": "运输-2024-005",
+    "header_text": "国能朔黄铁路发展有限责任公司肃宁分公司2024年度温室气体排放报告"
+  },
+  "entity_profile": {
+    "short_name": "肃宁分公司",
+    "business_description": "负责所辖铁路线路的日常保养、检修，以保障线路持续稳定运行。",
+    "carbon_department": "安全环保监察部",
+    "company_overview": "国能朔黄铁路发展有限责任公司肃宁分公司（以下简称“肃宁分公司”）成立于2002年1月1日，隶属于朔黄铁路发展有限责任公司。主要承担朔黄铁路三汲站至黄骅港站、黄万铁路黄骅南站至神港站两个区段的行车组织和工务、电务、供电、生活等设备设施的养护维修及管理任务。管内线路总长为418公里，其中朔黄铁路自西向东途经平山、灵寿、行唐、定州、安国、博野、蠡县，肃宁、河间、沧县、沧州、黄骅等县（市），在定州西站与京广铁路交汇，在肃宁北站与京九铁路接轨，在黄骅南站与黄万铁路相连，向东至渤海湾的黄骅港；黄万铁路自南向北途经河北省黄骅市，在K69+303（大港水库与万家码头区间）处进入天津市滨海新区，到万家码头车站后经天津地铁线路至神港站，到达天津港神华天津煤炭码头。\n肃宁分公司本部设9个部门，分别是：综合管理部（党委办公室）、党建工作部、纪委办公室、生产技术部、安全环保监察部、保障服务部、人力资源部、科技部、经济核算部；设1个直属机构：生产应急指挥中心。基层设中心站8个、检修中心3个，分别是：灵寿站、定州西站、肃宁北站、沧州西站、黄骅南站、黄骅港站、北港农场站、神港站、线桥检修中心、通信检修中心、供电移动检修中心。碳排放主管部门为安全环保监察部。",
+    "process_description": "肃宁分公司的主要工作任务是依据各项铁路行业运行规范，负责所辖418公里线路的日常保养、检修，以保障线路的持续稳定运行。工作范围覆盖朔黄铁路三汲站至黄骅港站、黄万铁路黄骅南站至神港站两个区段的工务、电务、供电及生活等设备设施养护维修。"
+  },
+  "organization_boundary": {
+    "boundary_description": "根据《陆上运输企业温室气体排放核算方法与报告指南（试行）》，报告主体应以独立法人企业或视同法人的独立核算单位为企业边界，核算和报告在运营上受其控制的所有生产设施产生的温室气体排放。肃宁分公司属于铁路运输企业，核算边界包括所辖8个站及3个检测中心所产生的排放，涵盖食堂天然气、公务用车汽油柴油、轨道作业车柴油等化石燃料燃烧CO2排放，以及净购入电力和热力隐含排放。线路运输机车归属机辆分公司，不在肃宁分公司运营边界内，不计入碳排放核算边界。",
+    "emission_sources": [
+      "化石燃料燃烧",
+      "净购入电力",
+      "净购入热力"
+    ],
+    "accounting_method": "依据陆上交通运输企业温室气体排放核算方法与报告指南进行核算。",
+    "emission_source_rows": [
+      {
+        "category": "化石燃料燃烧",
+        "facility": "食堂天然气灶",
+        "location": "肃宁分公司食堂",
+        "source": "天然气"
+      },
+      {
+        "category": "化石燃料燃烧",
+        "facility": "公务用车",
+        "location": "肃宁分公司",
+        "source": "汽油"
+      },
+      {
+        "category": "化石燃料燃烧",
+        "facility": "轨道作业车",
+        "location": "各站段",
+        "source": "柴油"
+      },
+      {
+        "category": "净购入电力",
+        "facility": "各站及检修中心",
+        "location": "运营边界内",
+        "source": "外购电力"
+      },
+      {
+        "category": "净购入热力",
+        "facility": "供暖站点",
+        "location": "五个供暖站点",
+        "source": "外购热力"
+      }
+    ]
+  },
+  "equipment": [
+    {
+      "name": "线路维修车",
+      "category": "机械设备",
+      "quantity": 12,
+      "unit": "台",
+      "model": "GC-270",
+      "energy_type": "柴油",
+      "remark": "线路施工与检修作业车辆"
+    },
+    {
+      "name": "办公用车",
+      "category": "车辆",
+      "quantity": 8,
+      "unit": "辆",
+      "model": "大众迈腾",
+      "energy_type": "汽油",
+      "remark": "日常行政出行用车"
+    }
+  ],
+  "workload": [
+    {
+      "name": "线路维修里程",
+      "quantity": 1250.5,
+      "unit": "km"
+    },
+    {
+      "name": "检修作业天",
+      "quantity": 320,
+      "unit": "天"
+    }
+  ],
+  "prior_year": {
+    "report_year": 2023,
+    "total_emissions_tco2": 10000.0,
+    "fuel_combustion_tco2": 700.0,
+    "electricity_emissions_tco2": 2200.0,
+    "heat_emissions_tco2": 7100.0
+  },
+  "fuel_activity": [
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.03,
+      "unit": "10k_m3",
+      "month": 1,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.028,
+      "unit": "10k_m3",
+      "month": 2,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.0265,
+      "unit": "10k_m3",
+      "month": 3,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.022,
+      "unit": "10k_m3",
+      "month": 4,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.018,
+      "unit": "10k_m3",
+      "month": 5,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.012,
+      "unit": "10k_m3",
+      "month": 6,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.008,
+      "unit": "10k_m3",
+      "month": 7,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.0085,
+      "unit": "10k_m3",
+      "month": 8,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.015,
+      "unit": "10k_m3",
+      "month": 9,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.025,
+      "unit": "10k_m3",
+      "month": 10,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.05,
+      "unit": "10k_m3",
+      "month": 11,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "natural_gas",
+      "facility": "canteen",
+      "quantity": 0.0743,
+      "unit": "10k_m3",
+      "month": 12,
+      "source_name": "天然气消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.1,
+      "unit": "t",
+      "month": 1,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.08,
+      "unit": "t",
+      "month": 2,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.09,
+      "unit": "t",
+      "month": 3,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.1,
+      "unit": "t",
+      "month": 4,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.11,
+      "unit": "t",
+      "month": 5,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.1,
+      "unit": "t",
+      "month": 6,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.12,
+      "unit": "t",
+      "month": 7,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.11,
+      "unit": "t",
+      "month": 8,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.09,
+      "unit": "t",
+      "month": 9,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.1,
+      "unit": "t",
+      "month": 10,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.12,
+      "unit": "t",
+      "month": 11,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "gasoline",
+      "facility": "vehicle",
+      "quantity": 0.13,
+      "unit": "t",
+      "month": 12,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.16,
+      "unit": "t",
+      "month": 1,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.14,
+      "unit": "t",
+      "month": 2,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.15,
+      "unit": "t",
+      "month": 3,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.16,
+      "unit": "t",
+      "month": 4,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.17,
+      "unit": "t",
+      "month": 5,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.16,
+      "unit": "t",
+      "month": 6,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.18,
+      "unit": "t",
+      "month": 7,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.17,
+      "unit": "t",
+      "month": 8,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.16,
+      "unit": "t",
+      "month": 9,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.17,
+      "unit": "t",
+      "month": 10,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.18,
+      "unit": "t",
+      "month": 11,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "vehicle",
+      "quantity": 0.2,
+      "unit": "t",
+      "month": 12,
+      "source_name": "汽油柴油消耗统计表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.65,
+      "unit": "t",
+      "month": 1,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.6,
+      "unit": "t",
+      "month": 2,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.62,
+      "unit": "t",
+      "month": 3,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.68,
+      "unit": "t",
+      "month": 4,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.7,
+      "unit": "t",
+      "month": 5,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.69,
+      "unit": "t",
+      "month": 6,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.73,
+      "unit": "t",
+      "month": 7,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.72,
+      "unit": "t",
+      "month": 8,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.7,
+      "unit": "t",
+      "month": 9,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.72,
+      "unit": "t",
+      "month": 10,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.8,
+      "unit": "t",
+      "month": 11,
+      "source_name": "轨道车用柴油汇总表"
+    },
+    {
+      "fuel_type": "diesel",
+      "facility": "rail-work-vehicle",
+      "quantity": 0.89,
+      "unit": "t",
+      "month": 12,
+      "source_name": "轨道车用柴油汇总表"
+    }
+  ],
+  "electricity_activity": [
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 310.532,
+      "month": 1,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 295.884,
+      "month": 2,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 322.751,
+      "month": 3,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 318.446,
+      "month": 4,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 333.105,
+      "month": 5,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 325.219,
+      "month": 6,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 340.672,
+      "month": 7,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 331.508,
+      "month": 8,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 319.764,
+      "month": 9,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 337.451,
+      "month": 10,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 342.886,
+      "month": 11,
+      "source_name": "电力统计报表"
+    },
+    {
+      "scope": "purchased-electricity",
+      "quantity_mwh": 358.675,
+      "month": 12,
+      "source_name": "电力统计报表"
+    }
+  ],
+  "heat_activity": [
+    {
+      "site": "肃宁北站",
+      "quantity_gj": 18000.0,
+      "source_name": "heat-settlement",
+      "heating_area_m2": 12000.0,
+      "heat_coefficient": 1.5
+    },
+    {
+      "site": "沧州西站",
+      "quantity_gj": 15000.0,
+      "source_name": "heat-settlement",
+      "heating_area_m2": 10000.0,
+      "heat_coefficient": 1.5
+    },
+    {
+      "site": "黄骅南站",
+      "quantity_gj": 12000.0,
+      "source_name": "heat-settlement",
+      "heating_area_m2": 8000.0,
+      "heat_coefficient": 1.5
+    },
+    {
+      "site": "定州西站",
+      "quantity_gj": 11000.0,
+      "source_name": "heat-settlement",
+      "heating_area_m2": 7500.0,
+      "heat_coefficient": 1.4667
+    },
+    {
+      "site": "灵寿站",
+      "quantity_gj": 9749.67,
+      "source_name": "heat-settlement",
+      "heating_area_m2": 6500.0,
+      "heat_coefficient": 1.5
+    }
+  ],
+  "monitoring_devices": [
+    {
+      "name": "电能表",
+      "model": "DTZ341",
+      "accuracy": "0.2S",
+      "measurement_range": "0-100A",
+      "location": "变电所",
+      "calibration_frequency": "每年1次",
+      "actual_calibration_frequency": "每年1次",
+      "calibration_time": "2024-03",
+      "guide_compliant": "是"
+    }
+  ],
+  "report_tables": [
+    {
+      "role": "workload_monthly",
+      "caption": "",
+      "rows": [
+        [
+          "月份",
+          "2024年"
+        ],
+        [
+          "1",
+          "104.20"
+        ],
+        [
+          "2",
+          "96.50"
+        ],
+        [
+          "3",
+          "101.30"
+        ],
+        [
+          "4",
+          "103.80"
+        ],
+        [
+          "5",
+          "105.10"
+        ],
+        [
+          "6",
+          "98.70"
+        ],
+        [
+          "7",
+          "102.60"
+        ],
+        [
+          "8",
+          "100.40"
+        ],
+        [
+          "9",
+          "104.90"
+        ],
+        [
+          "10",
+          "103.60"
+        ],
+        [
+          "11",
+          "106.10"
+        ],
+        [
+          "12",
+          "123.30"
+        ],
+        [
+          "合计",
+          "1250.50"
+        ],
+        [
+          "数据来源",
+          "企业生产统计报表"
+        ]
+      ]
+    },
+    {
+      "role": "electricity_internal_detail",
+      "caption": "",
+      "rows": [
+        [
+          "月份",
+          "2024年",
+          "2024年",
+          "2024年",
+          "2024年",
+          "2024年"
+        ],
+        [
+          "指标",
+          "发电量",
+          "上网电量",
+          "外购电量",
+          "自用电量",
+          "净购入电量"
+        ],
+        [
+          "1",
+          "0.000",
+          "0.000",
+          "310.532",
+          "0.000",
+          "310.532"
+        ],
+        [
+          "2",
+          "0.000",
+          "0.000",
+          "295.884",
+          "0.000",
+          "295.884"
+        ],
+        [
+          "3",
+          "0.000",
+          "0.000",
+          "322.751",
+          "0.000",
+          "322.751"
+        ],
+        [
+          "4",
+          "0.000",
+          "0.000",
+          "318.446",
+          "0.000",
+          "318.446"
+        ],
+        [
+          "5",
+          "0.000",
+          "0.000",
+          "333.105",
+          "0.000",
+          "333.105"
+        ],
+        [
+          "6",
+          "0.000",
+          "0.000",
+          "325.219",
+          "0.000",
+          "325.219"
+        ],
+        [
+          "7",
+          "0.000",
+          "0.000",
+          "340.672",
+          "0.000",
+          "340.672"
+        ],
+        [
+          "8",
+          "0.000",
+          "0.000",
+          "331.508",
+          "0.000",
+          "331.508"
+        ],
+        [
+          "9",
+          "0.000",
+          "0.000",
+          "319.764",
+          "0.000",
+          "319.764"
+        ],
+        [
+          "10",
+          "0.000",
+          "0.000",
+          "337.451",
+          "0.000",
+          "337.451"
+        ],
+        [
+          "11",
+          "0.000",
+          "0.000",
+          "342.886",
+          "0.000",
+          "342.886"
+        ],
+        [
+          "12",
+          "0.000",
+          "0.000",
+          "358.675",
+          "0.000",
+          "358.675"
+        ],
+        [
+          "合计",
+          "0.000",
+          "0.000",
+          "3936.893",
+          "0.000",
+          "3936.893"
+        ],
+        [
+          "数据来源",
+          "不涉及",
+          "不涉及",
+          "电力统计报表",
+          "不涉及",
+          "电力统计报表"
+        ]
+      ]
+    },
+    {
+      "role": "electricity_balance_detail",
+      "caption": "",
+      "rows": [
+        [
+          "月份",
+          "2024年",
+          "2024年",
+          "2024年",
+          "2024年"
+        ],
+        [
+          "指标",
+          "输入电量",
+          "输出电量",
+          "损耗电量",
+          "净购入电量"
+        ],
+        [
+          "指标",
+          "外购",
+          "外供",
+          "损耗",
+          "合计"
+        ],
+        [
+          "1",
+          "310.532",
+          "0.000",
+          "0.000",
+          "310.532"
+        ],
+        [
+          "2",
+          "295.884",
+          "0.000",
+          "0.000",
+          "295.884"
+        ],
+        [
+          "3",
+          "322.751",
+          "0.000",
+          "0.000",
+          "322.751"
+        ],
+        [
+          "4",
+          "318.446",
+          "0.000",
+          "0.000",
+          "318.446"
+        ],
+        [
+          "5",
+          "333.105",
+          "0.000",
+          "0.000",
+          "333.105"
+        ],
+        [
+          "6",
+          "325.219",
+          "0.000",
+          "0.000",
+          "325.219"
+        ],
+        [
+          "7",
+          "340.672",
+          "0.000",
+          "0.000",
+          "340.672"
+        ],
+        [
+          "8",
+          "331.508",
+          "0.000",
+          "0.000",
+          "331.508"
+        ],
+        [
+          "9",
+          "319.764",
+          "0.000",
+          "0.000",
+          "319.764"
+        ],
+        [
+          "10",
+          "337.451",
+          "0.000",
+          "0.000",
+          "337.451"
+        ],
+        [
+          "11",
+          "342.886",
+          "0.000",
+          "0.000",
+          "342.886"
+        ],
+        [
+          "12",
+          "358.675",
+          "0.000",
+          "0.000",
+          "358.675"
+        ],
+        [
+          "合计",
+          "3936.893",
+          "0.000",
+          "0.000",
+          "3936.893"
+        ],
+        [
+          "数据来源",
+          "电力统计报表",
+          "不涉及",
+          "不涉及",
+          "电力统计报表"
+        ]
+      ]
+    },
+    {
+      "role": "appendix_emission_summary",
+      "caption": "",
+      "rows": [
+        [
+          "2024年",
+          "2024年",
+          "2024年"
+        ],
+        [
+          "源类别",
+          "源类别",
+          "排放量（tCO2）"
+        ],
+        [
+          "化石燃料燃烧",
+          "天然气",
+          "6.90"
+        ],
+        [
+          "化石燃料燃烧",
+          "汽油和柴油",
+          "37.25"
+        ],
+        [
+          "净购入电力",
+          "电力",
+          "2106.24"
+        ],
+        [
+          "净购入热力",
+          "热力",
+          "7238.30"
+        ],
+        [
+          "合计",
+          "合计",
+          "9388.69"
+        ]
+      ]
+    },
+    {
+      "role": "appendix_fuel",
+      "caption": "",
+      "rows": [
+        [
+          "燃料品种",
+          "2024年",
+          "2024年",
+          "2024年",
+          "2024年",
+          "2024年"
+        ],
+        [
+          "燃料品种",
+          "消耗量",
+          "低位发热量",
+          "单位热值含碳量",
+          "碳氧化率",
+          "排放量（tCO2）"
+        ],
+        [
+          "燃料品种",
+          "数据",
+          "数据",
+          "数据",
+          "数据",
+          "数据"
+        ],
+        [
+          "天然气",
+          "0.3173",
+          "389.31",
+          "0.0153",
+          "0.99",
+          "6.90"
+        ],
+        [
+          "汽油",
+          "1.25",
+          "44.80",
+          "0.0189",
+          "0.98",
+          "3.80"
+        ],
+        [
+          "柴油",
+          "10.50",
+          "43.33",
+          "0.0202",
+          "0.98",
+          "33.45"
+        ],
+        [
+          "天然气",
+          "0.3173",
+          "389.31",
+          "0.0153",
+          "0.99",
+          "6.90"
+        ],
+        [
+          "汽油",
+          "1.25",
+          "44.80",
+          "0.0189",
+          "0.98",
+          "3.80"
+        ],
+        [
+          "柴油",
+          "10.50",
+          "43.33",
+          "0.0202",
+          "0.98",
+          "33.45"
+        ],
+        [
+          "小计",
+          "/",
+          "/",
+          "/",
+          "/",
+          "44.15"
+        ],
+        [
+          "数据来源",
+          "能源消耗台账",
+          "指南缺省值",
+          "指南缺省值",
+          "指南缺省值",
+          "计算得出"
+        ]
+      ]
+    },
+    {
+      "role": "appendix_electricity",
+      "caption": "",
+      "rows": [
+        [
+          "2024年",
+          "2024年",
+          "2024年",
+          "2024年"
+        ],
+        [
+          "净购入电量（MWh）",
+          "排放因子",
+          "单位",
+          "排放量（tCO2）"
+        ],
+        [
+          "3936.893",
+          "0.5357",
+          "tCO2/MWh",
+          "2106.24"
+        ],
+        [
+          "数据来源",
+          "电力统计报表",
+          "指南缺省值",
+          "计算得出"
+        ]
+      ]
+    },
+    {
+      "role": "appendix_heat",
+      "caption": "",
+      "rows": [
+        [
+          "2024年",
+          "2024年"
+        ],
+        [
+          "净购入热力排放量（tCO2）",
+          "7238.30"
+        ],
+        [
+          "数据来源",
+          "热力结算单"
+        ]
+      ]
+    }
+  ],
+  "images": [
+    {
+      "role": "cover_logo",
+      "caption": "国家能源集团",
+      "url": "/assets/suning/cover_logo.png",
+      "mime_type": "image/png"
+    },
+    {
+      "role": "org_chart",
+      "caption": "肅宁分公司组织机构图",
+      "url": "/assets/suning/org_chart.png",
+      "mime_type": "image/png"
+    },
+    {
+      "role": "office_location",
+      "caption": "公司机关所在地",
+      "url": "/assets/suning/office_location.jpeg",
+      "mime_type": "image/jpeg"
+    }
+  ]
+}

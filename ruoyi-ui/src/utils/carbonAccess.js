@@ -1,11 +1,14 @@
 import { hasAnyPermission, hasAnyRole } from '@/utils/permissionMatch'
+import { resolveServiceUrl } from '@/utils/serviceUrl'
 
 function resolveGoviewBaseUrl() {
   const configuredUrl = process.env.VUE_APP_GOVIEW_URL
-  const legacyLocalUrl = 'http://localhost:3000/index.html#/project'
-
-  if (configuredUrl && configuredUrl !== 'auto' && configuredUrl !== legacyLocalUrl) {
-    return configuredUrl.split('/index.html')[0].replace(/\/$/, '')
+  if (configuredUrl && configuredUrl !== 'auto') {
+    const configuredBase = configuredUrl.split('/index.html')[0].replace(/\/$/, '')
+    if (typeof window !== 'undefined') {
+      return resolveServiceUrl(configuredBase, window.location.href).replace(/\/$/, '')
+    }
+    return configuredBase
   }
 
   if (typeof window === 'undefined') {
@@ -31,14 +34,7 @@ export const carbonModules = [
     path: '/carbon/model',
     routeName: 'CarbonModel',
     permissions: [
-      'carbon:model:view',
-      'goview:project:view',
-      'goview:project:create',
-      'goview:project:edit',
-      'goview:template:view',
-      'goview:template:create',
-      'goview:chart:edit',
-      'goview:data:view'
+      'carbon:model:view'
     ]
   },
   {
@@ -58,7 +54,7 @@ export const carbonModules = [
     path: GOVIEW_URL,
     routeName: 'CarbonScreen',
     external: true,
-    permissions: ['goview:chart:preview', 'goview:project:view']
+    permissions: ['carbon:screen:view']
   },
   {
     key: 'dataEntry',
@@ -67,7 +63,7 @@ export const carbonModules = [
     color: 'orange',
     path: '/carbon/data-entry',
     routeName: 'CarbonDataEntry',
-    permissions: ['goview:data:create', 'goview:data:edit']
+    permissions: ['carbon:data:view', 'carbon:data:edit', 'carbon:data:submit', 'carbon:data:review', 'carbon:data:lock']
   },
   {
     key: 'statistics',
@@ -76,7 +72,7 @@ export const carbonModules = [
     color: 'cyan',
     path: '/carbon/statistics',
     routeName: 'CarbonStatistics',
-    permissions: ['goview:data:view']
+    permissions: ['carbon:statistics:view']
   },
   {
     key: 'report',
@@ -85,7 +81,7 @@ export const carbonModules = [
     color: 'red',
     path: '/carbon/report',
     routeName: 'CarbonReport',
-    permissions: ['goview:project:publish', 'goview:chart:preview']
+    permissions: ['carbon:report:list', 'carbon:report:query', 'carbon:report:add']
   },
   {
     key: 'system',

@@ -6,6 +6,7 @@ import com.example.carbon.emission.model.dto.NodeDTO;
 import com.example.carbon.emission.model.dto.UpdateNodeRequest;
 import com.example.carbon.emission.model.service.DataDictService;
 import com.example.carbon.emission.model.service.EmissionNodeService;
+import com.example.carbon.emission.model.security.CarbonDataScopeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class EmissionNodeController {
     
     @Autowired
     private DataDictService dictService;
+
+    @Autowired
+    private CarbonDataScopeService dataScopeService;
     
     @GetMapping
     public ResponseEntity<NodeDTO> getAllNodes() {
@@ -30,7 +34,7 @@ public class EmissionNodeController {
     
     @GetMapping("/tree")
     public ResponseEntity<NodeDTO> getTree(@RequestParam(required = false) Long templateId) {
-        return ResponseEntity.ok(nodeService.getTree(templateId));
+        return ResponseEntity.ok(dataScopeService.filterTree(nodeService.getTree(templateId)));
     }
     
     @GetMapping("/{id}")

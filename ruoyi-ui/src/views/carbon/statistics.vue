@@ -5,7 +5,7 @@
         <h2>统计查询</h2>
         <span>按模板、节点、日期和数据来源汇总排放数据</span>
       </div>
-      <el-button icon="el-icon-download" @click="exportCsv">导出结果</el-button>
+      <el-button v-if="canExport" icon="el-icon-download" @click="exportCsv">导出结果</el-button>
     </div>
 
     <section class="carbon-panel">
@@ -114,9 +114,16 @@
 <script>
 import * as echarts from 'echarts'
 import { templateApi, nodeApi, emissionApi, flattenCarbonTree } from '@/api/carbon'
+import { hasAnyPermission, hasAnyRole } from '@/utils/permissionMatch'
 
 export default {
   name: 'CarbonStatistics',
+  computed: {
+    canExport() {
+      return hasAnyRole(this.$store.getters.roles, ['admin'])
+        || hasAnyPermission(this.$store.getters.permissions, ['carbon:statistics:export'])
+    }
+  },
   data() {
     return {
       loading: false,

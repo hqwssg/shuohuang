@@ -23,8 +23,21 @@ const axiosInstance = axios.create({
   timeout: ResultEnum.TIMEOUT
 }) as unknown as MyRequestInstance
 
+const getRuoYiToken = () => {
+  const token = document.cookie
+    .split('; ')
+    .find(item => item.startsWith('Admin-Token='))
+    ?.substring('Admin-Token='.length)
+  return token ? decodeURIComponent(token) : ''
+}
+
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    const ruoyiToken = getRuoYiToken()
+    if (ruoyiToken) {
+      config.headers.Authorization = `Bearer ${ruoyiToken}`
+      return config
+    }
     // 白名单校验
     if (includes(fetchAllowList, config.url)) return config
     // 获取 token

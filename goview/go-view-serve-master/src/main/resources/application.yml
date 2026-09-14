@@ -2,12 +2,12 @@ v2:
   #虚拟路径映射路径 2个文件路径一一对应 第一个为主存储，其他为配置相关
   xnljmap:
    #win服务器  本地 注意！！ 记住这个结尾有一个/
-   oss: file:D://idea库//RuoYi-Cloud//goview//upload//
+   oss: ${GOVIEW_UPLOAD_MAPPING:file:../../upload/}
    #linux服务器
    #oss: file:/home/webapps/oss/
   #虚拟路径映射路径 end
   #本地存放地址 注意！！ 记住这个结尾没有/
-  fileurl: D://idea库//RuoYi-Cloud//goview//upload
+  fileurl: ${GOVIEW_UPLOAD_PATH:../../upload}
   #http://127.0.0.1:8080/oss/{yy}/2022-12-22/c83a77ae134a540c30daa6a0666fa945.md
   httpurl: http://127.0.0.1:8083/
   defaultFormat: .png
@@ -93,6 +93,10 @@ mybatis-plus:
     cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 ruoyi:
+  security:
+    enabled: ${RUOYI_SECURITY_ENABLED:true}
+    endpoint: ${RUOYI_SECURITY_ENDPOINT:http://127.0.0.1:8081/internal/security/context}
+    timeout: ${RUOYI_SECURITY_TIMEOUT:3000}
   audit:
     enabled: ${RUOYI_AUDIT_ENABLED:true}
     base-url: ${RUOYI_AUDIT_URL:http://127.0.0.1:8081/internal/goview/audit}

@@ -2,6 +2,7 @@ package com.example.carbon.emission.model.controller;
 
 import com.example.carbon.emission.model.entity.User;
 import com.example.carbon.emission.model.repository.UserRepository;
+import com.example.carbon.emission.model.security.CarbonSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CarbonSecurityProperties securityProperties;
+
     /**
      * 用户登录接口
      * 
@@ -43,6 +47,9 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
+        if (securityProperties.isEnabled()) {
+            return ResponseEntity.status(410).body("Use the unified RuoYi login");
+        }
         String username = loginRequest.get("username");
         String password = loginRequest.get("password");
 

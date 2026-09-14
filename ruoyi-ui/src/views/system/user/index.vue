@@ -83,8 +83,8 @@
     </div>
 
     <!-- 添加或修改用户配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="760px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="90px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="用户昵称" prop="nickName">
@@ -140,15 +140,21 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
-                <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1" ></el-option>
+              <el-select v-model="form.postIds" multiple collapse-tags placeholder="请选择岗位" class="assignment-select">
+                <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1">
+                  <span>{{ item.postName }}</span>
+                  <small class="assignment-code">{{ item.postCode }}</small>
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
-                <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId" :disabled="item.status == 1"></el-option>
+              <el-select v-model="form.roleIds" multiple collapse-tags placeholder="请选择角色" class="assignment-select">
+                <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId" :disabled="item.status == 1">
+                  <span>{{ item.roleName }}</span>
+                  <small class="assignment-code">{{ item.roleKey }}</small>
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -474,3 +480,26 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.assignment-select {
+  width: 100%;
+}
+
+.assignment-code {
+  float: right;
+  margin-left: 12px;
+  color: #8b95a5;
+}
+
+::v-deep .el-dialog__footer .el-button {
+  min-width: 92px;
+  min-height: 38px;
+}
+
+@media (max-width: 820px) {
+  ::v-deep .el-dialog {
+    width: calc(100% - 24px) !important;
+  }
+}
+</style>

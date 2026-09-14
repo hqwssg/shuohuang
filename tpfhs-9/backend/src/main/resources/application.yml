@@ -37,6 +37,9 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 integration:
+  ruoyi-security:
+    enabled: ${RUOYI_SECURITY_ENABLED:true}
+    endpoint: ${RUOYI_SECURITY_ENDPOINT:http://127.0.0.1:8081/internal/security/context}
   ruoyi-audit:
     enabled: ${RUOYI_AUDIT_ENABLED:true}
     endpoint: ${RUOYI_AUDIT_ENDPOINT:http://127.0.0.1:8081/internal/carbon/audit/operation}

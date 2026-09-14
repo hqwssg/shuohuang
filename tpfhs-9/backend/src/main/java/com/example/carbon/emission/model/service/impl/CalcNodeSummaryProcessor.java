@@ -4,11 +4,13 @@ import com.example.carbon.emission.model.entity.CalcNodeSummary;
 import com.example.carbon.emission.model.entity.CalcUnitDefault;
 import com.example.carbon.emission.model.entity.CalculationNode;
 import com.example.carbon.emission.model.entity.CalculationNodeData;
+import com.example.carbon.emission.model.entity.DataDict;
 import com.example.carbon.emission.model.entity.DataDictItem;
 import com.example.carbon.emission.model.repository.CalcNodeSummaryRepository;
 import com.example.carbon.emission.model.repository.CalcUnitDefaultRepository;
 import com.example.carbon.emission.model.repository.CalculationNodeDataRepository;
 import com.example.carbon.emission.model.repository.CalculationNodeRepository;
+import com.example.carbon.emission.model.repository.DataDictRepository;
 import com.example.carbon.emission.model.repository.DataDictItemRepository;
 import com.example.carbon.emission.model.service.UnitConversionService;
 import org.slf4j.Logger;
@@ -79,6 +81,9 @@ public class CalcNodeSummaryProcessor {
     private DataDictItemRepository dataDictItemRepository;
 
     @Autowired
+    private DataDictRepository dataDictRepository;
+
+    @Autowired
     private CalcUnitDefaultRepository calcUnitDefaultRepository;
 
     /**
@@ -86,7 +91,7 @@ public class CalcNodeSummaryProcessor {
      *
      * @param calcTemplateId 核算任务记录ID（emission_calculation_template.id）
      */
-    public void process(Long calcTemplateId) {
+    public int process(Long calcTemplateId) {
         // 1. 幂等：先删该模板下所有历史汇总
         calcNodeSummaryRepository.deleteByCalculationTemplateId(calcTemplateId);
 
@@ -102,7 +107,7 @@ public class CalcNodeSummaryProcessor {
                 .collect(Collectors.toList());
         if (targetNodes.isEmpty()) {
             log.info("[Step4][tpl={}] 无核算/根/运输节点，跳过", calcTemplateId);
-            return;
+            return 0;
         }
 
         // 3. 构建节点辅助 Map
@@ -134,6 +139,7 @@ public class CalcNodeSummaryProcessor {
 
         // 4. emission_category 反查缓存（subcategory → parent_code），懒加载避免 N+1
         Map<String, String> subcategoryToCategoryCache = new ConcurrentHashMap<>();
+        Map<String, String> subcategoryCodeCache = new HashMap<>();
 
         // 5. 排序：层级倒序（最深先），保证叶子先处理，父节点后处理
         List<CalculationNode> ordered = new ArrayList<>(targetNodes);
@@ -150,7 +156,7 @@ public class CalcNodeSummaryProcessor {
         for (CalculationNode node : ordered) {
             long nodeStart = System.currentTimeMillis();
             totalRows += processOneNode(calcTemplateId, node, byId, childrenByParent,
-                    levelMap, leafMap, subcategoryToCategoryCache);
+                    levelMap, leafMap, subcategoryToCategoryCache, subcategoryCodeCache);
 
             log.info("[Step4][tpl={}] 节点处理完成 name={} id={} typeId={} level={} leaf={} 耗时={}ms",
                     calcTemplateId, node.getName(), node.getId(), node.getTypeId(),
@@ -162,6 +168,7 @@ public class CalcNodeSummaryProcessor {
         log.info("[Step4][tpl={}] 全量节点处理完成：{} 个节点、共写入 {} 条汇总行、总耗时={}ms",
                 calcTemplateId, ordered.size(), totalRows,
                 System.currentTimeMillis() - overallStart);
+        return totalRows;
     }
 
     // ---------- 辅助方法 ----------
@@ -171,17 +178,27 @@ public class CalcNodeSummaryProcessor {
      */
     private int computeLevel(Long nodeId, Map<Long, CalculationNode> byId,
                              Map<Long, Integer> levelMap) {
+        return computeLevel(nodeId, byId, levelMap, new HashSet<>());
+    }
+
+    private int computeLevel(Long nodeId, Map<Long, CalculationNode> byId,
+                             Map<Long, Integer> levelMap, Set<Long> visiting) {
         if (levelMap.containsKey(nodeId)) {
             return levelMap.get(nodeId);
+        }
+        if (!visiting.add(nodeId)) {
+            throw new IllegalStateException("核算快照存在循环父子关系，nodeId=" + nodeId);
         }
         CalculationNode n = byId.get(nodeId);
         if (n == null || n.getParentId() == null || !byId.containsKey(n.getParentId())) {
             levelMap.put(nodeId, 1);
+            visiting.remove(nodeId);
             return 1;
         }
-        int parentLevel = computeLevel(n.getParentId(), byId, levelMap);
+        int parentLevel = computeLevel(n.getParentId(), byId, levelMap, visiting);
         int currentLevel = parentLevel + 1;
         levelMap.put(nodeId, currentLevel);
+        visiting.remove(nodeId);
         return currentLevel;
     }
 
@@ -192,7 +209,8 @@ public class CalcNodeSummaryProcessor {
                                Map<Long, CalculationNode> byId,
                                Map<Long, List<CalculationNode>> childrenByParent,
                                Map<Long, Integer> levelMap, Map<Long, Boolean> leafMap,
-                               Map<String, String> subcategoryToCategoryCache) {
+                               Map<String, String> subcategoryToCategoryCache,
+                               Map<String, String> subcategoryCodeCache) {
 
         Long calcNodeId = node.getId();
         // 幂等清理：删本节点之前的汇总
@@ -253,7 +271,10 @@ public class CalcNodeSummaryProcessor {
                 String l1 = r.getEnergyCategoryL1() == null ? "" : r.getEnergyCategoryL1();
                 String l2 = r.getEnergyCategoryL2() == null ? "" : r.getEnergyCategoryL2();
                 String l3 = r.getEnergyCategoryL3() == null ? "" : r.getEnergyCategoryL3();
-                String sub = r.getEmissionSubcategory();
+                String sub = resolveSubcategoryCode(r.getEmissionSubcategory(), subcategoryCodeCache);
+                if (sub == null) {
+                    throw new IllegalStateException("无法解析排放数据小类：" + r.getEmissionSubcategory());
+                }
                 GroupKey g = new GroupKey(l1, l2, l3, sub);
 
                 // 取 adjusted 值进行换算
@@ -428,6 +449,32 @@ public class CalcNodeSummaryProcessor {
         return calcUnitDefaultRepository.findBySubcategoryCode(subcategoryCode)
                 .map(CalcUnitDefault::getCalculationUnit)
                 .orElse(null);
+    }
+
+    /**
+     * 在 emission_subcategory 字典范围内，将采集点保存的编码或展示名称统一为编码。
+     */
+    private String resolveSubcategoryCode(String rawValue, Map<String, String> cache) {
+        if (rawValue == null || rawValue.isBlank()) {
+            return null;
+        }
+        String value = rawValue.trim();
+        if (cache.containsKey(value)) {
+            return cache.get(value);
+        }
+
+        DataDict dict = dataDictRepository.findByDictCode("emission_subcategory").orElse(null);
+        if (dict == null) {
+            throw new IllegalStateException("缺少 emission_subcategory 数据字典");
+        }
+
+        String code = dataDictItemRepository.findByDictIdAndItemCode(dict.getId(), value)
+                .map(DataDictItem::getItemCode)
+                .orElseGet(() -> dataDictItemRepository.findByDictIdAndItemValue(dict.getId(), value)
+                        .map(DataDictItem::getItemCode)
+                        .orElse(null));
+        cache.put(value, code);
+        return code;
     }
 
     /**

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportActivityMapper">
+    <delete id="deleteFuels">
+        delete from report_activity_fuel where report_id = #{reportId} and dept_id = #{deptId}
+    </delete>
+    <delete id="deleteElectricity">
+        delete from report_activity_electricity where report_id = #{reportId} and dept_id = #{deptId}
+    </delete>
+    <delete id="deleteHeat">
+        delete from report_activity_heat where report_id = #{reportId} and dept_id = #{deptId}
+    </delete>
+
+    <insert id="insertFuel" parameterType="com.ruoyi.carbon.report.domain.ReportActivityRow" useGeneratedKeys="true" keyProperty="id">
+        insert into report_activity_fuel (
+            dept_id, report_id, fuel_type, facility, quantity, unit, source_name,
+            data_origin, source_table, source_id, source_value, source_unit,
+            normalized_value, normalized_unit, source_hash, override_reason, sort_order,
+            create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{reportId}, #{fuelType}, #{facility}, #{quantity}, #{unit}, #{sourceName},
+            #{dataOrigin}, #{sourceTable}, #{sourceId}, #{sourceValue}, #{sourceUnit},
+            #{normalizedValue}, #{normalizedUnit}, #{sourceHash}, #{overrideReason}, #{sortOrder},
+            #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+
+    <insert id="insertElectricity" parameterType="com.ruoyi.carbon.report.domain.ReportActivityRow" useGeneratedKeys="true" keyProperty="id">
+        insert into report_activity_electricity (
+            dept_id, report_id, scope, quantity_mwh, source_name,
+            data_origin, source_table, source_id, source_value, source_unit,
+            normalized_value, normalized_unit, source_hash, override_reason, sort_order,
+            create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{reportId}, #{scope}, #{quantity}, #{sourceName},
+            #{dataOrigin}, #{sourceTable}, #{sourceId}, #{sourceValue}, #{sourceUnit},
+            #{normalizedValue}, #{normalizedUnit}, #{sourceHash}, #{overrideReason}, #{sortOrder},
+            #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+
+    <insert id="insertHeat" parameterType="com.ruoyi.carbon.report.domain.ReportActivityRow" useGeneratedKeys="true" keyProperty="id">
+        insert into report_activity_heat (
+            dept_id, report_id, site, quantity_gj, source_name,
+            data_origin, source_table, source_id, source_value, source_unit,
+            normalized_value, normalized_unit, source_hash, override_reason, sort_order,
+            create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{reportId}, #{site}, #{quantity}, #{sourceName},
+            #{dataOrigin}, #{sourceTable}, #{sourceId}, #{sourceValue}, #{sourceUnit},
+            #{normalizedValue}, #{normalizedUnit}, #{sourceHash}, #{overrideReason}, #{sortOrder},
+            #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+
+    <update id="updateOverride" parameterType="com.ruoyi.carbon.report.domain.ReportActivityRow">
+        update report_activity_fuel
+        set quantity = #{normalizedValue},
+            normalized_value = #{normalizedValue},
+            data_origin = 'OVERRIDE',
+            override_reason = #{overrideReason},
+            update_time = now()
+        where id = #{id} and report_id = #{reportId} and dept_id = #{deptId}
+    </update>
+
+    <select id="selectFuels" resultType="com.ruoyi.carbon.report.domain.ReportActivityRow">
+        select id, dept_id as deptId, report_id as reportId, fuel_type as fuelType, facility,
+               quantity, unit, source_name as sourceName, data_origin as dataOrigin,
+               source_table as sourceTable, source_id as sourceId, source_value as sourceValue,
+               source_unit as sourceUnit, normalized_value as normalizedValue,
+               normalized_unit as normalizedUnit, source_hash as sourceHash,
+               override_reason as overrideReason
+        from report_activity_fuel
+        where report_id = #{reportId} and dept_id = #{deptId}
+        order by sort_order, id
+    </select>
+
+    <select id="selectElectricity" resultType="com.ruoyi.carbon.report.domain.ReportActivityRow">
+        select id, dept_id as deptId, report_id as reportId, scope, quantity_mwh as quantity,
+               'MWh' as unit, source_name as sourceName, data_origin as dataOrigin,
+               source_table as sourceTable, source_id as sourceId, source_value as sourceValue,
+               source_unit as sourceUnit, normalized_value as normalizedValue,
+               normalized_unit as normalizedUnit, source_hash as sourceHash,
+               override_reason as overrideReason
+        from report_activity_electricity
+        where report_id = #{reportId} and dept_id = #{deptId}
+        order by sort_order, id
+    </select>
+
+    <select id="selectHeat" resultType="com.ruoyi.carbon.report.domain.ReportActivityRow">
+        select id, dept_id as deptId, report_id as reportId, site, quantity_gj as quantity,
+               'GJ' as unit, source_name as sourceName, data_origin as dataOrigin,
+               source_table as sourceTable, source_id as sourceId, source_value as sourceValue,
+               source_unit as sourceUnit, normalized_value as normalizedValue,
+               normalized_unit as normalizedUnit, source_hash as sourceHash,
+               override_reason as overrideReason
+        from report_activity_heat
+        where report_id = #{reportId} and dept_id = #{deptId}
+        order by sort_order, id
+    </select>
+
+    <select id="countWorkload" resultType="int">
+        select count(1) from report_workload
+        where report_id = #{reportId} and dept_id = #{deptId}
+    </select>
+</mapper>

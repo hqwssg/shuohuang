@@ -19,6 +19,9 @@ public class Template {
     
     @Column(name = "description", length = 500)
     private String description;
+
+    @Column(name = "dept_id")
+    private Long deptId;
     
     @Column(name = "created_by", nullable = false)
     private Long createdBy;

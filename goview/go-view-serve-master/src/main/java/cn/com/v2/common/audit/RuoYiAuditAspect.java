@@ -17,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import cn.com.v2.model.SysUser;
+import cn.com.v2.security.RuoYiSecurityContext;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
 
@@ -58,8 +59,10 @@ public class RuoYiAuditAspect
             payload.put("method", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName() + "()");
             payload.put("requestMethod", request == null ? "UNKNOWN" : request.getMethod());
             payload.put("operatorType", 1);
-            payload.put("operName", currentUsername());
-            payload.put("deptName", "GoView");
+            RuoYiSecurityContext securityContext = securityContext(request);
+            payload.put("operName", securityContext == null ? currentUsername() : securityContext.getUserName());
+            payload.put("deptId", securityContext == null ? null : securityContext.getDeptId());
+            payload.put("deptName", securityContext == null ? "GoView" : securityContext.getDeptName());
             payload.put("operUrl", request == null ? null : request.getRequestURI());
             payload.put("operIp", getClientIp(request));
             payload.put("operParam", serializeRequest(request, joinPoint.getArgs(), audit.saveRequestData()));
@@ -99,6 +102,13 @@ public class RuoYiAuditAspect
         {
             return "anonymous";
         }
+    }
+
+    private RuoYiSecurityContext securityContext(HttpServletRequest request)
+    {
+        if (request == null) return null;
+        Object value = request.getAttribute(RuoYiSecurityContext.REQUEST_ATTRIBUTE);
+        return value instanceof RuoYiSecurityContext ? (RuoYiSecurityContext) value : null;
     }
 
     private String getClientIp(HttpServletRequest request)

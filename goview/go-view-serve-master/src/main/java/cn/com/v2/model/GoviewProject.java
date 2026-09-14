@@ -36,6 +36,8 @@ public class GoviewProject implements Serializable {
 
     private String createUserId;
 
+    private Long deptId;
+
     private Integer isDelete;
 
     private String indexImage;

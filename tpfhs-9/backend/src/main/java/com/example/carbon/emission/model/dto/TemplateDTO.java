@@ -9,6 +9,7 @@ public class TemplateDTO {
     private Long id;
     private String name;
     private String description;
+    private Long deptId;
     private Long createdBy;
     private String createdByName;
     private LocalDateTime createdAt;

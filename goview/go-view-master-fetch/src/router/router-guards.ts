@@ -25,11 +25,13 @@ export function createRouterGuards(router: Router) {
     const isErrorPage = router.getRoutes().findIndex((item) => item.name === to.name);
     if (isErrorPage === -1) {
       next({ name: PageEnum.ERROR_PAGE_NAME_404 })
+      return
     }
 
     // @ts-ignore
     if (!routerAllowList.includes(to.name) && !loginCheck()) {
       next({ name: PageEnum.BASE_LOGIN_NAME })
+      return
     }
     next()
   })

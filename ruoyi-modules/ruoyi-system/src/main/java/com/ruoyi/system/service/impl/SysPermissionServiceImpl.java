@@ -39,10 +39,10 @@ public class SysPermissionServiceImpl implements ISysPermissionService
     public Set<String> getRolePermission(SysUser user)
     {
         Set<String> roles = new HashSet<String>();
-        // 管理员拥有所有权限
+        // 最高管理员保留全权限能力，但对外返回项目定义的真实角色键。
         if (user.isAdmin())
         {
-            roles.add(Constants.SUPER_ADMIN);
+            roles.addAll(roleService.selectRolePermissionByUserId(user.getUserId()));
         }
         else
         {

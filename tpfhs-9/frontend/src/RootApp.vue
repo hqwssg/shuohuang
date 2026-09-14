@@ -33,6 +33,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
 import Login from './components/Login.vue'
 import HomePage from './components/HomePage.vue'
 import TemplateList from './components/TemplateList.vue'
@@ -46,18 +48,22 @@ const currentTemplate = ref(null)
 const autoOpenFactorTemplateId = ref(null)
 const embedded = ref(false)
 
-onMounted(() => {
+onMounted(async () => {
   const params = new URLSearchParams(window.location.search)
   embedded.value = params.get('embedded') === '1'
 
-  if (embedded.value) {
-    currentUser.value = {
-      userId: Number(params.get('userId')) || 1,
-      userName: params.get('userName') || 'admin',
-      nickName: params.get('name') || params.get('userName') || '若依用户'
-    }
+  try {
+    const { data } = await axios.get('/api/security/me')
+    currentUser.value = data
+    localStorage.setItem('user', JSON.stringify(data))
     currentView.value = params.get('view') === 'params' ? 'params-settings' : 'template-list'
+    if (!embedded.value) currentView.value = 'home'
     return
+  } catch (error) {
+    if (embedded.value) {
+      ElMessage.error(error?.response?.status === 403 ? '当前账号没有访问该模块的权限' : '系统登录状态已失效，请重新登录')
+      return
+    }
   }
   
   const savedUser = localStorage.getItem('user')

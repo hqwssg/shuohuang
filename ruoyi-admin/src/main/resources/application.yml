@@ -49,8 +49,18 @@ spring:
     job-store-type: memory
 
 mybatis:
-  typeAliasesPackage: com.ruoyi.system,com.ruoyi.gen.domain,com.ruoyi.job.domain
+  typeAliasesPackage: com.ruoyi.system,com.ruoyi.gen.domain,com.ruoyi.job.domain,com.ruoyi.carbon.report.domain
   mapperLocations: classpath*:mapper/**/*.xml
+
+carbon:
+  report:
+    renderer:
+      python-executable: ${CARBON_REPORT_PYTHON:python}
+      module-root: ${CARBON_REPORT_RENDERER_ROOT:.}
+      work-dir: ${CARBON_REPORT_WORK_DIR:./report-work}
+      artifact-dir: ${CARBON_REPORT_ARTIFACT_DIR:./uploadPath/reports}
+      soffice-path: ${CARBON_REPORT_SOFFICE_PATH:}
+      timeout-seconds: ${CARBON_REPORT_RENDER_TIMEOUT:300}
 
 pagehelper:
   helperDialect: mysql
@@ -96,14 +106,13 @@ springdoc:
   api-docs:
     enabled: true
   info:
-    title: RuoYi Admin API
-    description: Single Spring Boot API
+    title: Carbon Emissions Management API
+    description: Carbon emissions management and integrated authorization API
     contact:
-      name: RuoYi
-      url: https://ruoyi.vip
+      name: Carbon Emissions Management Team
 
 gen:
-  author: ruoyi
+  author: carbon-team
   packageName: com.ruoyi.system
   autoRemovePre: false
   tablePrefix: sys_
@@ -122,4 +131,4 @@ minio:
 
 referer:
   enabled: false
-  allowed-domains: localhost,127.0.0.1,ruoyi.vip,www.ruoyi.vip
+  allowed-domains: localhost,127.0.0.1

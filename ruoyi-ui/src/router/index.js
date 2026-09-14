@@ -121,9 +121,27 @@ export const constantRoutes = [
       },
       {
         path: 'report',
-        component: () => import('@/views/carbon/report'),
+        component: () => import('@/views/carbon/report/index'),
         name: 'CarbonReport',
         meta: { title: '碳排放报告生成', icon: 'documentation', permissions: getCarbonModulePermissions('report') }
+      },
+      {
+        path: 'report/create',
+        component: () => import('@/views/carbon/report/create'),
+        name: 'CarbonReportCreate',
+        meta: { title: '新建碳排放报告', icon: 'documentation', activeMenu: '/carbon/report', permissions: ['carbon:report:add'] }
+      },
+      {
+        path: 'report/edit/:id(\\d+)',
+        component: () => import('@/views/carbon/report/edit'),
+        name: 'CarbonReportEdit',
+        meta: { title: '填报碳排放报告', icon: 'edit', activeMenu: '/carbon/report', permissions: ['carbon:report:query'] }
+      },
+      {
+        path: 'report/query',
+        component: () => import('@/views/carbon/report/query'),
+        name: 'CarbonReportQuery',
+        meta: { title: '核算结果查询', icon: 'search', activeMenu: '/carbon/report', permissions: ['carbon:report:query'] }
       },
       {
         path: 'system',

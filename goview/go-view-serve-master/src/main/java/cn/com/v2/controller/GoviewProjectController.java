@@ -27,6 +27,8 @@ import cn.com.v2.model.vo.SysFileVo;
 import cn.com.v2.service.IGoviewProjectDataService;
 import cn.com.v2.service.IGoviewProjectService;
 import cn.com.v2.service.ISysFileService;
+import cn.com.v2.security.GoviewDataScopeService;
+import cn.com.v2.security.RuoYiSecurityContext;
 import cn.com.v2.util.ConvertUtil;
 import cn.com.v2.util.SnowflakeIdWorker;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -64,6 +66,8 @@ public class GoviewProjectController  extends BaseController{
 	private IGoviewProjectService iGoviewProjectService;
 	@Autowired
 	private IGoviewProjectDataService iGoviewProjectDataService;
+	@Autowired
+	private GoviewDataScopeService dataScopeService;
 
 
 	@ApiOperation(value = "测试", notes = "测试")
@@ -81,7 +85,19 @@ public class GoviewProjectController  extends BaseController{
 	@ResponseBody
 	public ResultTable list(Tablepar tablepar){
 		Page<GoviewProject> page= new Page<GoviewProject>(tablepar.getPage(), tablepar.getLimit());
-		IPage<GoviewProject> iPages=iGoviewProjectService.page(page, new QueryWrapper<GoviewProject>());
+		RuoYiSecurityContext context = dataScopeService.current();
+		QueryWrapper<GoviewProject> query = new QueryWrapper<GoviewProject>();
+		if (!context.isAllData()) {
+			query.and(scope -> {
+				scope.isNull("dept_id");
+				if (context.isSelfOnly()) {
+					scope.or().eq("create_user_id", String.valueOf(context.getUserId()));
+				} else if (!context.getDeptIds().isEmpty()) {
+					scope.or().in("dept_id", context.getDeptIds());
+				}
+			});
+		}
+		IPage<GoviewProject> iPages=iGoviewProjectService.page(page, query);
 		ResultTable resultTable=new ResultTable();
 		resultTable.setData(iPages.getRecords());
 		resultTable.setCode(200);
@@ -102,7 +118,10 @@ public class GoviewProjectController  extends BaseController{
 	@RuoYiAudit(title = "GoView项目管理", businessType = 1)
 	@ResponseBody
 	public AjaxResult add(@RequestBody GoviewProject goviewProject){
+		RuoYiSecurityContext context = dataScopeService.current();
 		goviewProject.setCreateTime(DateUtil.now());
+		goviewProject.setCreateUserId(String.valueOf(context.getUserId()));
+		goviewProject.setDeptId(context.getDeptId());
 		goviewProject.setState(-1);
 		boolean b=iGoviewProjectService.save(goviewProject);
 		if(b){
@@ -125,6 +144,7 @@ public class GoviewProjectController  extends BaseController{
 	@ResponseBody
 	public AjaxResult remove(String ids){
 		List<String> lista=ConvertUtil.toListStrArray(ids);
+		for (String id : lista) dataScopeService.requireProject(id, true);
 		Boolean b=iGoviewProjectService.removeByIds(lista);
 		if(b){
 			return success();
@@ -139,6 +159,9 @@ public class GoviewProjectController  extends BaseController{
     @ResponseBody
     public AjaxResult editSave(@RequestBody GoviewProject goviewProject)
     {
+		dataScopeService.requireProject(goviewProject.getId(), true);
+		goviewProject.setCreateUserId(null);
+		goviewProject.setDeptId(null);
 		Boolean b= iGoviewProjectService.updateById(goviewProject);
         if(b){
         	return success();
@@ -153,6 +176,7 @@ public class GoviewProjectController  extends BaseController{
     @ResponseBody
     public AjaxResult rename(@RequestBody GoviewProject goviewProject)
     {
+		dataScopeService.requireProject(goviewProject.getId(), true);
 		
 		UpdateWrapper<GoviewProject> updateWrapper=new UpdateWrapper<GoviewProject>();
 		updateWrapper.eq("id", goviewProject.getId());
@@ -170,6 +194,7 @@ public class GoviewProjectController  extends BaseController{
 	@RuoYiAudit(title = "GoView项目发布", businessType = 2)
 	@ResponseBody
     public AjaxResult updateVisible(@RequestBody GoviewProject goviewProject){
+		dataScopeService.requireProject(goviewProject.getId(), true);
     	if(goviewProject.getState()==-1||goviewProject.getState()==1) {
     	
 			UpdateWrapper<GoviewProject> updateWrapper=new UpdateWrapper<GoviewProject>();
@@ -190,6 +215,7 @@ public class GoviewProjectController  extends BaseController{
 	@ResponseBody
     public AjaxResult getData(String projectId, ModelMap map)
     {
+		dataScopeService.requireProject(projectId, false);
 		GoviewProject goviewProject= iGoviewProjectService.getById(projectId);
 		
 		GoviewProjectData blogText=iGoviewProjectDataService.getProjectid(projectId);
@@ -210,7 +236,7 @@ public class GoviewProjectController  extends BaseController{
 	@RuoYiAudit(title = "GoView大屏数据", businessType = 2, saveRequestData = false)
 	@ResponseBody
 	public AjaxResult saveData(GoviewProjectData data) {
-		
+		dataScopeService.requireProject(data.getProjectId(), true);
 		GoviewProject goviewProject= iGoviewProjectService.getById(data.getProjectId());
 		if(goviewProject==null) {
 			return error("没有该项目ID");

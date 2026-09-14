@@ -16,7 +16,10 @@ import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 碳排放核算服务实现
@@ -27,13 +30,13 @@ import java.util.List;
  *   <li>Step2：遍历模版节点，创建核算节点快照（CalculationNode）</li>
  *   <li>Step3：仅对采集节点（typeId=3）计算能耗计量值并生成 CalculationNodeData（写入 emission_collection_node_data 表）。
  *       本步骤所有操作只针对采集节点进行，emission_collection_node_data 表只保存采集节点核算统计的数据。</li>
- *   <li>Step4：所有采集点核算完成后，统一对核算节点（typeId=2）和根节点（typeId=1）进行操作
- *       （汇总下级节点能耗、按因子折算等）。该阶段待后续进一步编程补充。</li>
+ *   <li>Step4：所有采集点核算完成后，统一对核算节点（typeId=2）和根节点（typeId=1）进行逐级汇总，
+ *       按能源场景与排放小类保存直接值、子树小计及实际因子。</li>
  *   <li>Step5：完成核算，更新任务状态为成功（2）或失败（3）</li>
  * </ol>
  *
- * 当前进度：emission_collection_node_data 表仅记录采集节点（typeId=3）的核算结果；
- * 核算节点与根节点的核算逻辑后续实现。任一节点计算失败不中断整体核算；整体异常则置 status=3。
+ * 当前进度：emission_collection_node_data 表记录采集节点（typeId=3）的核算结果，
+ * emission_calc_node_summary 表记录核算节点与根节点的逐级汇总。任一节点计算失败不中断整体核算；整体异常则置 status=3。
  */
 @Service
 public class EmissionCalculationServiceImpl implements EmissionCalculationService {
@@ -126,31 +129,52 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
         calcTemplate = calculationTemplateRepository.save(calcTemplate);
 
         try {
-            // Step 2：遍历模版节点，创建核算节点快照
+            // Step 2：先完整创建快照，再把设计态父节点转换为父快照ID。
+            // emission_node.parent_id 与 emission_calculation_node.parent_id 的语义不同，不能直接复制。
             List<EmissionNode> nodes = emissionNodeRepository.findByTemplateId(templateId);
             logger.info("***模版下节点数: {}, 模版ID: {}", nodes.size(), templateId);
-
+            Map<Long, CalculationNode> snapshotBySourceId = new HashMap<>();
             for (EmissionNode node : nodes) {
                 CalculationNode calcNode = new CalculationNode();
                 calcNode.setCalculationTemplateId(calcTemplate.getId());
                 calcNode.setNodeId(node.getId());
                 calcNode.setName(node.getName());
                 calcNode.setTypeId(node.getTypeId());
-                calcNode.setParentId(node.getParentId());
+                calcNode.setParentId(null);
 
                 // 核算子节点（typeId=2）查询 nodeCategory
                 if (node.getTypeId() != null && node.getTypeId() == TYPE_ID_CALCULATION) {
                     emissionNodeInfoRepository.findByNodeId(node.getId())
                             .ifPresent(info -> calcNode.setNodeCategory(info.getNodeCategory()));
                 }
-                calculationNodeRepository.save(calcNode);
+                CalculationNode saved = calculationNodeRepository.save(calcNode);
+                if (snapshotBySourceId.putIfAbsent(node.getId(), saved) != null) {
+                    throw new IllegalStateException("同一模版存在重复源节点，nodeId=" + node.getId());
+                }
+            }
 
-                // Step 3：节点能耗与碳排放核算
-                // 本步骤所有操作只针对采集节点（typeId=3）进行，emission_collection_node_data
-                // 表只保存采集节点（typeId=3）核算统计的数据。
+            for (EmissionNode node : nodes) {
+                Long parentSourceId = node.getParentId();
+                if (parentSourceId == null) {
+                    continue;
+                }
+                CalculationNode snapshot = snapshotBySourceId.get(node.getId());
+                CalculationNode parentSnapshot = snapshotBySourceId.get(parentSourceId);
+                if (snapshot == null || parentSnapshot == null) {
+                    throw new IllegalStateException("创建核算快照失败：找不到父源节点，sourceNodeId="
+                            + node.getId() + ", parentSourceId=" + parentSourceId);
+                }
+                snapshot.setParentId(parentSnapshot.getId());
+            }
+            calculationNodeRepository.saveAll(new ArrayList<>(snapshotBySourceId.values()));
+
+            Long factorTemplateId = template.getFactorTemplateId();
+            // Step 3：完整快照树保存后，再处理采集节点。
+            for (EmissionNode node : nodes) {
                 if (node.getTypeId() != null && node.getTypeId() == TYPE_ID_COLLECTION) {
+                    CalculationNode calcNode = snapshotBySourceId.get(node.getId());
                     try {
-                        processCollectionNode(calcNode.getId(), node.getId(), templateId,
+                        processCollectionNode(calcNode.getId(), node.getId(), factorTemplateId,
                                 cycleStartDate, cycleEndDate);
                     } catch (Exception e) {
                         logger.error("***节点核算失败，节点ID: {}, 模版ID: {}", node.getId(), templateId, e);
@@ -168,7 +192,11 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
                 if (calcNodeSummaryProcessor == null) {
                     logger.warn("[Step4] CalcNodeSummaryProcessor Bean 未启用，非job profile，跳过。");
                 } else {
-                    calcNodeSummaryProcessor.process(calcTemplate.getId());
+                    int summaryRows = calcNodeSummaryProcessor.process(calcTemplate.getId());
+                    if (hasSummarizableCollectionData(calcTemplate.getId()) && summaryRows == 0) {
+                        calcTemplate.setErrorCode(ERROR_CODE_STEP4);
+                        throw new IllegalStateException("存在有效采集节点数据，但未生成任何汇总结果");
+                    }
                     logger.info("[Step4] 逐级汇总完成，模版ID: {}, 核算ID: {}",
                             templateId, calcTemplate.getId());
                 }
@@ -188,7 +216,9 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
         } catch (Exception e) {
             logger.error("***碳排放核算失败，模版ID: {}, 核算ID: {}", templateId, calcTemplate.getId(), e);
             calcTemplate.setStatus(TEMPLATE_STATUS_FAILED);
-            calcTemplate.setErrorCode(1);
+            if (calcTemplate.getErrorCode() == null || calcTemplate.getErrorCode() == 0) {
+                calcTemplate.setErrorCode(1);
+            }
             calcTemplate.setCalculationEndTime(LocalDateTime.now());
             calculationTemplateRepository.save(calcTemplate);
         }
@@ -198,16 +228,17 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
      * 处理单个采集节点：查询配置和采集点信息，调用计算器，保存 CalculationNodeData。
      * <p>
      * 因子回退机制：采集点因子优先使用节点配置（emission_node_config.carbon_emission_factor），
-     * 为空时回退到模版缺省因子（emission_default_factor 表中 template_id + subcategory_name
-     * 匹配且 status=1 的记录）。即"采集点因子优先使用节点配置，为空时回退到模版缺省因子"。
+     * 为空时回退到因子模版缺省因子（emission_default_factor 表中 factor_template_id
+     * + subcategory_code/name 匹配且 status=1 的记录）。
+     * 即"采集点因子优先使用节点配置，为空时回退到因子模版缺省因子"。
      *
      * @param calcNodeId      核算主表ID（calculation_node 主键）
      * @param nodeId          采集节点配置ID（emission_node_config 主键）
-     * @param templateId      当前核算模版ID（用于查模版缺省因子）
+     * @param factorTemplateId 当前核算模版关联的因子模版ID（用于查模版缺省因子）
      * @param cycleStartDate  核算周期开始日期
      * @param cycleEndDate    核算周期结束日期
      */
-    private void processCollectionNode(Long calcNodeId, Long nodeId, Long templateId,
+    private void processCollectionNode(Long calcNodeId, Long nodeId, Long factorTemplateId,
                                        LocalDate cycleStartDate, LocalDate cycleEndDate) {
         EmissionNodeConfig config = emissionNodeConfigRepository.findByNodeId(nodeId).orElse(null);
         if (config == null) {
@@ -265,13 +296,15 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
 
         // 碳排放量 = 能耗计量值 × 碳排放因子
         // 因子回退机制：采集点因子优先使用节点配置（config.getCarbonEmissionFactor()），
-        // 为空时回退到模版缺省因子（emission_default_factor 表 template_id + subcategory_name 匹配）
+        // 为空时回退到因子模版缺省因子（emission_default_factor 表 template_id + 编码/名称匹配）
         BigDecimal factor = config.getCarbonEmissionFactor();
-        if (factor == null && templateId != null && cpInfo.emissionSubcategory != null) {
-            // 步骤1：节点未配置因子 -> 按 (templateId, 排放小类名) 查模版缺省因子
+        if (factor == null && factorTemplateId != null && cpInfo.emissionSubcategory != null) {
+            // 节点未配置因子 -> 按因子模版ID和编码/名称查模版缺省因子。
             DefaultFactor df = defaultFactorRepository
-                    .findByTemplateIdAndSubcategoryName(templateId, cpInfo.emissionSubcategory)
-                    .orElse(null);
+                    .findByTemplateIdAndSubcategoryCode(factorTemplateId, cpInfo.emissionSubcategory)
+                    .orElseGet(() -> defaultFactorRepository
+                            .findByTemplateIdAndSubcategoryName(factorTemplateId, cpInfo.emissionSubcategory)
+                            .orElse(null));
             // 步骤2：仅当缺省因子记录存在、有值且启用(status=1)时才采用，否则 factor 保持为 null
             if (df != null && df.getFactorValue() != null && df.getStatus() != null && df.getStatus() == 1) {
                 factor = df.getFactorValue();
@@ -296,6 +329,23 @@ public class EmissionCalculationServiceImpl implements EmissionCalculationServic
 
         calculationNodeDataRepository.save(data);
         logger.debug("***节点核算完成，节点ID: {}, 数据状态: {}", nodeId, calcResult.getDataStatus());
+    }
+
+    /**
+     * 只有本次存在完整采集数据时，才要求 Step4 至少生成一条汇总结果。
+     * 无数据或不完整数据仍可按既有规则结束，不把合法空场景误判为汇总故障。
+     */
+    private boolean hasSummarizableCollectionData(Long calcTemplateId) {
+        List<CalculationNode> collectionNodes = calculationNodeRepository
+                .findByCalculationTemplateId(calcTemplateId).stream()
+                .filter(node -> node.getTypeId() != null && node.getTypeId() == TYPE_ID_COLLECTION)
+                .toList();
+        if (collectionNodes.isEmpty()) {
+            return false;
+        }
+        List<Long> ids = collectionNodes.stream().map(CalculationNode::getId).toList();
+        return calculationNodeDataRepository.findByCalculationNodeIdIn(ids).stream()
+                .anyMatch(data -> data.getDataStatus() != null && data.getDataStatus() == 1);
     }
 
     /**

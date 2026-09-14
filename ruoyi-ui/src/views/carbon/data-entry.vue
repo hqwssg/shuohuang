@@ -7,7 +7,7 @@
       </div>
       <div class="toolbar-actions">
         <el-button icon="el-icon-refresh" :loading="loadingTree" @click="loadTree">刷新节点</el-button>
-        <el-button type="primary" icon="el-icon-download" @click="downloadImportTemplate">下载导入模板</el-button>
+        <el-button v-if="canEditData" type="primary" icon="el-icon-download" @click="downloadImportTemplate">下载导入模板</el-button>
       </div>
     </div>
 
@@ -209,8 +209,8 @@
 
                 <div class="form-actions">
                   <el-button @click="resetEntryForm">重置</el-button>
-                  <el-button type="primary" plain :loading="saving" @click="saveEntry('DRAFT')">保存草稿</el-button>
-                  <el-button type="success" :loading="saving" @click="saveEntry('SUBMITTED')">提交审核</el-button>
+                  <el-button v-if="canEditData" type="primary" plain :loading="saving" @click="saveEntry('DRAFT')">保存草稿</el-button>
+                  <el-button v-if="canSubmitData" type="success" :loading="saving" @click="saveEntry('SUBMITTED')">提交审核</el-button>
                 </div>
               </section>
             </el-tab-pane>
@@ -219,8 +219,8 @@
               <section class="entry-section">
                 <div class="batch-toolbar">
                   <input ref="importFile" type="file" accept=".csv,text/csv" class="file-input" @change="handleImportFile">
-                  <el-button icon="el-icon-upload2" @click="$refs.importFile.click()">选择 CSV 文件</el-button>
-                  <el-button type="primary" :disabled="!validImportRows.length" :loading="importing" @click="importBatch">导入有效数据</el-button>
+                  <el-button v-if="canEditData" icon="el-icon-upload2" @click="$refs.importFile.click()">选择 CSV 文件</el-button>
+                  <el-button v-if="canEditData" type="primary" :disabled="!validImportRows.length" :loading="importing" @click="importBatch">导入有效数据</el-button>
                   <span>{{ importRows.length }} 行预览，{{ validImportRows.length }} 行有效</span>
                 </div>
                 <el-alert
@@ -252,7 +252,7 @@
               </section>
             </el-tab-pane>
 
-            <el-tab-pane :label="`待审核(${pendingRecords.length})`" name="review">
+            <el-tab-pane v-if="canReviewData" :label="`待审核(${pendingRecords.length})`" name="review">
               <section class="entry-section">
                 <el-table v-loading="loadingRecords" :data="pendingRecords" border>
                   <el-table-column label="周期" width="180">
@@ -270,8 +270,8 @@
                   <el-table-column label="提交时间" prop="updatedAt" width="170" />
                   <el-table-column label="操作" width="210" align="center" fixed="right">
                     <template slot-scope="scope">
-                      <el-button type="text" icon="el-icon-check" @click="approveRecord(scope.row)">通过</el-button>
-                      <el-button type="text" icon="el-icon-close" @click="openReject(scope.row)">驳回</el-button>
+                      <el-button v-if="canReviewData" type="text" icon="el-icon-check" @click="approveRecord(scope.row)">通过</el-button>
+                      <el-button v-if="canReviewData" type="text" icon="el-icon-close" @click="openReject(scope.row)">驳回</el-button>
                       <el-button type="text" icon="el-icon-document" @click="viewAudits(scope.row)">流水</el-button>
                     </template>
                   </el-table-column>
@@ -328,11 +328,11 @@
                   <el-table-column label="备注" prop="remark" min-width="160" show-overflow-tooltip />
                   <el-table-column label="操作" width="260" align="center" fixed="right">
                     <template slot-scope="scope">
-                      <el-button v-if="canEdit(scope.row)" type="text" icon="el-icon-edit" @click="editRecord(scope.row)">编辑</el-button>
-                      <el-button v-if="canSubmit(scope.row)" type="text" icon="el-icon-position" @click="submitRecord(scope.row)">提交</el-button>
-                      <el-button v-if="scope.row.status === 'APPROVED'" type="text" icon="el-icon-lock" @click="lockRecord(scope.row)">锁定</el-button>
+                      <el-button v-if="canEditData && canEdit(scope.row)" type="text" icon="el-icon-edit" @click="editRecord(scope.row)">编辑</el-button>
+                      <el-button v-if="canSubmitData && canSubmit(scope.row)" type="text" icon="el-icon-position" @click="submitRecord(scope.row)">提交</el-button>
+                      <el-button v-if="canLockData && scope.row.status === 'APPROVED'" type="text" icon="el-icon-lock" @click="lockRecord(scope.row)">锁定</el-button>
                       <el-button type="text" icon="el-icon-document" @click="viewAudits(scope.row)">流水</el-button>
-                      <el-button v-if="canVoid(scope.row)" type="text" icon="el-icon-delete" @click="voidRecord(scope.row)">作废</el-button>
+                      <el-button v-if="canLockData && canVoid(scope.row)" type="text" icon="el-icon-delete" @click="voidRecord(scope.row)">作废</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -385,6 +385,7 @@
 
 <script>
 import { templateApi, nodeApi, emissionApi, flattenCarbonTree } from '@/api/carbon'
+import { hasAnyPermission, hasAnyRole } from '@/utils/permissionMatch'
 
 function today() {
   const date = new Date()
@@ -467,6 +468,21 @@ export default {
     }
   },
   computed: {
+    isAdmin() {
+      return hasAnyRole(this.$store.getters.roles, ['admin'])
+    },
+    canEditData() {
+      return this.isAdmin || hasAnyPermission(this.$store.getters.permissions, ['carbon:data:edit'])
+    },
+    canSubmitData() {
+      return this.isAdmin || hasAnyPermission(this.$store.getters.permissions, ['carbon:data:submit'])
+    },
+    canReviewData() {
+      return this.isAdmin || hasAnyPermission(this.$store.getters.permissions, ['carbon:data:review'])
+    },
+    canLockData() {
+      return this.isAdmin || hasAnyPermission(this.$store.getters.permissions, ['carbon:data:lock'])
+    },
     selectedConfig() {
       return (this.selectedNode && this.selectedNode.config) || {}
     },

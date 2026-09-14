@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportMonitoringDeviceMapper">
+    <select id="selectByReport" resultType="com.ruoyi.carbon.report.domain.ReportMonitoringDevice">
+        select id, dept_id as deptId, report_id as reportId, name, model, accuracy, location,
+               calibration_frequency as calibrationFrequency, measurement_range as measurementRange,
+               data_origin as dataOrigin, source_table as sourceTable, source_id as sourceId,
+               sort_order as sortOrder
+        from report_monitoring_device
+        where report_id = #{reportId} and dept_id = #{deptId}
+        order by sort_order, id
+    </select>
+    <delete id="deleteByReport">
+        delete from report_monitoring_device where report_id = #{reportId} and dept_id = #{deptId}
+    </delete>
+    <insert id="insert" parameterType="com.ruoyi.carbon.report.domain.ReportMonitoringDevice" useGeneratedKeys="true" keyProperty="id">
+        insert into report_monitoring_device (
+            dept_id, report_id, name, model, accuracy, location, calibration_frequency,
+            measurement_range, data_origin, source_table, source_id, sort_order,
+            create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{reportId}, #{name}, #{model}, #{accuracy}, #{location}, #{calibrationFrequency},
+            #{measurementRange}, #{dataOrigin}, #{sourceTable}, #{sourceId}, #{sortOrder},
+            #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+</mapper>

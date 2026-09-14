@@ -13,7 +13,7 @@
     - logout: 退出登录事件
 -->
 <template>
-  <div class="params-settings-container">
+  <div class="params-settings-container" :class="{ 'readonly-mode': !canEdit }">
     <div class="header">
       <div class="header-left">
         <el-button @click="$emit('back')" :icon="ArrowLeft" circle />
@@ -24,6 +24,14 @@
         <el-button @click="$emit('logout')" link type="danger">退出登录</el-button>
       </div>
     </div>
+    <el-alert
+      v-if="!canEdit"
+      title="当前账号只有查看权限，参数新增、编辑、删除和启停操作不可用"
+      type="warning"
+      show-icon
+      :closable="false"
+      class="permission-alert"
+    />
     
     <div class="main-content">
       <div class="sidebar">
@@ -855,6 +863,7 @@ import PurchasedHeatCollectionSettings from './PurchasedHeatCollectionSettings.v
 import EnergyCategorySettings from './EnergyCategorySettings.vue'
 import CarbonEmissionFactorDialog from './CarbonEmissionFactorDialog.vue'
 import { calcUnitDefaultApi, unitApi, factorUnitApi, defaultFactorApi, factorTemplateApi, unitConversionApi } from '../api/auth'
+import { hasPermission } from '../utils/permissions'
 
 const props = defineProps({
   /**
@@ -888,6 +897,8 @@ const emit = defineEmits([
    */
   'logout'
 ])
+
+const canEdit = computed(() => hasPermission(props.currentUser, 'carbon:params:edit') || hasPermission(props.currentUser, 'carbon:params:collection:edit'))
 
 /**
  * 当前激活的菜单项
@@ -2867,5 +2878,19 @@ onMounted(async () => {
 .footer-buttons {
   display: flex;
   gap: 10px;
+}
+
+.readonly-mode .main-content :deep(.el-button--success),
+.readonly-mode .main-content :deep(.el-button--danger),
+.readonly-mode .main-content :deep(.el-table__cell .el-button--primary),
+.readonly-mode .main-content :deep(.el-switch) {
+  opacity: .45;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.permission-alert {
+  flex: 0 0 auto;
+  border-radius: 0;
 }
 </style>

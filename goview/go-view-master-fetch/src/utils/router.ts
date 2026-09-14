@@ -191,6 +191,10 @@ export const goHome = () => {
  */
 export const loginCheck = () => {
   try {
+    const ruoyiToken = document.cookie
+      .split('; ')
+      .find(item => item.startsWith('Admin-Token='))
+    if (ruoyiToken) return true
     const info = getLocalStorage(StorageEnum.GO_SYSTEM_STORE)
     if (!info) return false
     if (info[SystemStoreEnum.USER_INFO][SystemStoreUserInfoEnum.USER_TOKEN]) {

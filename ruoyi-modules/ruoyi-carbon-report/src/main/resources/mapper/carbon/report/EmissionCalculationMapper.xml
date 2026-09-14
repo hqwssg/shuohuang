@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.EmissionCalculationMapper">
+    <select id="selectCandidates" resultType="com.ruoyi.carbon.report.domain.CalculationCandidate">
+        select distinct
+            ct.id as id,
+            ct.status as status,
+            t.name as templateName,
+            ct.calculation_cycle_start_date as cycleStart,
+            ct.calculation_cycle_end_date as cycleEnd,
+            ct.calculation_end_time as finishedAt
+        from emission_calculation_template ct
+        left join emission_template t on t.id = ct.template_id
+        inner join emission_calculation_node cn on cn.calculation_template_id = ct.id
+        where cn.node_id = #{subjectNodeId}
+          and ct.calculation_cycle_start_date &lt;= #{periodEnd}
+          and ct.calculation_cycle_end_date &gt;= #{periodStart}
+        order by ct.calculation_end_time desc
+    </select>
+
+    <select id="selectNodeData" resultType="com.ruoyi.carbon.report.domain.CalculationNodeDataRow">
+        select
+            d.id as id,
+            cn.calculation_template_id as calculationTemplateId,
+            d.emission_category as emissionCategory,
+            d.emission_subcategory as emissionSubcategory,
+            d.energy_measurement_value as energyMeasurementValue,
+            d.adjusted_energy_value as adjustedEnergyValue,
+            d.carbon_emission as carbonEmission,
+            d.measurement_unit as measurementUnit,
+            d.collection_point_id as collectionPointId,
+            d.collection_point_type as collectionPointType,
+            coalesce(fm.energy_allocation, em.energy_allocation, hm.energy_allocation) as energyAllocation,
+            coalesce(fm.name, em.name, hm.name) as facilityName
+        from emission_collection_node_data d
+        inner join emission_calculation_node cn on cn.id = d.calculation_node_id
+        left join emission_fossil_fuel_meter_info fm
+            on d.collection_point_type = 2 and fm.id = d.collection_point_id
+        left join emission_meter_info em
+            on d.collection_point_type = 1 and em.id = d.collection_point_id
+        left join emission_purchased_heat_meter_info hm
+            on d.collection_point_type = 3 and hm.id = d.collection_point_id
+        where cn.calculation_template_id = #{calculationTemplateId}
+          and coalesce(fm.energy_allocation, em.energy_allocation, hm.energy_allocation) = #{energyAllocation}
+    </select>
+
+    <select id="selectFactorTemplateLink" resultType="com.ruoyi.carbon.report.domain.FactorTemplateLink">
+        select
+            ct.id as calculationTemplateId,
+            ct.template_id as emissionTemplateId,
+            t.name as emissionTemplateName,
+            t.factor_template_id as factorTemplateId,
+            ft.template_name as factorTemplateName
+        from emission_calculation_template ct
+        left join emission_template t on t.id = ct.template_id
+        left join emission_factor_template ft on ft.id = t.factor_template_id
+        where ct.id = #{calculationTemplateId}
+    </select>
+
+    <select id="selectDefaultFactors" resultType="com.ruoyi.carbon.report.domain.DefaultFactorRow">
+        select
+            id as id,
+            template_id as templateId,
+            subcategory_code as subcategoryCode,
+            subcategory_name as subcategoryName,
+            factor_source as factorSource,
+            factor_id as factorId,
+            factor_name as factorName,
+            factor_value as factorValue,
+            factor_unit as factorUnit,
+            status as status
+        from emission_default_factor
+        where template_id = #{templateId}
+          and (status is null or status = 1)
+    </select>
+
+    <select id="selectFossilFactor" resultType="com.ruoyi.carbon.report.domain.FossilFactorRow">
+        select
+            id as id,
+            fuel_type as fuelType,
+            unit as unit,
+            lower_heating_value as lowerHeatingValue,
+            carbon_content_per_unit_heat as carbonContentPerUnitHeat,
+            fuel_oxidation_rate as fuelOxidationRate,
+            emission_factor as emissionFactor,
+            factor_unit as factorUnit
+        from emission_fossil_fuel_emission_factor
+        where id = #{id}
+    </select>
+</mapper>

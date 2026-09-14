@@ -19,25 +19,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<select id="selectLogininforList" parameterType="SysLogininfor" resultMap="SysLogininforResult">
-		select info_id, user_name, ipaddr, status, msg, access_time from sys_logininfor
+		select li.info_id, li.user_name, li.ipaddr, li.status, li.msg, li.access_time
+		from sys_logininfor li left join sys_user u on u.user_name = li.user_name
 		<where>
 			<if test="ipaddr != null and ipaddr != ''">
-				AND ipaddr like concat('%', #{ipaddr}, '%')
+				AND li.ipaddr like concat('%', #{ipaddr}, '%')
 			</if>
 			<if test="status != null and status != ''">
-				AND status = #{status}
+				AND li.status = #{status}
 			</if>
 			<if test="userName != null and userName != ''">
-				AND user_name like concat('%', #{userName}, '%')
+				AND li.user_name like concat('%', #{userName}, '%')
 			</if>
 			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-				AND access_time &gt;= #{params.beginTime}
+				AND li.access_time &gt;= #{params.beginTime}
 			</if>
 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-				AND access_time &lt;= #{params.endTime}
+				AND li.access_time &lt;= #{params.endTime}
 			</if>
+			${params.dataScope}
 		</where>
-		order by info_id desc
+		order by li.info_id desc
 	</select>
 	
 	<delete id="deleteLogininforByIds" parameterType="Long">
@@ -51,4 +53,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         truncate table sys_logininfor
     </update>
     
-</mapper> 
+</mapper>

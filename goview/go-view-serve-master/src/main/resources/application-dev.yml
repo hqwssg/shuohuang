@@ -2,7 +2,7 @@
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
-    url: jdbc:sqlite:D://idea库//RuoYi-Cloud//goview//go-view-serve-master//sqllite//goview.db
+    url: ${GOVIEW_DB_URL:jdbc:sqlite:sqllite/goview.db}
     #linux服务器
     #url: jdbc:sqlite://home/cqfy/project/OSSDATABASE/oss.db
     username: 

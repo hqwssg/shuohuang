@@ -6,9 +6,9 @@
         <span>按模板、节点和日期生成区间报告</span>
       </div>
       <div class="toolbar-actions">
-        <el-button type="primary" icon="el-icon-document" :loading="loading" @click="generateReport">生成报告</el-button>
+        <el-button v-if="canGenerate" type="primary" icon="el-icon-document" :loading="loading" @click="generateReport">生成报告</el-button>
         <el-button icon="el-icon-printer" :disabled="!report" @click="printReport">打印</el-button>
-        <el-button icon="el-icon-download" :disabled="!report" @click="exportReport">导出</el-button>
+        <el-button v-if="canExport" icon="el-icon-download" :disabled="!report" @click="exportReport">导出</el-button>
       </div>
     </div>
 
@@ -122,6 +122,7 @@
 
 <script>
 import { templateApi, nodeApi, emissionApi, flattenCarbonTree } from '@/api/carbon'
+import { hasAnyPermission, hasAnyRole } from '@/utils/permissionMatch'
 
 function defaultRange() {
   const end = new Date()
@@ -133,6 +134,16 @@ function defaultRange() {
 
 export default {
   name: 'CarbonReport',
+  computed: {
+    canGenerate() {
+      return hasAnyRole(this.$store.getters.roles, ['admin'])
+        || hasAnyPermission(this.$store.getters.permissions, ['carbon:report:generate'])
+    },
+    canExport() {
+      return hasAnyRole(this.$store.getters.roles, ['admin'])
+        || hasAnyPermission(this.$store.getters.permissions, ['carbon:report:export'])
+    }
+  },
   data() {
     return {
       loading: false,

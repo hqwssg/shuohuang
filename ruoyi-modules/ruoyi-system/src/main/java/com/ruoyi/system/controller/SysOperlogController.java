@@ -16,6 +16,7 @@ import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.web.page.TableDataInfo;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
+import com.ruoyi.common.datascope.annotation.DataScope;
 import com.ruoyi.common.security.annotation.InnerAuth;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.system.api.domain.SysOperLog;
@@ -35,6 +36,7 @@ public class SysOperlogController extends BaseController
 
     @RequiresPermissions("system:operlog:list")
     @GetMapping("/list")
+    @DataScope(deptAlias = "l")
     public TableDataInfo list(SysOperLog operLog)
     {
         startPage();
@@ -45,6 +47,7 @@ public class SysOperlogController extends BaseController
     @Log(title = "操作日志", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:operlog:export")
     @PostMapping("/export")
+    @DataScope(deptAlias = "l")
     public void export(HttpServletResponse response, SysOperLog operLog)
     {
         List<SysOperLog> list = operLogService.selectOperLogList(operLog);

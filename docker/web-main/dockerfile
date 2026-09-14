@@ -1,17 +1,29 @@
 FROM eclipse-temurin:17-jre
 MAINTAINER ruoyi
 
+COPY ./requirements-cli.txt /tmp/carbon-report-requirements.txt
+
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends nginx redis-server \
+    && apt-get install -y --no-install-recommends nginx redis-server python3 python3-venv libreoffice-writer fonts-noto-cjk \
+    && python3 -m venv /opt/carbon-report-venv \
+    && /opt/carbon-report-venv/bin/pip install --no-cache-dir -r /tmp/carbon-report-requirements.txt \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /home/ruoyi /home/ruoyi/projects/ruoyi-ui /home/ruoyi/uploadPath /data /run/nginx
+RUN mkdir -p /home/ruoyi /home/ruoyi/projects/ruoyi-ui /home/ruoyi/uploadPath/reports \
+    /home/ruoyi/report-work /home/ruoyi/renderer /data /run/nginx
 WORKDIR /home/ruoyi
 
 COPY ./jar/ruoyi-admin.jar /home/ruoyi/ruoyi-admin.jar
 COPY ./html/dist /home/ruoyi/projects/ruoyi-ui
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./start.sh /home/ruoyi/start.sh
+COPY ./renderer/carbon_report_agent /home/ruoyi/renderer/carbon_report_agent
+
+ENV CARBON_REPORT_PYTHON=/opt/carbon-report-venv/bin/python \
+    CARBON_REPORT_RENDERER_ROOT=/home/ruoyi/renderer \
+    CARBON_REPORT_SOFFICE_PATH=/usr/bin/libreoffice \
+    CARBON_REPORT_WORK_DIR=/home/ruoyi/report-work \
+    CARBON_REPORT_ARTIFACT_DIR=/home/ruoyi/uploadPath/reports
 
 EXPOSE 80 8081
 ENTRYPOINT ["sh", "/home/ruoyi/start.sh"]

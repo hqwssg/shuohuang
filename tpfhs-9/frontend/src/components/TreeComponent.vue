@@ -27,7 +27,7 @@
         <span class="node-name">{{ node.name }}</span>
         
         <span 
-          v-if="canAddChild(node)" 
+          v-if="!readonly && canAddChild(node)"
           class="add-btn"
           @click.stop="handleAddChild(node)"
         >
@@ -35,7 +35,7 @@
         </span>
         
         <span
-          v-if="node.typeId === 2"
+          v-if="!readonly && node.typeId === 2"
           class="add-multiple-btn"
           title="添加多个采集节点"
           @click.stop="handleAddMultipleCollectionNodes(node)"
@@ -44,7 +44,7 @@
         </span>
 
         <span
-          v-if="node.typeId === 1 || node.typeId === 2"
+          v-if="!readonly && (node.typeId === 1 || node.typeId === 2)"
           class="mount-template-btn"
           title="挂载节点模版"
           @click.stop="handleMountTemplate(node)"
@@ -53,7 +53,7 @@
         </span>
         
         <span 
-          v-if="node.id !== 1"
+          v-if="!readonly && node.id !== 1"
           class="delete-btn"
           @click.stop="handleDeleteNode(node)"
         >
@@ -61,7 +61,7 @@
         </span>
         
         <span 
-          v-if="canMoveUp(node)"
+          v-if="!readonly && canMoveUp(node)"
           class="move-up-btn"
           @click.stop="handleMoveUp(node)"
         >
@@ -69,7 +69,7 @@
         </span>
         
         <span 
-          v-if="canMoveDown(node)"
+          v-if="!readonly && canMoveDown(node)"
           class="move-down-btn"
           @click.stop="handleMoveDown(node)"
         >
@@ -85,6 +85,7 @@
           :tree-data="node.children"
           :selected-node="selectedNode"
           :options="options"
+          :readonly="readonly"
           @select="$emit('select', $event)"
           @add="$emit('add', $event)"
           @addMultiple="$emit('addMultiple', $event)"
@@ -112,6 +113,10 @@ const props = defineProps({
  options: {
  type: Object,
  default: () => ({})
+ },
+ readonly: {
+ type: Boolean,
+ default: false
  }
 });
 const emit = defineEmits(['select', 'add', 'addMultiple', 'mountTemplate', 'delete', 'moveUp', 'moveDown']);

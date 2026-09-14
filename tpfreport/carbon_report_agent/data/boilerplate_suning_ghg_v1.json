@@ -1,0 +1,132 @@
+{
+  "version": "suning-ghg-v1",
+  "entries": [
+    {
+      "id": "preface.opening_guide",
+      "source": "suning-005",
+      "requires": [],
+      "text": "根据国家发展和改革委员会发布的《中国陆上运输企业温室气体排放核算方法与报告指南（试行）》（以下简称“运输核算指南”）和中华人民共和国生态环境部办公厅发布的《关于做好2024—2025年部分重点行业企业温室气体排放报告与核查工作的通知》（环办气候函〔2024〕332号），本单位核算了2024年度温室气体排放量，并填写了相关数据表格。"
+    },
+    {
+      "id": "ch2.guide_boundary",
+      "source": "suning-005",
+      "requires": [],
+      "text": "根据《陆上运输企业温室气体排放核算方法与报告指南（试行）》，（下文简称《运输企业核算指南》），报告主体应以独立法人企业或视同法人的独立核算单位为企业边界，核算和报告在运营上受其控制的所有生产设施产生的温室气体排放。铁路运输企业核算和报告范围为其内燃机车、电力机车和动车组（如机车牵引、车辆维修、线路维护保养、行车调度、通信指挥、电力供应等）及直接为机车运营服务的辅助系统对应的燃料燃烧CO2排放、净购入使用的电力和热力隐含的排放。辅助系统包括为企业主营业务服务的部门和单位（如客货运场站、机修车间、库房、办公室、职工食堂、车间浴室、保健站及企业内部车辆等）。"
+    },
+    {
+      "id": "ch2.method_total",
+      "source": "suning-005",
+      "requires": [],
+      "text": "根据《陆上运输指南》的规定，陆上运输企业的温室气体排放总量等于企业边界内燃料燃烧CO2排放、运输车辆在尾气净化过程由于使用尿素等还原剂产生的CO2排放量、净购入的电力和热力隐含的CO2排放之和，按式（1）计算："
+    },
+    {
+      "id": "ch2.identify_sources",
+      "source": "suning-005",
+      "requires": [],
+      "text": "根据《运输企业核算指南》的规定，对企业设施边界内排放源进行识别："
+    },
+    {
+      "id": "ch2.method_fuel",
+      "source": "suning-005",
+      "requires": [],
+      "text": "化石燃料燃烧导致的二氧化碳排放量是基于分品种的燃料消耗量、单位燃料的含碳量和碳氧化率计算得到，按式（2）计算："
+    },
+    {
+      "id": "ch2.method_electricity",
+      "source": "suning-005",
+      "requires": [],
+      "text": "企业净购入的电力消费引起的CO2排放按公式（3）计算："
+    },
+    {
+      "id": "ch2.method_heat",
+      "source": "suning-005",
+      "requires": [],
+      "text": "企业净购入的热力消费引起的CO2排放按公式（4）计算："
+    },
+
+    {
+      "id": "ch4.carbon_content_natural_gas",
+      "source": "suning-005",
+      "requires": ["fuel:natural_gas"],
+      "text": "按照《运输企业核算指南》，天然气的低位发热量和单位热值含碳量分别为389.31 GJ/万Nm3和15.30×10-3 tC/GJ，计算得到天然气的含碳量为{carbon_content_natural_gas} tC/万Nm3。"
+    },
+    {
+      "id": "ch4.carbon_content_gasoline",
+      "source": "suning-005",
+      "requires": ["fuel:gasoline"],
+      "text": "根据《运输企业核算指南》，汽油的低位发热量和单位热值含碳量缺省值分别为44.800 GJ/t和18.9×10-3 tC/GJ，计算得出汽油的含碳量为{carbon_content_gasoline} tC/t。"
+    },
+    {
+      "id": "ch4.carbon_content_diesel",
+      "source": "suning-005",
+      "requires": ["fuel:diesel"],
+      "text": "根据《运输企业核算指南》，柴油的低位发热量和单位热值含碳量缺省值分别为43.330 GJ/t和20.20×10-3 tC/GJ，计算得出柴油的含碳量为{carbon_content_diesel} tC/t。"
+    },
+    {
+      "id": "ch4.no_measurement_natural_gas",
+      "source": "suning-005",
+      "requires": ["fuel:natural_gas"],
+      "text": "{short_name}未对天然气的含碳量、低位发热量和单位热值含碳量开展实测，含碳量采用《运输企业核算指南》中天然气的低位发热量与单位热值含碳量缺省值相乘计算得到。"
+    },
+    {
+      "id": "ch4.no_measurement_gasoline",
+      "source": "suning-005",
+      "requires": ["fuel:gasoline"],
+      "text": "{short_name}未对汽油的含碳量、低位发热量和单位热值含碳量开展实测，含碳量采用《运输企业核算指南》中汽油的低位发热量与单位热值含碳量缺省值相乘计算得到。"
+    },
+    {
+      "id": "ch4.no_measurement_diesel",
+      "source": "suning-005",
+      "requires": ["fuel:diesel"],
+      "text": "{short_name}未对柴油的含碳量、低位发热量和单位热值含碳量开展实测，含碳量采用《运输企业核算指南》中柴油的低位发热量与单位热值含碳量缺省值相乘计算得到。"
+    },
+    {
+      "id": "ch4.oxidation_rate_natural_gas",
+      "source": "suning-005",
+      "requires": ["fuel:natural_gas"],
+      "text": "{short_name}未对天然气的碳氧化率开展实测，根据《运输企业核算指南》的规定，天然气的碳氧化率取缺省值{oxidation_rate_natural_gas}。"
+    },
+    {
+      "id": "ch4.oxidation_rate_gasoline",
+      "source": "suning-005",
+      "requires": ["fuel:gasoline"],
+      "text": "{short_name}未对汽油的碳氧化率开展实测，根据《运输企业核算指南》的规定，汽油的碳氧化率取缺省值{oxidation_rate_gasoline}。"
+    },
+    {
+      "id": "ch4.oxidation_rate_diesel",
+      "source": "suning-005",
+      "requires": ["fuel:diesel"],
+      "text": "{short_name}未对柴油的碳氧化率开展实测，根据《运输企业核算指南》的规定，柴油的碳氧化率取缺省值{oxidation_rate_diesel}。"
+    },
+    {
+      "id": "ch4.factors_scope",
+      "source": "suning-005",
+      "requires": [],
+      "text": "本报告涉及的排放因子包括化石燃料（天然气、汽油、柴油）的含碳量、碳氧化率，电网排放因子和热力供应排放因子。"
+    },
+    {
+      "id": "ch4.grid_factor_source",
+      "source": "suning-005",
+      "requires": ["electricity:any"],
+      "text": "{short_name}{report_year}年度外购电力排放因子采用生态环境部发布的《关于发布2022年电力二氧化碳排放因子的公告》中要求的2022年全国电力平均二氧化碳排放因子{electricity_factor_tco2_per_mwh} tCO2/MWh。"
+    },
+    {
+      "id": "ch4.heat_factor_source",
+      "source": "suning-005",
+      "requires": ["heat:any"],
+      "text": "根据《运输企业核算指南》的规定，热力排放因子没有实测值，采用缺省值{heat_factor_tco2_per_gj} tCO2/GJ。"
+    },
+    {
+      "id": "ch1.equipment_table_leadin",
+      "source": "suning-005",
+      "requires": [],
+      "text": "{short_name}主要设备及参数如表1.3-1所示。"
+    },
+    {
+      "id": "ch5.calc_leadin",
+      "source": "cross-report",
+      "requires": [],
+      "text": "{short_name}温室气体排放量按《运输企业核算指南》相关公式计算，燃料燃烧及净购入电力、热力隐含的二氧化碳排放量计算结果如下表所示。"
+    }
+  ]
+}

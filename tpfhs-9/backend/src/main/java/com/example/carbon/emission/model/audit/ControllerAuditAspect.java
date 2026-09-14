@@ -1,10 +1,9 @@
 package com.example.carbon.emission.model.audit;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.example.carbon.emission.model.security.CarbonSecurityContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -32,9 +31,10 @@ public class ControllerAuditAspect {
     @Around("execution(public * com.example.carbon.emission.model.controller..*(..))")
     public Object recordMutation(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = currentRequest();
-        if (request == null || isReadOnly(request.getMethod())) {
-            return joinPoint.proceed();
-        }
+        if (request == null || isReadOnly(request.getMethod())) return joinPoint.proceed();
+
+        CarbonSecurityContext context = securityContext(request);
+        if (context != null) stampAuthenticatedActor(joinPoint.getArgs(), context.userId());
 
         long started = System.currentTimeMillis();
         Object result = null;
@@ -54,14 +54,16 @@ public class ControllerAuditAspect {
             Object result, Throwable failure, long costTime) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String controller = signature.getDeclaringType().getSimpleName().replace("Controller", "");
+        CarbonSecurityContext context = securityContext(request);
         Map<String, Object> audit = new LinkedHashMap<>();
-        audit.put("title", limit("碳核算-" + controller + "-" + signature.getName(), 50));
+        audit.put("title", limit("Carbon accounting - " + controller + " - " + signature.getName(), 50));
         audit.put("businessType", businessType(request.getMethod()));
         audit.put("method", limit(signature.toShortString(), 200));
         audit.put("requestMethod", request.getMethod());
         audit.put("operatorType", 1);
-        audit.put("operName", limit(header(request, "X-User-Name", "anonymous"), 50));
-        audit.put("deptName", "碳排放核算");
+        audit.put("operName", limit(context == null ? "anonymous" : context.userName(), 50));
+        audit.put("deptName", limit(context == null ? "Carbon accounting" : context.deptName(), 50));
+        audit.put("deptId", context == null ? null : context.deptId());
         audit.put("operUrl", limit(request.getRequestURI(), 255));
         audit.put("operIp", limit(clientIp(request), 128));
         audit.put("operParam", limit(toJson(requestDetails(signature, joinPoint.getArgs(), request)), 2000));
@@ -72,26 +74,28 @@ public class ControllerAuditAspect {
         return audit;
     }
 
+    private Map<String, Object> requestDetails(MethodSignature signature, Object[] values, HttpServletRequest request) {
+        CarbonSecurityContext context = securityContext(request);
+        Map<String, Object> details = new LinkedHashMap<>();
+        details.put("path", request.getRequestURI());
+        details.put("query", request.getParameterMap());
+        details.put("userId", context == null ? null : context.userId());
+        details.put("deptId", context == null ? null : context.deptId());
+        details.put("changedFields", arguments(signature, values));
+        return details;
+    }
+
     private Map<String, Object> arguments(MethodSignature signature, Object[] values) {
         Map<String, Object> args = new LinkedHashMap<>();
         String[] names = signature.getParameterNames();
         for (int i = 0; i < values.length; i++) {
             Object value = values[i];
-            if (value instanceof ServletRequest || value instanceof ServletResponse || value instanceof MultipartFile) {
-                continue;
+            if (!(value instanceof ServletRequest) && !(value instanceof ServletResponse)
+                    && !(value instanceof MultipartFile)) {
+                args.put(names != null && i < names.length ? names[i] : "arg" + i, value);
             }
-            args.put(names != null && i < names.length ? names[i] : "arg" + i, value);
         }
         return args;
-    }
-
-    private Map<String, Object> requestDetails(MethodSignature signature, Object[] values, HttpServletRequest request) {
-        Map<String, Object> details = new LinkedHashMap<>();
-        details.put("path", request.getRequestURI());
-        details.put("query", request.getParameterMap());
-        details.put("userId", header(request, "X-User-Id", ""));
-        details.put("changedFields", arguments(signature, values));
-        return details;
     }
 
     private HttpServletRequest currentRequest() {
@@ -101,10 +105,33 @@ public class ControllerAuditAspect {
         return null;
     }
 
-    private String header(HttpServletRequest request, String name, String fallback) {
-        String value = request.getHeader(name);
-        if (value == null || value.isBlank()) return fallback;
-        return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    private CarbonSecurityContext securityContext(HttpServletRequest request) {
+        Object value = request.getAttribute(CarbonSecurityContext.REQUEST_ATTRIBUTE);
+        return value instanceof CarbonSecurityContext context ? context : null;
+    }
+
+    private void stampAuthenticatedActor(Object[] arguments, Long userId) {
+        if (userId == null) return;
+        for (Object argument : arguments) {
+            if (argument instanceof Map<?, ?> source) {
+                @SuppressWarnings("unchecked")
+                Map<Object, Object> values = (Map<Object, Object>) source;
+                if (values.containsKey("createdBy")) values.put("createdBy", userId);
+                if (values.containsKey("updatedBy")) values.put("updatedBy", userId);
+            } else {
+                stampProperty(argument, "setCreatedBy", userId);
+                stampProperty(argument, "setUpdatedBy", userId);
+            }
+        }
+    }
+
+    private void stampProperty(Object target, String methodName, Long userId) {
+        if (target == null) return;
+        try {
+            target.getClass().getMethod(methodName, Long.class).invoke(target, userId);
+        } catch (ReflectiveOperationException ignored) {
+            // Not every request DTO contains audit fields.
+        }
     }
 
     private String clientIp(HttpServletRequest request) {

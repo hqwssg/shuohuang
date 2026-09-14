@@ -6,20 +6,29 @@
         <h1>碳排放核算模版管理</h1>
       </div>
       <div class="user-info">
-        <span>当前用户: {{ currentUser?.name }}</span>
+        <span>当前用户: {{ currentUser?.nickName || currentUser?.userName || currentUser?.name }}</span>
         <el-button @click="handleLogout" link>退出登录</el-button>
       </div>
     </div>
 
+    <el-alert
+      v-if="!canEdit"
+      title="当前账号只有查看权限，模板的新建、编辑和删除操作不可用"
+      type="warning"
+      show-icon
+      :closable="false"
+      class="permission-alert"
+    />
+
     <div class="toolbar">
-      <el-button @click="handleNewTemplate(2)" type="primary">新建核算模版</el-button>
-      <el-button @click="handleNewTemplate(1)" type="primary">新建节点模版</el-button>
+      <el-button @click="handleNewTemplate(2)" type="primary" :disabled="!canEdit" title="需要碳排放模型编辑权限">新建核算模版</el-button>
+      <el-button @click="handleNewTemplate(1)" type="primary" :disabled="!canEdit" title="需要碳排放模型编辑权限">新建节点模版</el-button>
       <el-button @click="handleOpenTemplate" :disabled="!selectedTemplate">打开模版</el-button>
-      <el-button @click="handleSaveAs" :disabled="!selectedTemplate">另存为</el-button>
-      <el-button @click="handleDeleteTemplate" :disabled="!selectedTemplate" type="danger">删除当前模版</el-button>
+      <el-button @click="handleSaveAs" :disabled="!canEdit || !selectedTemplate" title="需要碳排放模型编辑权限">另存为</el-button>
+      <el-button @click="handleDeleteTemplate" :disabled="!canEdit || !selectedTemplate" type="danger" title="需要碳排放模型编辑权限">删除当前模版</el-button>
       <el-button
         @click="handleValidateTemplate"
-        :disabled="!isCalcSelected"
+        :disabled="!canValidate || !isCalcSelected"
         :loading="validating"
         type="warning"
         title="仅核算模版支持校验"
@@ -74,6 +83,8 @@
                 @click.stop="handleEditTemplate(template)"
                 link
                 size="small"
+                :disabled="!canEdit"
+                title="需要碳排放模型编辑权限"
               >编辑</el-button>
             </td>
           </tr>
@@ -378,6 +389,7 @@ import { ref, computed, onMounted } from 'vue';
 import { ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus';
 import { templateApi, factorTemplateApi } from '../api/auth';
+import { hasPermission } from '../utils/permissions';
 
 const props = defineProps({
   currentUser: {
@@ -387,6 +399,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['open-template', 'logout', 'back', 'edit-factor-template']);
+const canEdit = computed(() => hasPermission(props.currentUser, 'carbon:model:edit'));
+const canValidate = computed(() => canEdit.value || hasPermission(props.currentUser, 'carbon:model:validate'));
 
 const templates = ref([]);
 const selectedTemplate = ref(null);
@@ -1014,6 +1028,10 @@ const confirmCopyFactorTemplate = async () => {
   padding: 20px;
   min-height: 100vh;
   background-color: #f5f7fa;
+}
+
+.permission-alert {
+  margin: 12px 0;
 }
 
 .header {

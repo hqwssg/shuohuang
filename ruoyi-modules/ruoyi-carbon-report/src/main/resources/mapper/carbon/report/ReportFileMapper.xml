@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.carbon.report.mapper.ReportFileMapper">
+    <select id="selectById" resultType="com.ruoyi.carbon.report.domain.ReportFile">
+        select id, dept_id as deptId, report_id as reportId, kind, role,
+               object_key as objectKey, original_name as originalName, mime_type as mimeType,
+               size_bytes as sizeBytes, sha256, snapshot_sha256 as snapshotSha256
+        from report_file
+        where id = #{id}
+    </select>
+
+    <select id="selectByDeptSnapshotRole" resultType="com.ruoyi.carbon.report.domain.ReportFile">
+        select id, dept_id as deptId, report_id as reportId, kind, role,
+               object_key as objectKey, original_name as originalName, mime_type as mimeType,
+               size_bytes as sizeBytes, sha256, snapshot_sha256 as snapshotSha256
+        from report_file
+        where dept_id = #{deptId} and snapshot_sha256 = #{snapshotSha256} and role = #{role}
+        order by id desc
+        limit 1
+    </select>
+
+    <select id="selectUploadsByReport" resultType="com.ruoyi.carbon.report.domain.ReportFile">
+        select id, dept_id as deptId, report_id as reportId, kind, role,
+               object_key as objectKey, original_name as originalName, mime_type as mimeType,
+               size_bytes as sizeBytes, sha256, snapshot_sha256 as snapshotSha256
+        from report_file
+        where report_id = #{reportId} and dept_id = #{deptId} and kind = 'upload'
+          and role in ('cover_logo', 'org_chart', 'office_location')
+        order by id
+    </select>
+
+    <delete id="deleteUploadByReportRole">
+        delete from report_file
+        where report_id = #{reportId} and dept_id = #{deptId} and kind = 'upload' and role = #{role}
+    </delete>
+
+    <insert id="insert" parameterType="com.ruoyi.carbon.report.domain.ReportFile" useGeneratedKeys="true" keyProperty="id">
+        insert into report_file (
+            dept_id, report_id, kind, role, object_key, original_name, mime_type,
+            size_bytes, sha256, snapshot_sha256, create_by, create_time, update_by, update_time
+        ) values (
+            #{deptId}, #{reportId}, #{kind}, #{role}, #{objectKey}, #{originalName}, #{mimeType},
+            #{sizeBytes}, #{sha256}, #{snapshotSha256}, #{createBy}, now(), #{updateBy}, now()
+        )
+    </insert>
+</mapper>

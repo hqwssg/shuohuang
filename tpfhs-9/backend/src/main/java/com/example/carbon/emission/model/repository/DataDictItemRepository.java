@@ -45,6 +45,11 @@ public interface DataDictItemRepository extends JpaRepository<DataDictItem, Long
      * @return 字典项对象（Optional）
      */
     Optional<DataDictItem> findByDictIdAndItemCode(Long dictId, String itemCode);
+
+    /**
+     * 在指定字典范围内按展示值查询，避免不同字典存在同名项时误匹配。
+     */
+    Optional<DataDictItem> findByDictIdAndItemValue(Long dictId, String itemValue);
     
     /**
      * 检查字典项编码是否存在

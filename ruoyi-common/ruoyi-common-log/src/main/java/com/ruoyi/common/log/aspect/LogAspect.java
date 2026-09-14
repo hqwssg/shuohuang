@@ -98,6 +98,14 @@ public class LogAspect
             operLog.setOperIp(ip);
             operLog.setOperUrl(StringUtils.substring(ServletUtils.getRequest().getRequestURI(), 0, 255));
             String username = SecurityUtils.getUsername();
+            if (SecurityUtils.getLoginUser() != null && SecurityUtils.getLoginUser().getSysUser() != null)
+            {
+                operLog.setDeptId(SecurityUtils.getLoginUser().getSysUser().getDeptId());
+                if (SecurityUtils.getLoginUser().getSysUser().getDept() != null)
+                {
+                    operLog.setDeptName(SecurityUtils.getLoginUser().getSysUser().getDept().getDeptName());
+                }
+            }
             if (StringUtils.isNotBlank(username))
             {
                 operLog.setOperName(username);

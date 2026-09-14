@@ -103,6 +103,11 @@
       <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
       <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
       <el-table-column label="显示顺序" prop="roleSort" width="100" />
+      <el-table-column label="数据范围" width="180">
+        <template slot-scope="scope">
+          <el-tag size="small" type="info">{{ getDataScopeLabel(scope.row.dataScope) }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="scope">
           <el-switch
@@ -345,6 +350,10 @@ export default {
     this.getList()
   },
   methods: {
+    getDataScopeLabel(value) {
+      const option = this.dataScopeOptions.find(item => item.value === String(value))
+      return option ? option.label : '未配置'
+    },
     /** 查询角色列表 */
     getList() {
       this.loading = true

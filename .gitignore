@@ -29,6 +29,15 @@ target/
 **/logs/
 .runtime/
 *.db
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+/output/
+/report-work/
+/uploadPath/
+.env.local
+.env.*.local
 
 # Generated deployment and build artifacts
 deploy-package/

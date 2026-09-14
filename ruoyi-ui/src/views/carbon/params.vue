@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { resolveServiceUrl } from '@/utils/serviceUrl'
+
 export default {
   name: 'CarbonParams',
   data() {
@@ -37,12 +39,9 @@ export default {
   },
   computed: {
     paramsFrameUrl() {
-      const url = new URL(this.modelUrl, window.location.origin)
+      const url = new URL(resolveServiceUrl(this.modelUrl, '/carbon-model/'))
       url.searchParams.set('embedded', '1')
       url.searchParams.set('view', 'params')
-      url.searchParams.set('userId', this.$store.getters.id || 1)
-      url.searchParams.set('userName', this.$store.getters.name || '')
-      url.searchParams.set('name', this.$store.getters.nickName || this.$store.getters.name || '若依用户')
       return url.toString()
     }
   },
@@ -73,7 +72,8 @@ export default {
 .carbon-params-page {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 84px);
+  min-height: 680px;
   padding: 16px;
   background: #f5f7fa;
   box-sizing: border-box;
@@ -116,7 +116,7 @@ export default {
 
 .params-frame-wrap {
   flex: 1;
-  min-height: 720px;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid #dfe6ee;
   border-radius: 6px;
@@ -127,11 +127,11 @@ export default {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 720px;
+  min-height: 100%;
 }
 
 @media (max-width: 780px) {
-  .carbon-params-page { padding: 10px; }
+  .carbon-params-page { height: calc(100dvh - 84px); min-height: 620px; padding: 10px; }
   .carbon-toolbar { align-items: stretch; flex-direction: column; }
   .toolbar-actions { flex-wrap: wrap; }
   .toolbar-actions .el-button { margin-left: 0; }

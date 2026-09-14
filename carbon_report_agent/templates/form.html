@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>碳排放报告生成</title>
+  <link rel="stylesheet" href="/static/form.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="brand">Carbon Report</p>
+        <h1>碳排放报告生成</h1>
+      </div>
+      <div class="actions">
+        <button type="button" id="btn-generate" class="primary" disabled>生成 Word</button>
+        <button type="button" id="btn-generate-pdf" class="secondary" disabled>导出 PDF</button>
+      </div>
+    </header>
+
+    <div id="error" class="error" role="alert" hidden></div>
+    <p id="load-status" class="status">正在加载传入 JSON...</p>
+
+    <section class="json-panel" aria-label="传入 JSON">
+      <pre id="raw-json"></pre>
+    </section>
+  </main>
+  <script src="/static/form.js"></script>
+</body>
+</html>

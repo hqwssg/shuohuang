@@ -159,6 +159,18 @@
   width: inherit;
 }
 
+/* Management screens need practical click targets, including text actions in tables. */
+.app-container .el-button--mini {
+  min-height: 32px;
+  padding: 7px 12px;
+  font-size: 13px;
+}
+
+.app-container .el-button--text.el-button--mini {
+  min-width: 48px;
+  padding: 7px 6px;
+}
+
 /** 表格更多操作下拉样式 */
 .el-table .el-dropdown-link,.el-table .el-dropdown-selfdefine {
 	cursor: pointer;

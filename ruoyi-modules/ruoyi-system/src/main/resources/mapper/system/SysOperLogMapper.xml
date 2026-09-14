@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="operatorType"   column="operator_type"  />
 		<result property="operName"       column="oper_name"      />
 		<result property="deptName"       column="dept_name"      />
+		<result property="deptId"         column="dept_id"        />
 		<result property="operUrl"        column="oper_url"       />
 		<result property="operIp"         column="oper_ip"        />
 		<result property="operParam"      column="oper_param"     />
@@ -24,13 +25,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<sql id="selectOperLogVo">
-        select oper_id, title, business_type, method, request_method, operator_type, oper_name, dept_name, oper_url, oper_ip, oper_param, json_result, status, error_msg, oper_time, cost_time
-        from sys_oper_log
+        select l.oper_id, l.title, l.business_type, l.method, l.request_method, l.operator_type, l.oper_name, l.dept_name, l.dept_id, l.oper_url, l.oper_ip, l.oper_param, l.json_result, l.status, l.error_msg, l.oper_time, l.cost_time
+        from sys_oper_log l
     </sql>
     
 	<insert id="insertOperlog" parameterType="SysOperLog">
-		insert into sys_oper_log(title, business_type, method, request_method, operator_type, oper_name, dept_name, oper_url, oper_ip, oper_param, json_result, status, error_msg, cost_time, oper_time)
-        values (#{title}, #{businessType}, #{method}, #{requestMethod}, #{operatorType}, #{operName}, #{deptName}, #{operUrl}, #{operIp}, #{operParam}, #{jsonResult}, #{status}, #{errorMsg}, #{costTime}, sysdate())
+		insert into sys_oper_log(title, business_type, method, request_method, operator_type, oper_name, dept_name, dept_id, oper_url, oper_ip, oper_param, json_result, status, error_msg, cost_time, oper_time)
+        values (#{title}, #{businessType}, #{method}, #{requestMethod}, #{operatorType}, #{operName}, #{deptName}, #{deptId}, #{operUrl}, #{operIp}, #{operParam}, #{jsonResult}, #{status}, #{errorMsg}, #{costTime}, sysdate())
 	</insert>
 	
 	<select id="selectOperLogList" parameterType="SysOperLog" resultMap="SysOperLogResult">
@@ -63,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
 				AND oper_time &lt;= #{params.endTime}
 			</if>
+			${params.dataScope}
 		</where>
 		order by oper_id desc
 	</select>
@@ -83,4 +85,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         truncate table sys_oper_log
     </update>
 
-</mapper> 
+</mapper>
