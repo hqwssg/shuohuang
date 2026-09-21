@@ -29,6 +29,22 @@
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
+      <el-form-item prop="nickName">
+        <el-input v-model="registerForm.nickName" type="text" auto-complete="off" placeholder="姓名/显示名称（可选）">
+          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-cascader
+          v-model="registerForm.deptId"
+          :options="departmentOptions"
+          :props="departmentProps"
+          clearable
+          filterable
+          placeholder="所属公司 / 部门 / 工队（可选）"
+          style="width: 100%"
+        />
+      </el-form-item>
       <el-form-item prop="code" v-if="captchaEnabled">
         <el-input
           v-model="registerForm.code"
@@ -67,7 +83,7 @@
 </template>
 
 <script>
-import { getCodeImg, register } from "@/api/login"
+import { getCodeImg, getRegisterDepartments, register } from "@/api/login"
 import defaultSettings from '@/settings'
 
 export default {
@@ -88,6 +104,8 @@ export default {
         username: "",
         password: "",
         confirmPassword: "",
+        nickName: "",
+        deptId: null,
         code: "",
         uuid: ""
       },
@@ -108,11 +126,20 @@ export default {
         code: [{ required: true, trigger: "change", message: "请输入验证码" }]
       },
       loading: false,
-      captchaEnabled: true
+      captchaEnabled: true,
+      departmentOptions: [],
+      departmentProps: {
+        value: "deptId",
+        label: "deptName",
+        children: "children",
+        checkStrictly: true,
+        emitPath: false
+      }
     }
   },
   created() {
     this.getCode()
+    this.getDepartments()
   },
   methods: {
     getCode() {
@@ -123,6 +150,40 @@ export default {
           this.registerForm.uuid = res.uuid
         }
       })
+    },
+    getDepartments() {
+      getRegisterDepartments().then(res => {
+        this.departmentOptions = this.toDepartmentTree(res.data || [])
+      })
+    },
+    toDepartmentTree(rows) {
+      const nodes = {}
+      const roots = []
+      rows.forEach(row => {
+        nodes[row.deptId] = {
+          deptId: row.deptId,
+          deptName: row.deptName,
+          children: []
+        }
+      })
+      rows.forEach(row => {
+        const node = nodes[row.deptId]
+        const parent = nodes[row.parentId]
+        if (parent) {
+          parent.children.push(node)
+        } else {
+          roots.push(node)
+        }
+      })
+      const trimEmptyChildren = node => {
+        if (!node.children.length) {
+          delete node.children
+        } else {
+          node.children.forEach(trimEmptyChildren)
+        }
+      }
+      roots.forEach(trimEmptyChildren)
+      return roots
     },
     handleRegister() {
       this.$refs.registerForm.validate(valid => {

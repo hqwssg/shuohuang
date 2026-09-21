@@ -69,3 +69,15 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+// Self-registration organization options
+export function getRegisterDepartments() {
+  return request({
+    url: '/auth/register/departments',
+    headers: {
+      isToken: false,
+      repeatSubmit: false
+    },
+    method: 'get'
+  })
+}

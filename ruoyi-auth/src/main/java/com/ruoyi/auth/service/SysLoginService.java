@@ -150,7 +150,7 @@ public class SysLoginService
     /**
      * 注册
      */
-    public void register(String username, String password)
+    public void register(String username, String password, Long deptId, String nickName)
     {
         // 用户名或密码为空 错误
         if (StringUtils.isAnyBlank(username, password))
@@ -171,7 +171,8 @@ public class SysLoginService
         // 注册用户信息
         SysUser sysUser = new SysUser();
         sysUser.setUserName(username);
-        sysUser.setNickName(username);
+        sysUser.setNickName(StringUtils.isBlank(nickName) ? username : nickName.trim());
+        sysUser.setDeptId(deptId);
         sysUser.setPwdUpdateDate(DateUtils.getNowDate());
         sysUser.setPassword(SecurityUtils.encryptPassword(password));
         R<?> registerResult = remoteUserService.registerUserInfo(sysUser, SecurityConstants.INNER);

@@ -39,7 +39,7 @@ public class EmissionNodeController {
     
     @GetMapping("/{id}")
     public ResponseEntity<NodeDTO> getNodeById(@PathVariable Long id) {
-        return ResponseEntity.ok(nodeService.getNodeById(id));
+        return ResponseEntity.ok(dataScopeService.filterTree(nodeService.getNodeById(id)));
     }
     
     @PostMapping

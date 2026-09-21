@@ -38,7 +38,7 @@ spring:
       datasource:
         master:
           driver-class-name: com.mysql.cj.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/carbon_emissions?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://localhost:3306/carbon_emissions?useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
           username: root
           password: 1275410782h
   servlet:
@@ -82,6 +82,7 @@ security:
       - /auth/logout
       - /auth/login
       - /auth/register
+      - /auth/register/departments
       - /code
       - /csrf
       - /error

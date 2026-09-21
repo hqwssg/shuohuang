@@ -16,10 +16,16 @@ import com.example.carbon.emission.model.repository.TemplateRepository;
 public class CarbonDataScopeService {
     private final TemplateRepository templateRepository;
     private final EmissionNodeRepository nodeRepository;
+    private final CollectionScopeService collectionScopes;
+    private final com.example.carbon.emission.model.repository.EmissionNodeConfigRepository configs;
 
-    public CarbonDataScopeService(TemplateRepository templateRepository, EmissionNodeRepository nodeRepository) {
+    public CarbonDataScopeService(TemplateRepository templateRepository, EmissionNodeRepository nodeRepository,
+            CollectionScopeService collectionScopes,
+            com.example.carbon.emission.model.repository.EmissionNodeConfigRepository configs) {
         this.templateRepository = templateRepository;
         this.nodeRepository = nodeRepository;
+        this.collectionScopes = collectionScopes;
+        this.configs = configs;
     }
 
     public CarbonSecurityContext current() {
@@ -51,6 +57,11 @@ public class CarbonDataScopeService {
         if (!isInAssignedNodeTree(node)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Node is outside the assigned accounting scope");
         }
+        configs.findByNodeId(nodeId).ifPresent(config -> {
+            if (config.getCollectionPointId() != null) {
+                collectionScopes.requireCollectionPoint(config.getCollectionPointType(), config.getCollectionPointId(), false);
+            }
+        });
     }
 
     public boolean canReadSafely(Template template) {
@@ -61,23 +72,49 @@ public class CarbonDataScopeService {
         }
     }
 
+    public void requireNodeTree(Long nodeId, boolean write) {
+        requireNodeTree(nodeId, write, new java.util.HashSet<>());
+    }
+
+    private void requireNodeTree(Long nodeId, boolean write, java.util.Set<Long> visited) {
+        if (!visited.add(nodeId)) return;
+        requireNode(nodeId, write);
+        for (EmissionNode child : nodeRepository.findByParentId(nodeId)) requireNodeTree(child.getId(), write, visited);
+    }
+
+    public void requireTemplateTree(Long templateId) {
+        requireTemplate(templateId, false);
+        for (EmissionNode node : nodeRepository.findByTemplateId(templateId)) requireNode(node.getId(), false);
+    }
+
     public NodeDTO filterTree(NodeDTO root) {
         CarbonSecurityContext context = current();
-        if (root == null || context.allData() || context.nodeIds().isEmpty()) return root;
+        if (root == null || context.allData()) return root;
         return retainAuthorizedNodes(root, false, context.nodeIds()) ? root : null;
     }
 
     private boolean retainAuthorizedNodes(NodeDTO node, boolean insideAssignedTree, java.util.List<Long> assignedIds) {
-        boolean currentAssigned = insideAssignedTree || assignedIds.contains(node.getId());
+        boolean currentAssigned = assignedIds.isEmpty() || insideAssignedTree || assignedIds.contains(node.getId());
+        boolean physicalAllowed = true;
+        if (node.getConfig() != null && node.getConfig().getCollectionPointId() != null) {
+            try {
+                collectionScopes.requireCollectionPoint(node.getConfig().getCollectionPointType(), node.getConfig().getCollectionPointId(), false);
+            } catch (ResponseStatusException ex) {
+                if (ex.getStatusCode().value() != 403 && ex.getStatusCode().value() != 404) throw ex;
+                physicalAllowed = false;
+            }
+        }
         java.util.List<NodeDTO> children = node.getChildren() == null
                 ? new java.util.ArrayList<>() : new java.util.ArrayList<>(node.getChildren());
+        int originalCount = children.size();
         children.removeIf(child -> !retainAuthorizedNodes(child, currentAssigned, assignedIds));
         node.setChildren(children);
-        if (!currentAssigned && !children.isEmpty()) {
+        if (!currentAssigned || !physicalAllowed || originalCount != children.size()) {
             node.setConfig(null);
             node.setNodeInfo(null);
         }
-        return currentAssigned || !children.isEmpty();
+        if (originalCount > 0 && children.isEmpty() && (node.getConfig() == null || node.getConfig().getCollectionPointId() == null)) return false;
+        return (currentAssigned && physicalAllowed) || !children.isEmpty();
     }
 
     private boolean canWrite(Template template) {

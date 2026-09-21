@@ -146,9 +146,15 @@ export const constantRoutes = [
       {
         path: 'system',
         component: () => import('@/views/carbon/system'),
-        name: 'CarbonSystem',
-        meta: { title: '系统管理', icon: 'system', permissions: getCarbonModulePermissions('system') }
-      },
+          name: 'CarbonSystem',
+          meta: { title: '系统管理', icon: 'system', permissions: getCarbonModulePermissions('system') }
+        },
+        {
+          path: 'scopes',
+          component: () => import('@/views/carbon/scopes'),
+          name: 'CarbonScopes',
+          meta: { title: '采集范围分配', icon: 'tree', permissions: ['carbon:scope:view'] }
+        },
       {
         path: 'logs',
         component: () => import('@/views/carbon/logs'),

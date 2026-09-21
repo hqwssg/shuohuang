@@ -76,6 +76,7 @@ Copy-Payload 'sql/carbon-report/V1__report_tables.sql' 'mysql/migrations/20_repo
 Copy-Payload 'sql/carbon_permission_model.sql' 'mysql/migrations/30_permissions.sql'
 Copy-Payload 'sql/carbon-report/V11__shuohuang_project_integration.sql' 'mysql/migrations/40_report_integration.sql'
 Copy-Payload 'tpfhs-9/backend/src/main/resources/schema-update-20260912.sql' 'mysql/migrations/50_factor_precision.sql'
+Copy-Payload 'sql/carbon_collection_scope_permissions.sql' 'mysql/migrations/55_collection_scopes.sql'
 Copy-Payload 'sql/carbon_project_cleanup_and_test_users.sql' 'mysql/optional/60_cleanup_and_test_users.sql'
 Copy-Payload 'tools/server-update/deploy-update.sh' 'deploy-update.sh'
 Copy-Payload 'tools/server-update/container-update.sh' 'scripts/container-update.sh'

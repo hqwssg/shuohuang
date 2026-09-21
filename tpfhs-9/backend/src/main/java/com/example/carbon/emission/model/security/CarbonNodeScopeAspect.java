@@ -11,15 +11,23 @@ import com.example.carbon.emission.model.dto.CreateNodeRequest;
 @Component
 public class CarbonNodeScopeAspect {
     private final CarbonDataScopeService dataScope;
+    private final CollectionScopeService collectionScopes;
 
-    public CarbonNodeScopeAspect(CarbonDataScopeService dataScope) {
+    public CarbonNodeScopeAspect(CarbonDataScopeService dataScope, CollectionScopeService collectionScopes) {
         this.dataScope = dataScope;
+        this.collectionScopes = collectionScopes;
     }
 
     @Before("execution(public * com.example.carbon.emission.model.controller.EmissionNodeController.*(..))")
     public void check(JoinPoint joinPoint) {
         String method = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
+        for (Object arg : args) {
+            if (arg instanceof com.example.carbon.emission.model.dto.NodeConfigDTO config
+                    && config.getCollectionPointId() != null) {
+                collectionScopes.requireCollectionPoint(config.getCollectionPointType(), config.getCollectionPointId(), false);
+            }
+        }
         boolean write = method.startsWith("create") || method.startsWith("update") || method.startsWith("delete")
                 || method.startsWith("move") || method.startsWith("mount");
 
@@ -44,7 +52,12 @@ public class CarbonNodeScopeAspect {
             return;
         }
         if (args.length > 0 && args[0] instanceof Long nodeId && !"getNextNodeId".equals(method)) {
-            dataScope.requireNode(nodeId, write);
+            if (method.startsWith("delete") || method.startsWith("move") || method.startsWith("mount")) dataScope.requireNodeTree(nodeId, write);
+            else dataScope.requireNode(nodeId, write);
+        }
+        if ("mountNodeTemplate".equals(method) && args.length > 1 && args[1] instanceof java.util.Map<?, ?> body
+                && body.get("templateId") instanceof Long templateId) {
+            dataScope.requireTemplateTree(templateId);
         }
     }
 }

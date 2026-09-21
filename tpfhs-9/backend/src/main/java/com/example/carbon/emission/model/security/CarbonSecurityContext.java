@@ -18,6 +18,16 @@ public record CarbonSecurityContext(
 
     public static final String REQUEST_ATTRIBUTE = CarbonSecurityContext.class.getName();
 
+    public static CarbonSecurityContext current() {
+        if (org.springframework.web.context.request.RequestContextHolder.getRequestAttributes()
+                instanceof org.springframework.web.context.request.ServletRequestAttributes attributes
+                && attributes.getRequest().getAttribute(REQUEST_ATTRIBUTE) instanceof CarbonSecurityContext context) {
+            return context;
+        }
+        throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.UNAUTHORIZED, "Missing carbon security context");
+    }
+
     public boolean hasPermission(String required) {
         if (required == null || required.isBlank()) {
             return true;

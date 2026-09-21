@@ -10,6 +10,7 @@ import com.ruoyi.common.core.utils.sign.Base64;
 import com.ruoyi.common.core.utils.uuid.IdUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.redis.service.RedisService;
+import com.ruoyi.system.service.ISysConfigService;
 import jakarta.annotation.Resource;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -31,10 +32,14 @@ public class CaptchaService
 
     private final CaptchaProperties captchaProperties;
 
-    public CaptchaService(RedisService redisService, CaptchaProperties captchaProperties)
+    private final ISysConfigService configService;
+
+    public CaptchaService(RedisService redisService, CaptchaProperties captchaProperties,
+            ISysConfigService configService)
     {
         this.redisService = redisService;
         this.captchaProperties = captchaProperties;
+        this.configService = configService;
     }
 
     public AjaxResult createCaptcha() throws IOException
@@ -42,6 +47,7 @@ public class CaptchaService
         AjaxResult ajax = AjaxResult.success();
         boolean captchaEnabled = Boolean.TRUE.equals(captchaProperties.getEnabled());
         ajax.put("captchaEnabled", captchaEnabled);
+        ajax.put("registerEnabled", "true".equals(configService.selectConfigByKey("sys.account.registerUser")));
         if (!captchaEnabled)
         {
             return ajax;

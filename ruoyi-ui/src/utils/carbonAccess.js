@@ -120,6 +120,7 @@ export const carbonModules = [
 ]
 
 export const carbonSystemLinks = [
+  { title: '采集范围分配', icon: 'el-icon-map-location', path: '/carbon/scopes', group: 'permission', description: '分配站点、区间、燃料与热能范围的公司归属及部门权限', permissions: ['carbon:scope:view'] },
   { title: '用户管理', icon: 'el-icon-user', path: '/system/user', group: 'organization', description: '维护登录账号、用户状态与所属组织', permissions: ['system:user:list'] },
   { title: '部门管理', icon: 'el-icon-office-building', path: '/system/dept', group: 'organization', description: '维护组织架构、上下级部门与负责人', permissions: ['system:dept:list'] },
   { title: '岗位管理', icon: 'el-icon-suitcase', path: '/system/post', group: 'organization', description: '维护岗位编码、岗位名称和显示顺序', permissions: ['system:post:list'] },

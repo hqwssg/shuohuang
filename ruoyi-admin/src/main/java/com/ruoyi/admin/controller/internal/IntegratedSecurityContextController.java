@@ -57,14 +57,15 @@ public class IntegratedSecurityContextController
         }
 
         SysUser user = userService.selectUserById(loginUser.getUserid());
-        if (user == null)
+        if (user == null || !"0".equals(user.getStatus()) || !"0".equals(user.getDelFlag()))
         {
             return R.fail(401, "User no longer exists");
         }
 
         Set<String> permissions = permissionService.getMenuPermission(user);
         Set<String> roleKeys = permissionService.getRolePermission(user);
-        List<SysRole> roles = user.getRoles() == null ? List.of() : user.getRoles();
+        List<SysRole> roles = user.getRoles() == null ? List.of() : user.getRoles().stream()
+                .filter(role -> "0".equals(role.getStatus())).toList();
         DataScope scope = resolveDataScope(user, roles);
 
         Map<String, Object> result = new LinkedHashMap<>();

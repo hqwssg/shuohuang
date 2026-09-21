@@ -24,6 +24,8 @@ public class CalcSummaryController {
 
     @Autowired
     private CalcNodeSummaryService calcSummaryService;
+    @Autowired
+    private com.example.carbon.emission.model.security.SummaryScopeService summaryScope;
 
     /**
      * 按核算任务 ID 查询节点汇总
@@ -45,7 +47,7 @@ public class CalcSummaryController {
             @RequestParam(value = "l2", required = false) String l2,
             @RequestParam(value = "l3", required = false) String l3) {
         return ResponseEntity.ok(
-                calcSummaryService.queryByTemplate(templateId, nodeId, subcategoryCode, l1, l2, l3));
+                summaryScope.filter(calcSummaryService.queryByTemplate(templateId, nodeId, subcategoryCode, l1, l2, l3)));
     }
 
     /**
@@ -84,6 +86,6 @@ public class CalcSummaryController {
             return ResponseEntity.badRequest().body(
                     Map.of("message", "cycleEndDate 日期格式错误，应为 yyyy-MM-dd（如 2026-12-31）"));
         }
-        return ResponseEntity.ok(calcSummaryService.queryBySourceNodeAndCycle(sourceNodeId, start, end));
+        return ResponseEntity.ok(summaryScope.filter(calcSummaryService.queryBySourceNodeAndCycle(sourceNodeId, start, end)));
     }
 }

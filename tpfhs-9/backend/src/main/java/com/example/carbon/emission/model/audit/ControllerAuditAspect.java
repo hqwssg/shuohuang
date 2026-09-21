@@ -13,6 +13,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,8 +69,10 @@ public class ControllerAuditAspect {
         audit.put("operIp", limit(clientIp(request), 128));
         audit.put("operParam", limit(toJson(requestDetails(signature, joinPoint.getArgs(), request)), 2000));
         audit.put("jsonResult", limit(toJson(result), 2000));
-        audit.put("status", failure == null ? 0 : 1);
-        audit.put("errorMsg", failure == null ? "" : limit(failure.getMessage(), 2000));
+        boolean rejected = result instanceof ResponseEntity<?> response && !response.getStatusCode().is2xxSuccessful();
+        audit.put("status", failure == null && !rejected ? 0 : 1);
+        audit.put("errorMsg", failure != null ? limit(failure.getMessage(), 2000)
+            : rejected ? limit(toJson(((ResponseEntity<?>) result).getBody()), 2000) : "");
         audit.put("costTime", costTime);
         return audit;
     }

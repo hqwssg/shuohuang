@@ -5,6 +5,8 @@ import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.system.api.RemoteUserService;
 import com.ruoyi.system.api.domain.SysUser;
 import com.ruoyi.system.api.model.LoginUser;
+import com.ruoyi.system.api.domain.SysDept;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysPermissionService;
 import com.ruoyi.system.service.ISysUserService;
@@ -20,12 +22,15 @@ public class LocalRemoteUserService implements RemoteUserService
 
     private final ISysConfigService configService;
 
+    private final ISysDeptService deptService;
+
     public LocalRemoteUserService(ISysUserService userService, ISysPermissionService permissionService,
-            ISysConfigService configService)
+            ISysConfigService configService, ISysDeptService deptService)
     {
         this.userService = userService;
         this.permissionService = permissionService;
         this.configService = configService;
+        this.deptService = deptService;
     }
 
     @Override
@@ -56,6 +61,14 @@ public class LocalRemoteUserService implements RemoteUserService
         if (!userService.checkUserNameUnique(sysUser))
         {
             return R.fail("保存用户'" + username + "'失败，注册账号已存在");
+        }
+        if (sysUser.getDeptId() != null && sysUser.getDeptId() != 0)
+        {
+            SysDept dept = deptService.selectDeptById(sysUser.getDeptId());
+            if (dept == null || !"0".equals(dept.getStatus()) || !"0".equals(dept.getDelFlag()))
+            {
+                return R.fail("所选公司、部门或工队不存在或已停用");
+            }
         }
         return R.ok(userService.registerUser(sysUser));
     }

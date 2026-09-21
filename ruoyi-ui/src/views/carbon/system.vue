@@ -106,6 +106,7 @@ import SystemPost from '@/views/system/post/index'
 import SystemRole from '@/views/system/role/index'
 import SystemMenu from '@/views/system/menu/index'
 import SystemConfig from '@/views/system/config/index'
+import CarbonScopes from '@/views/carbon/scopes'
 
 const embeddedSystemViews = {
   '/system/user': SystemUser,
@@ -113,7 +114,8 @@ const embeddedSystemViews = {
   '/system/post': SystemPost,
   '/system/role': SystemRole,
   '/system/menu': SystemMenu,
-  '/system/config': SystemConfig
+  '/system/config': SystemConfig,
+  '/carbon/scopes': CarbonScopes
 }
 
 function getSystemLinkKey(item) {
